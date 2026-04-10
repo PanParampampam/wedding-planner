@@ -6,7 +6,12 @@ export function setCorsHeaders(req, res) {
   ];
   const origin = req.headers.origin;
   console.log("CORS request from origin:", origin);
-  if (allowedOrigins.includes(origin)) {
+  if (
+    allowedOrigins.includes(origin) ||
+    (origin &&
+      origin.startsWith("https://wedding-planner-") &&
+      origin.endsWith(".vercel.app"))
+  ) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   } else {
     res.setHeader("Access-Control-Allow-Origin", "");
