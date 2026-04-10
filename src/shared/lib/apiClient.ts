@@ -2,7 +2,8 @@ export const apiClient = async <T>(
   url: string,
   options?: RequestInit,
 ): Promise<T> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
+  const normalizedUrl = url.replace(/^\//, "");
+  const response = await fetch(normalizedUrl, {
     headers: {
       "Content-Type": "application/json",
     },
