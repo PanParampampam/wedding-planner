@@ -9,7 +9,7 @@ export default function GuestItem(guest: Guest) {
       )}
       {guest.status && (
         <span
-          className={`inline-block px-2 py-1 rounded text-xs font-medium ${guest.rsvpStatus === "accepted" ? "bg-green-100 text-green-700" : guest.rsvpStatus === "declined" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-600"}`}
+          className={`inline-block px-2 py-1 rounded text-xs font-medium ${guest.status === "confirmed" ? "bg-green-100 text-green-700" : guest.status === "declined" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-600"}`}
         >
           {guest.status}
         </span>
