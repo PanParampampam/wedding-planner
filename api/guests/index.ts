@@ -1,10 +1,13 @@
-import { prisma } from "../_lib/prisma.js";
+import { prisma } from "../_lib/prisma";
+import { setCorsHeaders } from "../_lib/cors.js";
 
 export default async function handler(req, res) {
   // Set CORS headers for all responses
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  // res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  // res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  setCorsHeaders(req, res);
 
   // Handle preflight OPTIONS request
   if (req.method === "OPTIONS") {
