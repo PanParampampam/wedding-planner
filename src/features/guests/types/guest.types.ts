@@ -9,7 +9,7 @@ export type Guest = {
     street: string | null;
     zipCode: string | null;
   } | null;
-  status: "invited" | "confirmed" | "declined";
+  status: "not yet invited" | "invited" | "confirmed" | "declined";
   group: "family" | "friends" | "coworkers" | "other";
   plusOne: "on the list" | "outside the list" | "none";
   plusOneName: string | null;
