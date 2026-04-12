@@ -4,10 +4,13 @@ import GuestListSkeleton from "./GuestListSkeleton";
 import { Container, Grid, Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useGuestsStats } from "../hooks/useGuestsStats";
+import { useContext } from "react";
+import { GuestsContext } from "../context/GuestsContext";
 
 export default function GuestList() {
   const { guests, loading, error } = useGuests();
   const { total, confirmed, attending } = useGuestsStats(guests);
+  const guestsContext = useContext(GuestsContext);
 
   if (loading) {
     return <GuestListSkeleton />;
@@ -45,6 +48,24 @@ export default function GuestList() {
           </Typography>
         </Stack>
       </Container>
+      {guestsContext?.newGuest && (
+        <Box sx={{ mb: 2 }}>
+          <Typography
+            sx={{
+              bgcolor: "success.main",
+              color: "common.white",
+              px: 3,
+              py: 2,
+              borderRadius: 2,
+              textAlign: "center",
+              fontWeight: 600,
+              fontSize: "1rem",
+            }}
+          >
+            A new guest has been added!
+          </Typography>
+        </Box>
+      )}
       <Grid container spacing={3}>
         {guests && guests.length > 0 ? (
           guests.map((guest) => (

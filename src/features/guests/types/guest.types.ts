@@ -1,7 +1,7 @@
 import type { Guest as GeneratedGuest } from "../../../generated/prisma/client";
 
 export type Guest = {
-  id: string;
+  id: number;
   name: string;
   email: string | null;
   phone: string | null;

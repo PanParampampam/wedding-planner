@@ -12,10 +12,11 @@ import {
   FormControlLabel,
   Alert,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useCreateGuest } from "../hooks/useCreateGuest";
 import type { Guest } from "../../../generated/prisma/client";
 import type { CreateGuest } from "../types/guest.types";
+import { GuestsContext } from "../context/GuestsContext";
 
 type GuestFormProps = {
   open: boolean;
@@ -25,6 +26,7 @@ type GuestFormProps = {
 export default function GuestForm({ open, onClose }: GuestFormProps) {
   const [showAddress, setShowAddress] = useState(false);
   const [showDietary, setShowDietary] = useState(false);
+  const guestsContext = useContext(GuestsContext);
 
   const initialGuestData: CreateGuest = {
     name: "",
@@ -55,6 +57,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
     if (guestCreated) {
       onClose();
       setNewGuest(initialGuestData);
+      guestsContext?.setNewGuest(true);
     }
   };
 
