@@ -6,21 +6,19 @@ import { v4 as uuidv4 } from "uuid";
 export const useCreateGuest = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<boolean>(false);
 
   const handler = async (guest: Guest) => {
     setLoading(true);
     const newGuest: Guest = { ...guest, id: uuidv4() };
     const response = await createGuest(newGuest);
-    console.log(response);
     if (response.success) {
-      setSuccess(response.success);
+      return response.success;
     } else {
-      setSuccess(response.success);
+      setLoading(false);
       setError(response.message);
+      return response.success;
     }
-    setLoading(false);
   };
 
-  return { handler, loading, error, success };
+  return { handler, loading, error };
 };

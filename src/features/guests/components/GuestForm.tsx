@@ -42,7 +42,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
   };
 
   const [newGuest, setNewGuest] = useState<Guest>(initialGuestData);
-  const { handler, loading, error, success } = useCreateGuest();
+  const { handler, loading, error } = useCreateGuest();
 
   const formFieldHandler = (key: keyof Guest, value: string | null) => {
     setNewGuest((g) => ({ ...g, [key]: value }));
@@ -50,8 +50,8 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
 
   const handleFormSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await handler(newGuest);
-    if (success === true) {
+    const guestCreated: boolean = await handler(newGuest);
+    if (guestCreated) {
       onClose();
       setNewGuest(initialGuestData);
     }
