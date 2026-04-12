@@ -10,6 +10,7 @@ import {
   Typography,
   Checkbox,
   FormControlLabel,
+  Alert,
 } from "@mui/material";
 import { useState } from "react";
 import { useCreateGuest } from "../hooks/useCreateGuest";
@@ -250,7 +251,20 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
         >
           Create Guest
         </Button>
-        {error && <p>{error}</p>}
+        {error && (
+          <Alert
+            severity="error"
+            sx={{
+              mt: 2,
+              bgcolor: "error.main",
+              color: "common.white",
+              textAlign: "center",
+              fontWeight: 600,
+            }}
+          >
+            {error}
+          </Alert>
+        )}
       </form>
     </Dialog>
   );
