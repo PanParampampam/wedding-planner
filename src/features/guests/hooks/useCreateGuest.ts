@@ -1,22 +1,25 @@
 import { useState } from "react";
-import type { Guest } from "../../../generated/prisma/client";
 import { createGuest } from "../api/guests.api";
-import { v4 as uuidv4 } from "uuid";
+import type { CreateGuest } from "../types/guest.types";
 
 export const useCreateGuest = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string | undefined>("");
 
-  const handler = async (guest: Guest) => {
+  const handler = async (guest: CreateGuest) => {
     setLoading(true);
-    const newGuest: Guest = { ...guest, id: uuidv4() };
-    const response = await createGuest(newGuest);
-    if (response.success) {
-      return response.success;
-    } else {
+    try {
+      const response = await createGuest(guest);
+      console.log(response);
+      if (response.success) {
+        return true;
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (e) {
       setLoading(false);
-      setError(response.message);
-      return response.success;
+      setError(e instanceof Error ? e.message : String(e));
+      return false;
     }
   };
 

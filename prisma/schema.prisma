@@ -13,11 +13,11 @@ datasource db {
 }
 
 model Guest {
-  id                  String   @id @default(uuid())
+  id                  Int   @id @default(autoincrement())
   name                String
   status              String
-  email               String?
-  phone               String?
+  email               String? @unique
+  phone               String? @unique
   addressCountry      String?
   addressCity         String?
   addressStreet       String?

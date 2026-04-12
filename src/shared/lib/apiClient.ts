@@ -10,9 +10,5 @@ export const apiClient = async <T>(
     ...options,
   });
 
-  if (!response.ok) {
-    throw new Error("API Error");
-  }
-
   return response.json();
 };

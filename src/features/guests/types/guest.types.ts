@@ -1,3 +1,5 @@
+import type { Guest as GeneratedGuest } from "../../../generated/prisma/client";
+
 export type Guest = {
   id: string;
   name: string;
@@ -16,3 +18,5 @@ export type Guest = {
   dietaryRestrictions: "vegetarian" | "vegan" | "gluten free" | null;
   notes: string | null;
 };
+
+export type CreateGuest = Omit<GeneratedGuest, "id">;

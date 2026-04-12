@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { useCreateGuest } from "../hooks/useCreateGuest";
 import type { Guest } from "../../../generated/prisma/client";
+import type { CreateGuest } from "../types/guest.types";
 
 type GuestFormProps = {
   open: boolean;
@@ -24,8 +25,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
   const [showAddress, setShowAddress] = useState(false);
   const [showDietary, setShowDietary] = useState(false);
 
-  const initialGuestData: Guest = {
-    id: "",
+  const initialGuestData: CreateGuest = {
     name: "",
     email: null,
     phone: null,
@@ -41,7 +41,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
     notes: null,
   };
 
-  const [newGuest, setNewGuest] = useState<Guest>(initialGuestData);
+  const [newGuest, setNewGuest] = useState<CreateGuest>(initialGuestData);
   const { handler, loading, error } = useCreateGuest();
 
   const formFieldHandler = (key: keyof Guest, value: string | null) => {

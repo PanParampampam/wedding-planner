@@ -1,5 +1,6 @@
 import { prisma } from "../_lib/prisma.js";
 import { setCorsHeaders } from "../_lib/cors.js";
+import { Prisma } from "../../src/generated/prisma/client.js";
 
 export type createGuestResponse = {
   success: boolean;
@@ -35,11 +36,19 @@ export default async function handler(req, res) {
         .json({ success: true, message: "Guest created" });
       return response;
     } catch (e) {
-      response = res.status().json({
-        success: false,
-        message: "The guest has not been created: ",
-        e,
-      });
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        //409 status - conflict
+        response = res.status(409).json({
+          success: false,
+          message: "Guest with this email and/or phone number already exist",
+        });
+      } else {
+        //500 status - internal server error
+        response = res.status(500).json({
+          success: false,
+          message: "Something went wrong. Please try again later.",
+        });
+      }
       return response;
     }
   }
