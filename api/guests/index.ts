@@ -1,6 +1,11 @@
 import { prisma } from "../_lib/prisma.js";
 import { setCorsHeaders } from "../_lib/cors.js";
 
+export type createGuestResponse = {
+  success: boolean;
+  message: string;
+};
+
 export default async function handler(req, res) {
   // Set CORS headers for all responses
   // res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
@@ -20,10 +25,23 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    const guest = await prisma.guest.create({
-      data: req.body,
-    });
-    return res.status(201).json(guest);
+    let response: createGuestResponse = { success: false, message: "" };
+    try {
+      await prisma.guest.create({
+        data: req.body,
+      });
+      response = res
+        .status(201)
+        .json({ success: true, message: "Guest created" });
+      return response;
+    } catch (e) {
+      response = res.status().json({
+        success: false,
+        message: "The guest has not been created: ",
+        e,
+      });
+      return response;
+    }
   }
 
   return res.status(405).end();

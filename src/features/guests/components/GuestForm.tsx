@@ -13,16 +13,18 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useCreateGuest } from "../hooks/useCreateGuest";
-import type { Guest } from "@prisma/client";
+import type { Guest } from "../../../generated/prisma/client";
 
 type GuestFormProps = {
   open: boolean;
   onClose: () => void;
 };
+
 export default function GuestForm({ open, onClose }: GuestFormProps) {
   const [showAddress, setShowAddress] = useState(false);
   const [showDietary, setShowDietary] = useState(false);
-  const [newGuest, setNewGuest] = useState<Partial<Guest>>({
+
+  const initialGuestData: Guest = {
     id: "",
     name: "",
     email: null,
@@ -37,25 +39,32 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
     plusOneName: null,
     dietaryRestrictions: null,
     notes: null,
-  });
-  const { handler, loading, error } = useCreateGuest();
+  };
+
+  const [newGuest, setNewGuest] = useState<Guest>(initialGuestData);
+  const { handler, loading, error, success } = useCreateGuest();
 
   const formFieldHandler = (key: keyof Guest, value: string | null) => {
     setNewGuest((g) => ({ ...g, [key]: value }));
   };
 
-  const handleFormSubmit = () => {
-    console.log("submit");
+  const handleFormSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await handler(newGuest);
+    if (success === true) {
+      onClose();
+      setNewGuest(initialGuestData);
+    }
   };
 
   return (
     <Dialog fullWidth={true} maxWidth={"sm"} onClose={onClose} open={open}>
       <form
         className="w-full max-w-3xl p-8 bg-white rounded-lg shadow-lg flex flex-col gap-4"
-        action={handleFormSubmit}
+        onSubmit={handleFormSubmit}
       >
         <DialogTitle className="text-2xl font-bold mb-2 !text-gray-900">
-          Create a guest
+          Add a new guest
         </DialogTitle>
         <div className="flex flex-col items-center gap-4">
           <TextField
@@ -236,9 +245,12 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
           color="primary"
           type="submit"
           className="mt-4 max-w-md w-full self-center"
+          loading={loading}
+          loadingPosition="end"
         >
           Create Guest
         </Button>
+        {error && <p>{error}</p>}
       </form>
     </Dialog>
   );

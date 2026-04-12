@@ -15,10 +15,10 @@ export default function Guests() {
   };
   return (
     <main>
-      <GuestList />
       <Button variant="contained" onClick={handleGuestFormOpen}>
-        Add new guest
+        Add a new guest
       </Button>
+      <GuestList />
       <GuestForm open={guestFormOpen} onClose={handleGuestFormClose} />
     </main>
   );

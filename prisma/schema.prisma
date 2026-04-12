@@ -27,6 +27,4 @@ model Guest {
   plusOneName         String?
   dietaryRestrictions String?
   notes               String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
 }
