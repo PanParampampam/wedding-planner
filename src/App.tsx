@@ -1,5 +1,5 @@
 import { Routes, Route, Link } from "react-router-dom";
-import GuestList from "./features/guests/components/GuestList";
+import Guests from "./features/guests/Guests";
 
 function Home() {
   return <h2>Welcome to the Wedding Planner!</h2>;
@@ -17,7 +17,7 @@ function App() {
       <section id="center">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/guests" element={<GuestList />} />
+          <Route path="/guests" element={<Guests />} />
         </Routes>
       </section>
     </>

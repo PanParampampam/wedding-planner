@@ -1,5 +1,11 @@
 import { prisma } from "../_lib/prisma.js";
 import { setCorsHeaders } from "../_lib/cors.js";
+import { Prisma } from "../../src/generated/prisma/client.js";
+
+export type createGuestResponse = {
+  success: boolean;
+  message: string;
+};
 
 export default async function handler(req, res) {
   // Set CORS headers for all responses
@@ -20,10 +26,31 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    const guest = await prisma.guest.create({
-      data: req.body,
-    });
-    return res.status(201).json(guest);
+    let response: createGuestResponse = { success: false, message: "" };
+    try {
+      await prisma.guest.create({
+        data: req.body,
+      });
+      response = res
+        .status(201)
+        .json({ success: true, message: "Guest created" });
+      return response;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        //409 status - conflict
+        response = res.status(409).json({
+          success: false,
+          message: "Guest with this email and/or phone number already exist",
+        });
+      } else {
+        //500 status - internal server error
+        response = res.status(500).json({
+          success: false,
+          message: "Something went wrong. Please try again later.",
+        });
+      }
+      return response;
+    }
   }
 
   return res.status(405).end();
