@@ -8,3 +8,7 @@ export const getGuests = async () => {
 export const createGuest = async (data: Prisma.GuestCreateInput) => {
   return guestRepository.create(data);
 };
+
+export const deleteGuest = async (id: number) => {
+  return guestRepository.delete(id);
+};

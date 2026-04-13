@@ -8,4 +8,12 @@ export const guestRepository = {
     prisma.guest.create({
       data,
     }),
+
+  delete: (id: number) => {
+    prisma.guest.delete({
+      where: {
+        id: id,
+      },
+    });
+  },
 };

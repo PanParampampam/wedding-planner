@@ -5,8 +5,11 @@ import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
+import { useDeleteGuest } from "../hooks/useDeleteGuest";
+import { Alert, Button } from "@mui/material";
 
 export default function GuestItem(guest: Guest) {
+  const { handler, loading, error } = useDeleteGuest();
   return (
     <Box
       sx={{
@@ -105,6 +108,30 @@ export default function GuestItem(guest: Guest) {
           <Typography variant="body2" color="text.secondary">
             <strong>Notes:</strong> {guest.notes}
           </Typography>
+        )}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handler(guest.id)}
+          className="mt-4 max-w-md w-full self-center"
+          loading={loading}
+          loadingPosition="end"
+        >
+          Delete Guest
+        </Button>
+        {error && (
+          <Alert
+            severity="error"
+            sx={{
+              mt: 2,
+              bgcolor: "error.main",
+              color: "common.white",
+              textAlign: "center",
+              fontWeight: 600,
+            }}
+          >
+            {error}
+          </Alert>
         )}
       </Stack>
     </Box>

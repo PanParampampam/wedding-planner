@@ -2,7 +2,7 @@ import { prisma } from "../_lib/prisma.js";
 import { setCorsHeaders } from "../_lib/cors.js";
 import { Prisma } from "../../src/generated/prisma/client.js";
 
-export type createGuestResponse = {
+export type guestResponse = {
   success: boolean;
   message: string;
 };
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    let response: createGuestResponse = { success: false, message: "" };
+    let response: guestResponse = { success: false, message: "" };
     try {
       await prisma.guest.create({
         data: req.body,
@@ -49,6 +49,26 @@ export default async function handler(req, res) {
           message: "Something went wrong. Please try again later.",
         });
       }
+      return response;
+    }
+  }
+
+  if (req.method === "DELETE") {
+    let response: guestResponse = { success: false, message: "" };
+    try {
+      await prisma.guest.delete({
+        where: { id: req.body },
+      });
+      response = res
+        .status(201)
+        .json({ success: true, message: "Guest deleted" });
+      return response;
+    } catch (e) {
+      console.error(e);
+      response = res.status(500).json({
+        success: false,
+        message: "Something went wrong. Please try again later.",
+      });
       return response;
     }
   }
