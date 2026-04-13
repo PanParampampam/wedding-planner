@@ -57,7 +57,6 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
     if (guestCreated) {
       onClose();
       setNewGuest(initialGuestData);
-      guestsContext?.setNewGuest(true);
     }
   };
 

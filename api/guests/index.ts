@@ -5,6 +5,10 @@ import { Prisma } from "../../src/generated/prisma/client.js";
 export type guestResponse = {
   success: boolean;
   message: string;
+  guest?: {
+    id: number;
+    name: string;
+  };
 };
 
 export default async function handler(req, res) {
@@ -28,12 +32,17 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     let response: guestResponse = { success: false, message: "" };
     try {
-      await prisma.guest.create({
+      const newGuest = await prisma.guest.create({
         data: req.body,
       });
-      response = res
-        .status(201)
-        .json({ success: true, message: "Guest created" });
+      response = res.status(201).json({
+        success: true,
+        message: "Guest created",
+        guest: {
+          id: newGuest.id,
+          name: newGuest.name,
+        },
+      });
       return response;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -44,6 +53,7 @@ export default async function handler(req, res) {
         });
       } else {
         //500 status - internal server error
+        console.error(e);
         response = res.status(500).json({
           success: false,
           message: "Something went wrong. Please try again later.",
@@ -56,12 +66,17 @@ export default async function handler(req, res) {
   if (req.method === "DELETE") {
     let response: guestResponse = { success: false, message: "" };
     try {
-      await prisma.guest.delete({
+      const deletedGuest = await prisma.guest.delete({
         where: { id: req.body },
       });
-      response = res
-        .status(201)
-        .json({ success: true, message: "Guest deleted" });
+      response = res.status(201).json({
+        success: true,
+        message: "Guest deleted",
+        guest: {
+          id: deletedGuest.id,
+          name: deletedGuest.name,
+        },
+      });
       return response;
     } catch (e) {
       console.error(e);

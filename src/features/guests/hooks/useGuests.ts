@@ -42,7 +42,7 @@ export const useGuests = () => {
       }
     };
     getGuestsHandler();
-  }, [guestsContext?.newGuest]);
+  }, [guestsContext?.guestAction]);
 
   return { guests, loading, error };
 };

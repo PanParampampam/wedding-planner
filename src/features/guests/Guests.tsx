@@ -3,10 +3,11 @@ import { Button } from "@mui/material";
 import GuestForm from "./components/GuestForm";
 import { useState } from "react";
 import { GuestsContext } from "./context/GuestsContext";
+import type { GuestAction } from "./types/guest.types";
 
 export default function Guests() {
   const [guestFormOpen, setGuestFormOpen] = useState<boolean>(false);
-  const [newGuest, setNewGuest] = useState<boolean>(false);
+  const [guestAction, setGuestAction] = useState<GuestAction>();
 
   const handleGuestFormOpen = () => {
     setGuestFormOpen(true);
@@ -16,7 +17,7 @@ export default function Guests() {
     setGuestFormOpen(false);
   };
   return (
-    <GuestsContext value={{ newGuest, setNewGuest }}>
+    <GuestsContext value={{ guestAction, setGuestAction }}>
       <main>
         <Button variant="contained" onClick={handleGuestFormOpen}>
           Add a new guest

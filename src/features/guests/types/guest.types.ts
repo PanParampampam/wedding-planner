@@ -20,3 +20,9 @@ export type Guest = {
 };
 
 export type CreateGuest = Omit<GeneratedGuest, "id">;
+
+export type GuestAction = {
+  actionType: "created" | "deleted";
+  guestId: number;
+  guestName: string;
+};
