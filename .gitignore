@@ -26,6 +26,7 @@ dist-ssr
 /src/generated/prisma
 
 .vercel
+.env
 .env*.local
 
 #vercel.json should stay only on prod
