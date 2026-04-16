@@ -88,5 +88,31 @@ export default async function handler(req, res) {
     }
   }
 
+  if (req.method === "PUT") {
+    let response: guestResponse = { success: false, message: "" };
+    try {
+      const updatedGuest = await prisma.guest.update({
+        where: { id: req.body.id },
+        data: { ...req.body },
+      });
+      response = res.status(201).json({
+        success: true,
+        message: "Guest updated",
+        guest: {
+          id: updatedGuest.id,
+          name: updatedGuest.name,
+        },
+      });
+      return response;
+    } catch (e) {
+      console.error(e);
+      response = res.status(500).json({
+        success: false,
+        message: "Something went wrong. Please try again later.",
+      });
+      return response;
+    }
+  }
+
   return res.status(405).end();
 }

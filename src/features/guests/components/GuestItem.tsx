@@ -8,7 +8,13 @@ import Grid from "@mui/material/Grid";
 import { useDeleteGuest } from "../hooks/useDeleteGuest";
 import { Alert, Button } from "@mui/material";
 
-export default function GuestItem(guest: Guest) {
+export default function GuestItem({
+  guest,
+  openEditGuestForm,
+}: {
+  guest: Guest;
+  openEditGuestForm: (guest: Guest) => void;
+}) {
   const { handler, loading, error } = useDeleteGuest();
   return (
     <Box
@@ -118,6 +124,16 @@ export default function GuestItem(guest: Guest) {
           loadingPosition="end"
         >
           Delete Guest
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => openEditGuestForm(guest)}
+          className="mt-4 max-w-md w-full self-center"
+          loading={loading}
+          loadingPosition="end"
+        >
+          Edit Guest
         </Button>
         {error && (
           <Alert

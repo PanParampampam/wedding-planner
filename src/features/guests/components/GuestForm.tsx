@@ -14,47 +14,84 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useCreateGuest } from "../hooks/useCreateGuest";
-import type { Guest } from "../../../generated/prisma/client";
+import type { Guest } from "../types/guest.types";
+import type { Guest as PrismaGuest } from "../../../generated/prisma/client";
 import type { CreateGuest } from "../types/guest.types";
+import { useUpdateGuest } from "../hooks/useUpdateGuest";
 
 type GuestFormProps = {
   open: boolean;
   onClose: () => void;
+  editGuest: Guest | undefined;
 };
 
-export default function GuestForm({ open, onClose }: GuestFormProps) {
+export default function GuestForm({
+  open,
+  onClose,
+  editGuest,
+}: GuestFormProps) {
   const [showAddress, setShowAddress] = useState(false);
   const [showDietary, setShowDietary] = useState(false);
 
-  const initialGuestData: CreateGuest = {
-    name: "",
-    email: null,
-    phone: null,
-    addressCountry: null,
-    addressCity: null,
-    addressStreet: null,
-    addressZipCode: null,
-    status: "not yet invited",
-    group: "family",
-    plusOne: "none",
-    plusOneName: null,
-    dietaryRestrictions: null,
-    notes: null,
-  };
+  const initialGuestData: CreateGuest | PrismaGuest = editGuest
+    ? ({
+        id: editGuest.id,
+        name: editGuest.name,
+        email: editGuest.email,
+        phone: editGuest.phone,
+        addressCountry: editGuest.address?.country || "",
+        addressCity: editGuest.address?.city || "",
+        addressStreet: editGuest.address?.street || "",
+        addressZipCode: editGuest.address?.zipCode || "",
+        status: editGuest.status,
+        group: editGuest.group,
+        plusOne: editGuest.plusOne,
+        plusOneName: editGuest.plusOneName,
+        dietaryRestrictions: editGuest.dietaryRestrictions,
+        notes: editGuest.notes,
+      } as PrismaGuest)
+    : ({
+        name: "",
+        email: null,
+        phone: null,
+        addressCountry: null,
+        addressCity: null,
+        addressStreet: null,
+        addressZipCode: null,
+        status: "not yet invited",
+        group: "family",
+        plusOne: "none",
+        plusOneName: null,
+        dietaryRestrictions: null,
+        notes: null,
+      } as CreateGuest);
 
-  const [newGuest, setNewGuest] = useState<CreateGuest>(initialGuestData);
-  const { handler, loading, error } = useCreateGuest();
+  const [guestData, setGuestData] =
+    useState<typeof initialGuestData>(initialGuestData);
 
-  const formFieldHandler = (key: keyof Guest, value: string | null) => {
-    setNewGuest((g) => ({ ...g, [key]: value }));
+  const createGuestHook = useCreateGuest();
+  const updateGuestHook = useUpdateGuest();
+
+  const { handler, loading, error } = editGuest
+    ? updateGuestHook
+    : createGuestHook;
+
+  const formFieldHandler = (key: keyof PrismaGuest, value: string | null) => {
+    setGuestData((g) => ({ ...g, [key]: value }));
   };
 
   const handleFormSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const guestCreated: boolean = await handler(newGuest);
-    if (guestCreated) {
+    let guestOperationResponse: boolean = false;
+    if ("id" in guestData) {
+      guestOperationResponse = await handler(guestData as PrismaGuest);
+    } else {
+      console.log("create");
+      guestOperationResponse = await handler(guestData as CreateGuest);
+    }
+    if (guestOperationResponse) {
       onClose();
-      setNewGuest(initialGuestData);
+      setGuestData(initialGuestData);
     }
   };
 
@@ -73,7 +110,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
             name="name"
             required
             className="mb-2 max-w-md w-full"
-            value={newGuest.name || ""}
+            value={guestData.name || ""}
             onChange={(e) => formFieldHandler("name", e.target.value)}
           />
           <TextField
@@ -81,7 +118,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
             name="email"
             type="email"
             className="mb-2 max-w-md w-full"
-            value={newGuest.email || ""}
+            value={guestData.email || ""}
             onChange={(e) => formFieldHandler("email", e.target.value || null)}
           />
           <TextField
@@ -89,7 +126,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
             name="phone"
             type="tel"
             className="mb-2 max-w-md w-full"
-            value={newGuest.phone || ""}
+            value={guestData.phone || ""}
             onChange={(e) => formFieldHandler("phone", e.target.value || null)}
           />
         </div>
@@ -100,7 +137,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
             <Select
               label="Status"
               name="status"
-              value={newGuest.status}
+              value={guestData.status}
               onChange={(e) => formFieldHandler("status", e.target.value)}
             >
               <MenuItem value="not yet invited">Not yet invited</MenuItem>
@@ -114,7 +151,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
             <Select
               label="Group"
               name="group"
-              value={newGuest.group}
+              value={guestData.group}
               onChange={(e) => formFieldHandler("group", e.target.value)}
             >
               <MenuItem value="family">Family</MenuItem>
@@ -128,7 +165,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
             <Select
               label="Plus One"
               name="plusOne"
-              value={newGuest.plusOne}
+              value={guestData.plusOne}
               onChange={(e) => formFieldHandler("plusOne", e.target.value)}
             >
               <MenuItem value="none">None</MenuItem>
@@ -137,12 +174,12 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
             </Select>
           </FormControl>
         </div>
-        {newGuest.plusOne !== "none" && (
+        {guestData.plusOne !== "none" && (
           <TextField
             label="Plus One Name"
             name="plusOneName"
             className="mb-2 max-w-md w-full"
-            value={newGuest.plusOneName || ""}
+            value={guestData.plusOneName || ""}
             onChange={(e) =>
               formFieldHandler("plusOneName", e.target.value || null)
             }
@@ -169,7 +206,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
                 label="Country"
                 name="addressCountry"
                 className="max-w-md w-full"
-                value={newGuest.addressCountry || ""}
+                value={guestData.addressCountry || ""}
                 onChange={(e) =>
                   formFieldHandler("addressCountry", e.target.value || null)
                 }
@@ -178,7 +215,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
                 label="City"
                 name="addressCity"
                 className="max-w-md w-full"
-                value={newGuest.addressCity || ""}
+                value={guestData.addressCity || ""}
                 onChange={(e) =>
                   formFieldHandler("addressCity", e.target.value || null)
                 }
@@ -187,7 +224,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
                 label="Street"
                 name="addressStreet"
                 className="max-w-md w-full"
-                value={newGuest.addressStreet || ""}
+                value={guestData.addressStreet || ""}
                 onChange={(e) =>
                   formFieldHandler("addressStreet", e.target.value || null)
                 }
@@ -196,7 +233,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
                 label="Zip Code"
                 name="addressZipCode"
                 className="max-w-md w-full"
-                value={newGuest.addressZipCode || ""}
+                value={guestData.addressZipCode || ""}
                 onChange={(e) =>
                   formFieldHandler("addressZipCode", e.target.value || null)
                 }
@@ -221,7 +258,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
             <Select
               label="Dietary Restrictions"
               name="dietaryRestrictions"
-              value={newGuest.dietaryRestrictions || ""}
+              value={guestData.dietaryRestrictions || ""}
               onChange={(e) =>
                 formFieldHandler("dietaryRestrictions", e.target.value || null)
               }
@@ -238,7 +275,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
           multiline
           minRows={2}
           className="mb-2 max-w-md w-full"
-          value={newGuest.notes || ""}
+          value={guestData.notes || ""}
           onChange={(e) => formFieldHandler("notes", e.target.value || null)}
         />
         <Button
@@ -249,7 +286,7 @@ export default function GuestForm({ open, onClose }: GuestFormProps) {
           loading={loading}
           loadingPosition="end"
         >
-          Create Guest
+          {editGuest ? "Edit guest" : "New guest"}
         </Button>
         {error && (
           <Alert

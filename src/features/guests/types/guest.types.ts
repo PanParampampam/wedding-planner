@@ -22,7 +22,7 @@ export type Guest = {
 export type CreateGuest = Omit<GeneratedGuest, "id">;
 
 export type GuestAction = {
-  actionType: "created" | "deleted";
+  actionType: "created" | "deleted" | "updated";
   guestId: number;
   guestName: string;
 };

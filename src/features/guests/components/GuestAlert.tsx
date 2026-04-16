@@ -47,6 +47,27 @@ export default function GuestAlert() {
     );
   }
 
+  if (guestContext?.guestAction?.actionType === "updated") {
+    return (
+      <Box sx={{ mb: 2 }}>
+        <Typography
+          sx={{
+            bgcolor: "success.main",
+            color: "common.white",
+            px: 3,
+            py: 2,
+            borderRadius: 2,
+            textAlign: "center",
+            fontWeight: 600,
+            fontSize: "1rem",
+          }}
+        >
+          Guest "{guestContext.guestAction.guestName}" has been updated.
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ mb: 2 }}>
       <Typography

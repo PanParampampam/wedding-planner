@@ -6,8 +6,13 @@ import Box from "@mui/material/Box";
 import { useGuestsStats } from "../hooks/useGuestsStats";
 import GuestAlert from "./GuestAlert";
 import GuestsStats from "./GuestsStats";
+import type { Guest } from "../types/guest.types";
 
-export default function GuestList() {
+export default function GuestList({
+  openEditGuestForm,
+}: {
+  openEditGuestForm: (guest: Guest) => void;
+}) {
   const { guests, loading, error } = useGuests();
   const { total, confirmed, attending } = useGuestsStats(guests);
 
@@ -31,12 +36,27 @@ export default function GuestList() {
         {guests && guests.length > 0 ? (
           guests.map((guest) => (
             <Grid size={{ xs: 12, md: 6, lg: 4 }} key={guest.id}>
-              <GuestItem {...guest} />
+              <GuestItem guest={guest} openEditGuestForm={openEditGuestForm} />
             </Grid>
           ))
         ) : (
           <Grid size={{ xs: 6, md: 8 }}>
-            <Box sx={{ textAlign: "center", color: "text.secondary" }}>
+            <Box
+              sx={{
+                bgcolor: "background.paper",
+                borderRadius: 2,
+                boxShadow: 1,
+                p: 3,
+                border: 1,
+                borderColor: "grey.200",
+                minHeight: 220,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1.5,
+                transition: "box-shadow 0.2s",
+                "&:hover": { boxShadow: 4 },
+              }}
+            >
               No guests found.
             </Box>
           </Grid>
