@@ -1,7 +1,7 @@
 import GuestItem from "./GuestItem";
 import { useGuests } from "../hooks/useGuests";
 import GuestListSkeleton from "./GuestListSkeleton";
-import { Container, Grid, Stack, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useGuestsStats } from "../hooks/useGuestsStats";
 import GuestAlert from "./GuestAlert";
