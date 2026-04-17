@@ -20,14 +20,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   setCorsHeaders(req, res);
 
-  // Handle preflight OPTIONS request
-  // if (req.method === "OPTIONS") {
-  //   return res.status(204).end();
-  // }
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
 
   if (req.method === "GET") {
-    const guests = await prisma.guest.findMany();
-    return res.status(200).json(guests);
+    try {
+      const guests = await prisma.guest.findMany();
+      return res.status(200).json(guests);
+    } catch (e) {
+      console.error("Failed to fetch guests", e);
+
+      return res.status(500).json({
+        success: false,
+        message: "Something went wrong. Please try again later.",
+      });
+    }
   }
 
   if (req.method === "POST") {
