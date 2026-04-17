@@ -1,6 +1,7 @@
 import { prisma } from "../_lib/prisma.js";
 import { setCorsHeaders } from "../_lib/cors.js";
 import { Prisma } from "../../src/generated/prisma/client.js";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 export type guestResponse = {
   success: boolean;
@@ -11,7 +12,7 @@ export type guestResponse = {
   };
 };
 
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers for all responses
   // res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
   // res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
@@ -20,9 +21,9 @@ export default async function handler(req, res) {
   setCorsHeaders(req, res);
 
   // Handle preflight OPTIONS request
-  if (req.method === "OPTIONS") {
-    return res.status(204).end();
-  }
+  // if (req.method === "OPTIONS") {
+  //   return res.status(204).end();
+  // }
 
   if (req.method === "GET") {
     const guests = await prisma.guest.findMany();
@@ -30,87 +31,96 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    let response: guestResponse = { success: false, message: "" };
     try {
       const newGuest = await prisma.guest.create({
         data: req.body,
       });
-      response = res.status(201).json({
+
+      const response: guestResponse = {
         success: true,
         message: "Guest created",
         guest: {
           id: newGuest.id,
           name: newGuest.name,
         },
-      });
-      return response;
+      };
+
+      return res.status(201).json(response);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        //409 status - conflict
-        response = res.status(409).json({
+        const response: guestResponse = {
           success: false,
           message: "Guest with this email and/or phone number already exist",
-        });
-      } else {
-        //500 status - internal server error
-        console.error(e);
-        response = res.status(500).json({
-          success: false,
-          message: "Something went wrong. Please try again later.",
-        });
+        };
+
+        return res.status(409).json(response);
       }
-      return response;
+
+      console.error(e);
+
+      const response: guestResponse = {
+        success: false,
+        message: "Something went wrong. Please try again later.",
+      };
+
+      return res.status(500).json(response);
     }
   }
 
   if (req.method === "DELETE") {
-    let response: guestResponse = { success: false, message: "" };
     try {
       const deletedGuest = await prisma.guest.delete({
         where: { id: req.body },
       });
-      response = res.status(201).json({
+
+      const response: guestResponse = {
         success: true,
         message: "Guest deleted",
         guest: {
           id: deletedGuest.id,
           name: deletedGuest.name,
         },
-      });
-      return response;
+      };
+
+      return res.status(200).json(response);
     } catch (e) {
       console.error(e);
-      response = res.status(500).json({
+
+      const response: guestResponse = {
         success: false,
         message: "Something went wrong. Please try again later.",
-      });
-      return response;
+      };
+
+      return res.status(500).json(response);
     }
   }
 
   if (req.method === "PUT") {
-    let response: guestResponse = { success: false, message: "" };
     try {
       const updatedGuest = await prisma.guest.update({
         where: { id: req.body.id },
         data: { ...req.body },
       });
-      response = res.status(201).json({
+
+      const response: guestResponse = {
         success: true,
         message: "Guest updated",
         guest: {
           id: updatedGuest.id,
           name: updatedGuest.name,
         },
-      });
-      return response;
+      };
+
+      return res.status(200).json(response);
     } catch (e) {
       console.error(e);
-      response = res.status(500).json({
+
+      const response: guestResponse = {
         success: false,
         message: "Something went wrong. Please try again later.",
-      });
-      return response;
+      };
+
+      return res.status(500).json(response);
     }
   }
 
