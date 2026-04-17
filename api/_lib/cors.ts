@@ -1,4 +1,6 @@
-export function setCorsHeaders(req, res) {
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+
+export function setCorsHeaders(req: VercelRequest, res: VercelResponse) {
   const allowedOrigins = [
     "http://localhost:5173",
     "http://localhost:3000",
@@ -7,7 +9,7 @@ export function setCorsHeaders(req, res) {
   const origin = req.headers.origin;
   console.log("CORS request from origin:", origin);
   if (
-    allowedOrigins.includes(origin) ||
+    (origin && allowedOrigins.includes(origin)) ||
     (origin &&
       origin.startsWith("https://wedding-planner-") &&
       origin.endsWith(".vercel.app"))
