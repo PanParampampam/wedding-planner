@@ -72,9 +72,7 @@ export default function GuestForm({
   const createGuestHook = useCreateGuest();
   const updateGuestHook = useUpdateGuest();
 
-  const { handler, loading, error } = editGuest
-    ? updateGuestHook
-    : createGuestHook;
+  const { loading, error } = editGuest ? updateGuestHook : createGuestHook;
 
   const formFieldHandler = (key: keyof PrismaGuest, value: string | null) => {
     setGuestData((g) => ({ ...g, [key]: value }));
@@ -84,10 +82,13 @@ export default function GuestForm({
     e.preventDefault();
     let guestOperationResponse: boolean = false;
     if ("id" in guestData) {
-      guestOperationResponse = await handler(guestData as PrismaGuest);
+      guestOperationResponse = await updateGuestHook.handler(
+        guestData as PrismaGuest,
+      );
     } else {
-      console.log("create");
-      guestOperationResponse = await handler(guestData as CreateGuest);
+      guestOperationResponse = await createGuestHook.handler(
+        guestData as CreateGuest,
+      );
     }
     if (guestOperationResponse) {
       onClose();
@@ -133,9 +134,11 @@ export default function GuestForm({
 
         <div className="flex flex-col md:flex-row gap-4">
           <FormControl required className="mb-2 max-w-md w-full">
-            <InputLabel>Status</InputLabel>
+            <InputLabel htmlFor="status-select">Status</InputLabel>
             <Select
+              id="status-select"
               label="Status"
+              aria-label="status"
               name="status"
               value={guestData.status}
               onChange={(e) => formFieldHandler("status", e.target.value)}
@@ -147,9 +150,11 @@ export default function GuestForm({
             </Select>
           </FormControl>
           <FormControl required className="mb-2 max-w-md w-full">
-            <InputLabel>Group</InputLabel>
+            <InputLabel htmlFor="group-select">Group</InputLabel>
             <Select
+              id="group-select"
               label="Group"
+              aria-label="group"
               name="group"
               value={guestData.group}
               onChange={(e) => formFieldHandler("group", e.target.value)}
@@ -161,9 +166,11 @@ export default function GuestForm({
             </Select>
           </FormControl>
           <FormControl required className="mb-2 max-w-md w-full">
-            <InputLabel>Plus One</InputLabel>
+            <InputLabel htmlFor="plusone-select">Plus One</InputLabel>
             <Select
+              id="plusone-select"
               label="Plus One"
+              aria-label="plus one"
               name="plusOne"
               value={guestData.plusOne}
               onChange={(e) => formFieldHandler("plusOne", e.target.value)}
@@ -254,8 +261,11 @@ export default function GuestForm({
         />
         {showDietary && (
           <FormControl className="mb-2 max-w-md w-full">
-            <InputLabel>Dietary Restrictions</InputLabel>
+            <InputLabel htmlFor="dietary-select">
+              Dietary Restrictions
+            </InputLabel>
             <Select
+              id="dietary-select"
               label="Dietary Restrictions"
               name="dietaryRestrictions"
               value={guestData.dietaryRestrictions || ""}
