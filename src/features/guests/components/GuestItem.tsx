@@ -1,10 +1,10 @@
 import type { Guest } from "../types/guest.types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 import { useDeleteGuest } from "../hooks/useDeleteGuest";
 import { Alert, Button } from "@mui/material";
 
@@ -16,6 +16,35 @@ export default function GuestItem({
   openEditGuestForm: (guest: Guest) => void;
 }) {
   const { handler, loading, error } = useDeleteGuest();
+
+  const summaryItems = [
+    {
+      label: "Status",
+      value: guest.status || "Pending",
+      valueColor:
+        guest.status === "confirmed"
+          ? "success.main"
+          : guest.status === "declined"
+            ? "error.main"
+            : "text.secondary",
+    },
+    {
+      label: "Group",
+      value: guest.group || "Not set",
+      valueColor: "primary.main",
+    },
+    {
+      label: "Plus One",
+      value: guest.plusOne ? "Yes" : "No",
+      valueColor: "text.primary",
+    },
+    {
+      label: "Dietary",
+      value: guest.dietaryRestrictions || "None",
+      valueColor: "text.primary",
+    },
+  ];
+
   return (
     <Box
       sx={{
@@ -24,8 +53,10 @@ export default function GuestItem({
         boxShadow: 1,
         p: 3,
         border: 1,
-        borderColor: "grey.200",
+        borderColor: "divider",
         minHeight: 220,
+        height: "100%",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         gap: 1.5,
@@ -33,62 +64,76 @@ export default function GuestItem({
         "&:hover": { boxShadow: 4 },
       }}
     >
-      <Typography variant="h6" color="text.primary">
+      <Typography
+        variant="h6"
+        sx={{
+          color: "primary.main",
+          textAlign: "center",
+          fontWeight: 700,
+        }}
+      >
         {guest.name}
       </Typography>
-      <Grid container spacing={1}>
-        <Grid size={{ xs: 6 }}>
-          <Chip
-            label={guest.group}
-            size="small"
-            color="primary"
-            variant="outlined"
-            sx={{ width: "100%" }}
-          />
-        </Grid>
-        <Grid size={{ xs: 6 }}>
-          <Chip
-            label={guest.status}
-            size="small"
-            color={
-              guest.status === "confirmed"
-                ? "success"
-                : guest.status === "declined"
-                  ? "error"
-                  : "default"
-            }
-            sx={{ width: "100%" }}
-          />
-        </Grid>
-        <Grid size={{ xs: 6 }}>
-          <Chip
-            label={`Plus One: ${guest.plusOne}`}
-            size="small"
-            variant="outlined"
-            sx={{ width: "100%" }}
-          />
-        </Grid>
-        <Grid size={{ xs: 6 }}>
-          {guest.dietaryRestrictions && (
-            <Chip
-              label={guest.dietaryRestrictions}
-              size="small"
-              color="secondary"
-              sx={{ width: "100%" }}
-            />
-          )}
-        </Grid>
+
+      <Grid container spacing={1.25}>
+        {summaryItems.map((item) => (
+          <Grid size={{ xs: 6 }} key={item.label}>
+            <Paper
+              variant="outlined"
+              sx={{
+                p: 1.25,
+                height: "100%",
+                bgcolor: "grey.50",
+                borderColor: "grey.200",
+                borderRadius: 2,
+              }}
+            >
+              <Typography
+                variant="caption"
+                sx={{
+                  display: "block",
+                  mb: 0.5,
+                  color: "text.secondary",
+                  fontWeight: 700,
+                  letterSpacing: 0.4,
+                  textTransform: "uppercase",
+                }}
+              >
+                {item.label}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: item.valueColor, fontWeight: 600 }}
+              >
+                {String(item.value)}
+              </Typography>
+            </Paper>
+          </Grid>
+        ))}
       </Grid>
       <Divider sx={{ my: 1 }} />
-      <Stack spacing={0.5}>
+
+      <Stack spacing={0.5} sx={{ flexGrow: 1 }}>
         {guest.email && guest.email.trim() && (
-          <Typography variant="body2" color="text.secondary">
-            <strong>Email:</strong> {guest.email}
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            <Box
+              component="span"
+              sx={{ color: "primary.main", fontWeight: 700 }}
+            >
+              Email:
+            </Box>{" "}
+            {guest.email}
           </Typography>
         )}
         {guest.phone && guest.phone.trim() && (
-          <Typography variant="body2" color="text.secondary">
-            <strong>Phone:</strong> {guest.phone}
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            <Box
+              component="span"
+              sx={{ color: "primary.main", fontWeight: 700 }}
+            >
+              Phone:
+            </Box>{" "}
+            {guest.phone}
           </Typography>
         )}
         {guest.address &&
@@ -100,56 +145,82 @@ export default function GuestItem({
               guest.address.country,
             ].filter(Boolean);
             return addressParts.length > 0 ? (
-              <Typography variant="body2" color="text.secondary">
-                <strong>Address:</strong> {addressParts.join(", ")}
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                <Box
+                  component="span"
+                  sx={{ color: "primary.main", fontWeight: 700 }}
+                >
+                  Address:
+                </Box>{" "}
+                {addressParts.join(", ")}
               </Typography>
             ) : null;
           })()}
         {guest.plusOneName && guest.plusOneName.trim() && (
-          <Typography variant="body2" color="text.secondary">
-            <strong>Plus One Name:</strong> {guest.plusOneName}
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            <Box
+              component="span"
+              sx={{ color: "primary.main", fontWeight: 700 }}
+            >
+              Plus One Name:
+            </Box>{" "}
+            {guest.plusOneName}
           </Typography>
         )}
         {guest.notes && guest.notes.trim() && (
-          <Typography variant="body2" color="text.secondary">
-            <strong>Notes:</strong> {guest.notes}
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            <Box
+              component="span"
+              sx={{ color: "primary.main", fontWeight: 700 }}
+            >
+              Notes:
+            </Box>{" "}
+            {guest.notes}
           </Typography>
         )}
+      </Stack>
+
+      <Stack
+        direction="row"
+        spacing={1.5}
+        sx={{ mt: "auto", pt: 2, justifyContent: "space-between" }}
+      >
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           onClick={() => handler(guest.id)}
-          className="mt-4 max-w-md w-full self-center"
           loading={loading}
           loadingPosition="end"
+          fullWidth
         >
           Delete Guest
         </Button>
         <Button
           variant="contained"
-          color="secondary"
+          color="primary"
           onClick={() => openEditGuestForm(guest)}
-          className="mt-4 max-w-md w-full self-center"
           loading={loading}
           loadingPosition="end"
+          fullWidth
         >
           Edit Guest
         </Button>
-        {error && (
-          <Alert
-            severity="error"
-            sx={{
-              mt: 2,
-              bgcolor: "error.main",
-              color: "common.white",
-              textAlign: "center",
-              fontWeight: 600,
-            }}
-          >
-            {error}
-          </Alert>
-        )}
       </Stack>
+
+      {error && (
+        <Alert
+          severity="error"
+          sx={{
+            mt: 2,
+            bgcolor: "error.main",
+            color: "common.white",
+            textAlign: "center",
+            fontWeight: 600,
+          }}
+        >
+          {error}
+        </Alert>
+      )}
     </Box>
   );
 }

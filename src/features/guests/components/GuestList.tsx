@@ -32,15 +32,30 @@ export default function GuestList({
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Guest List</h2>
       <GuestsStats total={total} confirmed={confirmed} attending={attending} />
       <GuestAlert />
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
         {guests && guests.length > 0 ? (
           guests.map((guest) => (
-            <Grid size={{ xs: 12, md: 6, lg: 4 }} key={guest.id}>
+            <Grid
+              size={{ xs: 12, md: 6 }}
+              key={guest.id}
+              sx={{
+                display: "flex",
+                flexBasis: { xs: "100%", md: "49%" },
+                maxWidth: { xs: "100%", md: "49%" },
+              }}
+            >
               <GuestItem guest={guest} openEditGuestForm={openEditGuestForm} />
             </Grid>
           ))
         ) : (
-          <Grid size={{ xs: 6, md: 8 }}>
+          <Grid
+            size={{ xs: 12, md: 6 }}
+            sx={{
+              display: "flex",
+              flexBasis: { xs: "100%", md: "49%" },
+              maxWidth: { xs: "100%", md: "49%" },
+            }}
+          >
             <Box
               sx={{
                 bgcolor: "background.paper",
@@ -50,6 +65,8 @@ export default function GuestList({
                 border: 1,
                 borderColor: "grey.200",
                 minHeight: 220,
+                height: "100%",
+                width: "100%",
                 display: "flex",
                 flexDirection: "column",
                 gap: 1.5,

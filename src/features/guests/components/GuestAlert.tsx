@@ -1,86 +1,73 @@
-import { useContext } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { GuestsContext } from "../context/GuestsContext";
-import { Box, Typography } from "@mui/material";
+import { Alert, Box, Fade } from "@mui/material";
+import { EMPTY_ALERT_HEIGHT } from "../../../shared/constants/componentsSizes";
 
 export default function GuestAlert() {
   const guestContext = useContext(GuestsContext);
+  const guestAction = guestContext?.guestAction;
+  const [open, setOpen] = useState(true);
 
-  if (guestContext?.guestAction?.actionType === "created") {
-    return (
-      <Box sx={{ mb: 2 }}>
-        <Typography
-          sx={{
-            bgcolor: "success.main",
-            color: "common.white",
-            px: 3,
-            py: 2,
-            borderRadius: 2,
-            textAlign: "center",
-            fontWeight: 600,
-            fontSize: "1rem",
-          }}
-        >
-          A new guest "{guestContext.guestAction.guestName}" has been added.
-        </Typography>
-      </Box>
-    );
-  }
+  const alertConfig = useMemo(() => {
+    if (!guestAction) return null;
 
-  if (guestContext?.guestAction?.actionType === "deleted") {
-    return (
-      <Box sx={{ mb: 2 }}>
-        <Typography
-          sx={{
-            bgcolor: "warning.main",
-            color: "common.white",
-            px: 3,
-            py: 2,
-            borderRadius: 2,
-            textAlign: "center",
-            fontWeight: 600,
-            fontSize: "1rem",
-          }}
-        >
-          Guest "{guestContext.guestAction.guestName}" has been deleted.
-        </Typography>
-      </Box>
-    );
-  }
+    if (guestAction.actionType === "created") {
+      return {
+        severity: "success" as const,
+        message: `A new guest "${guestAction.guestName}" has been added.`,
+      };
+    }
 
-  if (guestContext?.guestAction?.actionType === "updated") {
-    return (
-      <Box sx={{ mb: 2 }}>
-        <Typography
-          sx={{
-            bgcolor: "success.main",
-            color: "common.white",
-            px: 3,
-            py: 2,
-            borderRadius: 2,
-            textAlign: "center",
-            fontWeight: 600,
-            fontSize: "1rem",
-          }}
-        >
-          Guest "{guestContext.guestAction.guestName}" has been updated.
-        </Typography>
-      </Box>
-    );
-  }
+    if (guestAction.actionType === "deleted") {
+      return {
+        severity: "warning" as const,
+        message: `Guest "${guestAction.guestName}" has been deleted.`,
+      };
+    }
+
+    if (guestAction.actionType === "updated") {
+      return {
+        severity: "success" as const,
+        message: `Guest "${guestAction.guestName}" has been updated.`,
+      };
+    }
+
+    return null;
+  }, [guestAction]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setOpen(false);
+    }, 3000);
+
+    return () => window.clearTimeout(timer);
+  }, [alertConfig]);
 
   return (
-    <Box sx={{ mb: 2 }}>
-      <Typography
-        sx={{
-          color: "common.white",
-          px: 3,
-          py: 2,
-          borderRadius: 2,
-          textAlign: "center",
-          fontWeight: 600,
-          fontSize: "1rem",
-        }}
-      ></Typography>
+    <Box sx={{ mb: 2, minHeight: EMPTY_ALERT_HEIGHT }}>
+      <Fade
+        in={Boolean(alertConfig && open)}
+        timeout={{ enter: 200, exit: 400 }}
+      >
+        <Box>
+          <Alert
+            severity={alertConfig?.severity ?? "info"}
+            sx={{
+              borderRadius: 0,
+              fontWeight: 600,
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              "& .MuiAlert-message": {
+                width: "100%",
+                textAlign: "center",
+              },
+            }}
+          >
+            {alertConfig?.message ?? " "}
+          </Alert>
+        </Box>
+      </Fade>
     </Box>
   );
 }

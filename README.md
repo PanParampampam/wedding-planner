@@ -21,3 +21,4 @@ npx prisma migrate reset
 - **API:** REST (custom endpoints in `api/`)
 - **Database:** PostgreSQL (via Prisma ORM)
 - **Testing:** Vitest, jsdom, React Testing Library
+- **AI:** VSC Coopilot connected to MUI documentation
