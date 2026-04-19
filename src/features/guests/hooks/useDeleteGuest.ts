@@ -1,23 +1,22 @@
 import { useState, useContext } from "react";
-import { createGuest } from "../api/guests.api";
-import type { CreateGuest } from "../types/guest.types";
+import { deleteGuest } from "../api/guests.api";
 import { GuestsContext } from "../context/GuestsContext";
 
-export const useCreateGuest = () => {
+export const useDeleteGuest = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>("");
   const guestsContext = useContext(GuestsContext);
 
-  const handler = async (guest: CreateGuest) => {
+  const handler = async (id: number) => {
     setLoading(true);
     try {
-      const response = await createGuest(guest);
+      const response = await deleteGuest(id);
       if (response.success && response.guest) {
         setError("");
         guestsContext?.setGuestAction({
-          actionType: "created",
+          actionType: "deleted",
           guestId: response.guest.id,
-          guestName: response.guest.name,
+          guestName: response.guest?.name,
         });
         return true;
       } else {

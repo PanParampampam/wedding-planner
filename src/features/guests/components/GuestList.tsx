@@ -1,14 +1,23 @@
 import GuestItem from "./GuestItem";
 import { useGuests } from "../hooks/useGuests";
+import GuestListSkeleton from "./GuestListSkeleton";
+import { Grid } from "@mui/material";
+import Box from "@mui/material/Box";
+import { useGuestsStats } from "../hooks/useGuestsStats";
+import GuestAlert from "./GuestAlert";
+import GuestsStats from "./GuestsStats";
+import type { Guest } from "../types/guest.types";
 
-export default function GuestList() {
-  //const { guests, isLoading, error } = useGuests();
+export default function GuestList({
+  openEditGuestForm,
+}: {
+  openEditGuestForm: (guest: Guest) => void;
+}) {
   const { guests, loading, error } = useGuests();
+  const { total, confirmed, attending } = useGuestsStats(guests);
 
   if (loading) {
-    return (
-      <div className="text-center py-8 text-gray-500">Loading guests...</div>
-    );
+    return <GuestListSkeleton />;
   }
   if (error) {
     return (
@@ -19,15 +28,57 @@ export default function GuestList() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto mt-8">
+    <Box sx={{ maxWidth: { xs: "100%", lg: 1200 }, marginX: "auto", mt: 8 }}>
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Guest List</h2>
-      <div className="flex flex-col gap-4">
+      <GuestsStats total={total} confirmed={confirmed} attending={attending} />
+      <GuestAlert />
+      <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
         {guests && guests.length > 0 ? (
-          guests.map((guest) => <GuestItem key={guest.id} {...guest} />)
+          guests.map((guest) => (
+            <Grid
+              size={{ xs: 12, md: 6 }}
+              key={guest.id}
+              sx={{
+                display: "flex",
+                flexBasis: { xs: "100%", md: "49%" },
+                maxWidth: { xs: "100%", md: "49%" },
+              }}
+            >
+              <GuestItem guest={guest} openEditGuestForm={openEditGuestForm} />
+            </Grid>
+          ))
         ) : (
-          <div className="text-gray-500 text-center">No guests found.</div>
+          <Grid
+            size={{ xs: 12, md: 6 }}
+            sx={{
+              display: "flex",
+              flexBasis: { xs: "100%", md: "49%" },
+              maxWidth: { xs: "100%", md: "49%" },
+            }}
+          >
+            <Box
+              sx={{
+                bgcolor: "background.paper",
+                borderRadius: 2,
+                boxShadow: 1,
+                p: 3,
+                border: 1,
+                borderColor: "grey.200",
+                minHeight: 220,
+                height: "100%",
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                gap: 1.5,
+                transition: "box-shadow 0.2s",
+                "&:hover": { boxShadow: 4 },
+              }}
+            >
+              No guests found.
+            </Box>
+          </Grid>
         )}
-      </div>
-    </div>
+      </Grid>
+    </Box>
   );
 }

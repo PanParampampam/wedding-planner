@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getGuests } from "../api/guests.api";
 import type { Guest } from "../types/guest.types";
+import { GuestsContext } from "../context/GuestsContext";
 
 export const useGuests = () => {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const guestsContext = useContext(GuestsContext);
 
   useEffect(() => {
+    setLoading(true);
     const getGuestsHandler = async () => {
       try {
         const guestsResponse = await getGuests();
@@ -39,7 +42,7 @@ export const useGuests = () => {
       }
     };
     getGuestsHandler();
-  }, []);
+  }, [guestsContext?.guestAction]);
 
   return { guests, loading, error };
 };

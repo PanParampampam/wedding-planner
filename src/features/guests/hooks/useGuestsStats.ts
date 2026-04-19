@@ -8,7 +8,7 @@ export const useGuestsStats = (guests: Guest[]) => {
   }, 0);
   return {
     total: guests.length,
-    confirmed: confirmed,
+    confirmed: confirmed.length,
     attending: attending,
   };
 };

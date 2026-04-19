@@ -1,13 +1,17 @@
 import { StrictMode } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { createRoot } from "react-dom/client";
+import { ThemeProvider } from "@mui/material/styles";
 import "./index.css";
 import App from "./App.tsx";
+import appTheme from "./shared/theme/appTheme";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ThemeProvider theme={appTheme}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
   </StrictMode>,
 );
