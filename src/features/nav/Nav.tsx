@@ -1,14 +1,14 @@
 import {
   Box,
-  Button,
   Divider,
   Drawer,
+  IconButton,
   List,
   ListItemButton,
   ListItemText,
-  Toolbar,
   Typography,
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { useState } from "react";
 import logo from "../../assets/logo.png";
@@ -129,43 +129,34 @@ export default function Nav() {
 
   return (
     <>
-      <Box
+      <IconButton
+        onClick={handleDrawerToggle}
         sx={{
-          display: { xs: "block", md: "none" },
-          position: "sticky",
-          top: 0,
+          display: { xs: mobileOpen ? "none" : "flex", md: "none" },
+          position: "fixed",
+          top: 12,
+          left: 12,
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          borderBottom: "1px solid",
+          width: 48,
+          height: 48,
+          backgroundColor: "rgba(255, 255, 255, 0.75)",
+          backdropFilter: "blur(6px)",
+          border: "1px solid",
           borderColor: "divider",
-          backgroundColor: "rgba(255, 255, 255, 0.92)",
-          backdropFilter: "blur(10px)",
+          "&:hover": { backgroundColor: "rgba(248, 238, 243, 0.9)" },
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between", gap: 2 }}>
-          <Typography
-            variant="h6"
-            sx={{ color: "primary.main", fontSize: "1rem", fontWeight: 700 }}
-          >
-            Wedding Planner
-          </Typography>
-
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleDrawerToggle}
-            sx={{
-              borderRadius: 999,
-            }}
-          >
-            Show menu
-          </Button>
-        </Toolbar>
-      </Box>
+        <MenuIcon sx={{ color: "primary.main", fontSize: 26 }} />
+      </IconButton>
 
       <Box
         component="nav"
         aria-label="Wedding planner pages"
-        sx={{ width: { md: DRAWER_WIDTH }, flexShrink: { md: 0 } }}
+        sx={{
+          width: { md: DRAWER_WIDTH },
+          flexShrink: { md: 0 },
+          display: { xs: "none", md: "block" },
+        }}
       >
         <Drawer
           variant="temporary"

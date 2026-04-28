@@ -16,7 +16,7 @@ export default function LoginLayout({ children }: { children: ReactNode }) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: "100vw",
+          width: "100%",
           backgroundColor: "#FEFEFE",
         }}
       >
