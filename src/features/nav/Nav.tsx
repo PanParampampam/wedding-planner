@@ -39,7 +39,7 @@ function DrawerContent({ onNavigate }: DrawerContentProps) {
           `linear-gradient(180deg, ${theme.palette.background.paper} 0%, ${theme.palette.secondary.light} 100%)`,
       }}
     >
-      <Box sx={{ px: 3, py: 4, textAlign: "center" }}>
+      <Box sx={{ px: 2.5, py: 2.5, textAlign: "center" }}>
         <Box
           component={RouterLink}
           to="/home"
@@ -51,7 +51,9 @@ function DrawerContent({ onNavigate }: DrawerContentProps) {
             src={logo}
             alt="Wedding Planner logo"
             sx={{
-              display: "block",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
               width: "100%",
               maxWidth: 180,
               height: "auto",

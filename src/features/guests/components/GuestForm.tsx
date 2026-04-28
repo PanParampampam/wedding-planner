@@ -18,6 +18,8 @@ import type { Guest } from "../types/guest.types";
 import type { Guest as PrismaGuest } from "../../../generated/prisma/client";
 import type { CreateGuest } from "../types/guest.types";
 import { useUpdateGuest } from "../hooks/useUpdateGuest";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 
 type GuestFormProps = {
   open: boolean;
@@ -295,6 +297,7 @@ export default function GuestForm({
           className="mt-4 max-w-md w-full self-center"
           loading={loading}
           loadingPosition="end"
+          endIcon={editGuest ? <EditRoundedIcon /> : <SaveRoundedIcon />}
         >
           {editGuest ? "Edit guest" : "New guest"}
         </Button>

@@ -4,6 +4,7 @@ import GuestForm from "./components/GuestForm";
 import { useState } from "react";
 import { GuestsContext } from "./context/GuestsContext";
 import type { Guest, GuestAction } from "./types/guest.types";
+import ComponentHeader from "../../shared/ui/ComponentHeader";
 
 export default function Guests() {
   const [guestFormOpen, setGuestFormOpen] = useState<boolean>(false);
@@ -27,9 +28,18 @@ export default function Guests() {
   return (
     <GuestsContext value={{ guestAction, setGuestAction }}>
       <main>
-        <Button variant="contained" onClick={openNewGuestForm}>
-          Add a new guest
-        </Button>
+        <ComponentHeader
+          title="Guest List"
+          description="Track, edit, and organize everyone invited to your wedding."
+        >
+          <Button
+            variant="contained"
+            onClick={openNewGuestForm}
+            sx={{ width: "fit-content" }}
+          >
+            Add a new guest
+          </Button>
+        </ComponentHeader>
         <GuestList openEditGuestForm={openEditGuestForm} />
         <GuestForm
           open={guestFormOpen}

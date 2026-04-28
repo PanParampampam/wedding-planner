@@ -49,6 +49,12 @@ const appTheme = createTheme({
     fontFamily: ["Inter", "Segoe UI", "Roboto", "Arial", "sans-serif"].join(
       ",",
     ),
+    h1: {
+      fontSize: "2.125rem",
+      fontWeight: 700,
+      lineHeight: 1.235,
+      letterSpacing: "0.00735em",
+    },
     h4: {
       fontWeight: 700,
     },

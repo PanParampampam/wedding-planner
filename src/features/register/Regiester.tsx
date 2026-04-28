@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import AppRegistrationRoundedIcon from "@mui/icons-material/AppRegistrationRounded";
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import type { RegisterForm } from "./types/register.types";
@@ -166,6 +167,8 @@ export default function Register() {
               size="large"
               fullWidth
               loading={loading}
+              loadingPosition="end"
+              endIcon={<AppRegistrationRoundedIcon />}
               sx={{ mt: 0.5, py: 1.25 }}
             >
               Create an account

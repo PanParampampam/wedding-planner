@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Stack, Typography } from "@mui/material";
-import logo from "./../../assets/logo.png";
+import logo from "./../../assets/logo-transparent.png";
 
 export default function LoadingLayout() {
   return (
@@ -15,8 +15,12 @@ export default function LoadingLayout() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
           width: "100vw",
-          backgroundColor: "#FEFEFE",
+          height: 200,
+          backgroundColor: "background.paper",
+          mb: 12,
+          mt: 4,
         }}
       >
         <Box
