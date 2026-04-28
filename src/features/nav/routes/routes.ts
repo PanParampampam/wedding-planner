@@ -1,4 +1,4 @@
-import type { navItemProps } from "../types/common.types";
+import type { navItemProps } from "../types/Nav.types";
 
 const home: navItemProps = { label: "Home", path: "/home" };
 const guestList: navItemProps = { label: "Guest List", path: "/guests" };

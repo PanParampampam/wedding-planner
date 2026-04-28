@@ -212,8 +212,6 @@ export default function GuestItem({
           severity="error"
           sx={{
             mt: 2,
-            bgcolor: "error.main",
-            color: "common.white",
             textAlign: "center",
             fontWeight: 600,
           }}

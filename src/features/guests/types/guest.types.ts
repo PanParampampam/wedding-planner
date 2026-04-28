@@ -1,4 +1,4 @@
-import type { Guest as GeneratedGuest } from "../../../generated/prisma/client";
+import type { Guest as PrismaGuest } from "../../../generated/prisma/client";
 
 export type Guest = {
   id: number;
@@ -19,7 +19,7 @@ export type Guest = {
   notes: string | null;
 };
 
-export type CreateGuest = Omit<GeneratedGuest, "id">;
+export type CreateGuest = Omit<PrismaGuest, "id">;
 
 export type GuestAction = {
   actionType: "created" | "deleted" | "updated";

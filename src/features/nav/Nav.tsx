@@ -13,8 +13,9 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 import { useState } from "react";
 import logo from "../../assets/logo.png";
 import { DRAWER_WIDTH } from "../../shared/constants/componentsSizes";
-import { routes } from "../../shared/constants/routes";
-import type { navItemProps } from "../../shared/types/common.types";
+import { routes } from "./routes/routes";
+import type { navItemProps } from "./types/Nav.types";
+import { useAuthProvider } from "../authProvider/hooks/useAuthProvider";
 
 const navItems: navItemProps[] = routes;
 
@@ -24,6 +25,7 @@ type DrawerContentProps = {
 
 function DrawerContent({ onNavigate }: DrawerContentProps) {
   const location = useLocation();
+  const { logout } = useAuthProvider();
 
   return (
     <Box
@@ -97,6 +99,21 @@ function DrawerContent({ onNavigate }: DrawerContentProps) {
           );
         })}
       </List>
+
+      <Box sx={{ mt: "auto", px: 1.5, pb: 2 }}>
+        <Divider sx={{ mb: 2 }} />
+        <ListItemButton
+          onClick={logout}
+          sx={{
+            borderRadius: 2,
+            color: "text.secondary",
+          }}
+        >
+          <ListItemText
+            primary={<Typography sx={{ fontWeight: 500 }}>Logout</Typography>}
+          />
+        </ListItemButton>
+      </Box>
     </Box>
   );
 }

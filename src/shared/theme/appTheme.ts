@@ -30,6 +30,12 @@ const appTheme = createTheme({
       dark: "#9a671d",
       contrastText: "#ffffff",
     },
+    error: {
+      main: "#c96b86",
+      light: "#f8dce5",
+      dark: "#9c4760",
+      contrastText: "#ffffff",
+    },
     text: {
       primary: "#3d3242",
       secondary: "#6b6375",
@@ -73,6 +79,28 @@ const appTheme = createTheme({
       defaultProps: {
         disableElevation: true,
       },
+    },
+    MuiAlert: {
+      variants: [
+        {
+          props: { severity: "error", variant: "standard" },
+          style: {
+            backgroundColor: "#f8dce5",
+            color: "#9c4760",
+            border: "1px solid #efc3d0",
+            "& .MuiAlert-icon": {
+              color: "#c96b86",
+            },
+          },
+        },
+        {
+          props: { severity: "error", variant: "filled" },
+          style: {
+            backgroundColor: "#c96b86",
+            color: "#ffffff",
+          },
+        },
+      ],
     },
   },
 });

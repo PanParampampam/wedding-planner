@@ -1,35 +1,30 @@
 import { prisma } from "../_lib/prisma.js";
 import { setCorsHeaders } from "../_lib/cors.js";
 import { Prisma } from "../../src/generated/prisma/client.js";
+import { getUserFromRequest } from "../../src/backend/shared/auth/getUser.js";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-
-export type guestResponse = {
-  success: boolean;
-  message: string;
-  guest?: {
-    id: number;
-    name: string;
-  };
-};
+import type { GuestResponse } from "../../src/backend/features/guests/guests.types.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Set CORS headers for all responses
-  // res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
-  // res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  // res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
   setCorsHeaders(req, res);
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
   }
 
+  const user = await getUserFromRequest(req);
+  if (!user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   if (req.method === "GET") {
     try {
-      const guests = await prisma.guest.findMany();
+      const guests = await prisma.guest.findMany({
+        where: { userId: user.id },
+      });
       return res.status(200).json(guests);
     } catch (e) {
-      console.error("Failed to fetch guests", e);
+      console.error("Failed to fetch guests: ", e);
 
       return res.status(500).json({
         success: false,
@@ -41,10 +36,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === "POST") {
     try {
       const newGuest = await prisma.guest.create({
-        data: req.body,
+        data: { ...req.body, userId: user.id },
       });
 
-      const response: guestResponse = {
+      const response: GuestResponse = {
         success: true,
         message: "Guest created",
         guest: {
@@ -56,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(201).json(response);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        const response: guestResponse = {
+        const response: GuestResponse = {
           success: false,
           message: "Guest with this email and/or phone number already exist",
         };
@@ -66,7 +61,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       console.error(e);
 
-      const response: guestResponse = {
+      const response: GuestResponse = {
         success: false,
         message: "Something went wrong. Please try again later.",
       };
@@ -81,7 +76,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         where: { id: req.body },
       });
 
-      const response: guestResponse = {
+      const response: GuestResponse = {
         success: true,
         message: "Guest deleted",
         guest: {
@@ -94,7 +89,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     } catch (e) {
       console.error(e);
 
-      const response: guestResponse = {
+      const response: GuestResponse = {
         success: false,
         message: "Something went wrong. Please try again later.",
       };
@@ -110,7 +105,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         data: { ...req.body },
       });
 
-      const response: guestResponse = {
+      const response: GuestResponse = {
         success: true,
         message: "Guest updated",
         guest: {
@@ -123,7 +118,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     } catch (e) {
       console.error(e);
 
-      const response: guestResponse = {
+      const response: GuestResponse = {
         success: false,
         message: "Something went wrong. Please try again later.",
       };
