@@ -5,7 +5,6 @@ import { useAuthProvider } from "./features/authProvider/hooks/useAuthProvider";
 
 function App() {
   const { user } = useAuthProvider();
-  console.log(user);
   return (
     <Box
       sx={{

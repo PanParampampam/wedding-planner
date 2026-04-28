@@ -15,12 +15,17 @@ export const apiClient = async <T>(
     },
     ...options,
   });
-
   if (!response.ok) {
-    const errorText = await response.json();
-    throw new Error(
-      errorText.message || `Request failed with status ${response.status}`,
-    );
+    const text = await response.text();
+    let message: string;
+    try {
+      const errorJson = JSON.parse(text);
+      message =
+        errorJson.message || `Request failed with status ${response.status}`;
+    } catch {
+      message = `Request failed with status ${response.status}`;
+    }
+    throw new Error(message);
   }
 
   return response.json() as Promise<T>;

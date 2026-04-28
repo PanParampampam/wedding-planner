@@ -1,16 +1,13 @@
-import { useState } from "react";
-import type { User } from "../../../shared/types/common.types";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthProvider.context";
 import type { AuthProvider } from "../types/authProvider.types";
 
 export const useAuthProvider = (): AuthProvider => {
-  const [user, setUser] = useState<User | null>(null);
+  const context = useContext(AuthContext);
 
-  const login = (userData: User) => {
-    setUser(userData);
-  };
+  if (!context) {
+    throw new Error("useAuthProvider must be used within an AuthProvider");
+  }
 
-  const logout = () => {
-    setUser(null);
-  };
-  return { user, login, logout };
+  return context;
 };

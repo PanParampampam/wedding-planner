@@ -4,13 +4,12 @@ import { prisma } from "../../../../api/_lib/prisma";
 
 export const getUserFromRequest = async (req: VercelRequest) => {
   const cookie = req.headers.cookie;
-
   if (!cookie) return null;
 
-  const token = cookie
+  const tokenCookie = cookie
     .split(";")
-    .find((c) => c.trim().startsWith("token="))
-    ?.split("=")[1];
+    .find((c) => c.trim().startsWith("token="));
+  const token = tokenCookie?.trim().slice("token=".length);
 
   if (!token) return null;
 

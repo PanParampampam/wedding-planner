@@ -1,8 +1,3 @@
-export type navItemProps = {
-  label: string;
-  path: string;
-};
-
 export type User = {
   name: string;
   email: string;

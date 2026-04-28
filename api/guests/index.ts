@@ -1,20 +1,20 @@
-import { prisma } from "../_lib/prisma";
+import { prisma } from "../_lib/prisma.js";
 import { setCorsHeaders } from "../_lib/cors.js";
-import { Prisma } from "../../src/generated/prisma/client";
-import { getUserFromRequest } from "../../src/backend/shared/auth/getUser";
+import { Prisma } from "../../src/generated/prisma/client.js";
+import { getUserFromRequest } from "../../src/backend/shared/auth/getUser.js";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import type { GuestResponse } from "../../src/backend/features/guests/guests.types";
+import type { GuestResponse } from "../../src/backend/features/guests/guests.types.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const user = await getUserFromRequest(req);
-
-  if (!user) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
   setCorsHeaders(req, res);
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
+  }
+
+  const user = await getUserFromRequest(req);
+  if (!user) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   if (req.method === "GET") {
