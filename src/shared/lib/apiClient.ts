@@ -17,9 +17,9 @@ export const apiClient = async <T>(
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
+    const errorText = await response.json();
     throw new Error(
-      errorText || `Request failed with status ${response.status}`,
+      errorText.message || `Request failed with status ${response.status}`,
     );
   }
 

@@ -12,8 +12,16 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  password String // hashed (bcrypt)
+  guests   Guest[]
+}
+
 model Guest {
-  id                  Int   @id @default(autoincrement())
+  id                  Int     @id @default(autoincrement())
   name                String
   status              String
   email               String? @unique
@@ -25,6 +33,9 @@ model Guest {
   group               String
   plusOne             String
   plusOneName         String?
+  children            Int?
   dietaryRestrictions String?
   notes               String?
+  userId              String
+  user                User    @relation(fields: [userId], references: [id])
 }

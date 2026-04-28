@@ -1,5 +1,5 @@
 import { prisma } from "../../../../api/_lib/prisma";
-import { Prisma } from "../../../generated/prisma/client";
+import { Prisma } from "src/generated/prisma/client";
 
 export const guestRepository = {
   findAll: () => prisma.guest.findMany(),
