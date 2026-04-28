@@ -4,8 +4,12 @@ import { Prisma } from "../../src/generated/prisma/client.js";
 import { getUserFromRequest } from "../../src/backend/shared/auth/getUser.js";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import type { GuestResponse } from "../../src/backend/features/guests/guests.types.js";
+import type { UserResponse } from "../../src/shared/types/common.types.js";
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse,
+): Promise<UserResponse | VercelResponse> {
   setCorsHeaders(req, res);
 
   if (req.method === "OPTIONS") {

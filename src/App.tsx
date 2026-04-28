@@ -2,9 +2,15 @@ import { Box, CssBaseline, Toolbar } from "@mui/material";
 import PublicRoutes from "./routes/PublicRoutes";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import { useAuthProvider } from "./features/authProvider/hooks/useAuthProvider";
+import LoadingLayout from "./shared/layouts/LoadingLayout";
 
 function App() {
-  const { user } = useAuthProvider();
+  const { user, authLoading } = useAuthProvider();
+
+  if (authLoading) {
+    return <LoadingLayout />;
+  }
+
   return (
     <Box
       sx={{

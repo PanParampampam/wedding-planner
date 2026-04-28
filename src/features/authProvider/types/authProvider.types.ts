@@ -2,6 +2,7 @@ import type { User } from "src/shared/types/common.types";
 
 export type AuthProvider = {
   user: User | null;
+  authLoading: boolean;
   login: (userData: User) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 };
