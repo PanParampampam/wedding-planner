@@ -5,17 +5,19 @@ import {
   IconButton,
   List,
   ListItemButton,
+  ListItemIcon,
   ListItemText,
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { useState } from "react";
 import logo from "../../assets/logo.png";
 import { DRAWER_WIDTH } from "../../shared/constants/componentsSizes";
 import { routes } from "./routes/routes";
 import type { navItemProps } from "./types/Nav.types";
 import { useAuthProvider } from "../authProvider/hooks/useAuthProvider";
+import { useState } from "react";
 
 const navItems: navItemProps[] = routes;
 
@@ -63,6 +65,7 @@ function DrawerContent({ onNavigate }: DrawerContentProps) {
 
       <List sx={{ px: 1.5, py: 2 }}>
         {navItems.map((item) => {
+          const Icon = item.icon;
           const isHomeRoute = item.path === "/home";
           const isSelected = isHomeRoute
             ? location.pathname === "/" || location.pathname === "/home"
@@ -88,6 +91,14 @@ function DrawerContent({ onNavigate }: DrawerContentProps) {
                 },
               }}
             >
+              <ListItemIcon
+                sx={{
+                  minWidth: 40,
+                  color: isSelected ? "primary.main" : "text.secondary",
+                }}
+              >
+                <Icon />
+              </ListItemIcon>
               <ListItemText
                 primary={
                   <Typography sx={{ fontWeight: isSelected ? 700 : 500 }}>
@@ -109,6 +120,9 @@ function DrawerContent({ onNavigate }: DrawerContentProps) {
             color: "text.secondary",
           }}
         >
+          <ListItemIcon sx={{ minWidth: 40, color: "text.secondary" }}>
+            <LogoutIcon />
+          </ListItemIcon>
           <ListItemText
             primary={<Typography sx={{ fontWeight: 500 }}>Logout</Typography>}
           />
