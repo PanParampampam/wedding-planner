@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getUserFromRequest } from "../../src/backend/shared/auth/getUser";
-import type { UserResponse } from "../../src/shared/types/common.types";
+import { getUserFromRequest } from "../../src/backend/shared/auth/getUser.js";
+import type { UserResponse } from "../../src/shared/types/common.types.js";
 
 export default async function handler(
   req: VercelRequest,

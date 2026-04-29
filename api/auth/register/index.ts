@@ -1,8 +1,8 @@
-import { prisma } from "../../_lib/prisma";
-import { Prisma } from "../../../src/generated/prisma/client";
+import { prisma } from "../../_lib/prisma.js";
+import { Prisma } from "../../../src/generated/prisma/client.js";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import bcrypt from "bcrypt";
-import type { UserResponse } from "../../../src/shared/types/common.types";
+import type { UserResponse } from "../../../src/shared/types/common.types.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") return res.status(405).end();

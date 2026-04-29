@@ -1,5 +1,5 @@
 import { guestRepository } from "./guests.repository";
-import { Prisma } from "src/generated/prisma/client";
+import { Prisma } from "src/generated/prisma/client.js";
 
 export const getGuests = async () => {
   return guestRepository.findAll();
