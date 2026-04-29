@@ -25,6 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         name: newUser.name,
         id: newUser.id,
         email: newUser.email,
+        weddingDate: newUser.weddingDate,
       },
     };
 
