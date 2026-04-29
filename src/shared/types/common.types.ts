@@ -1,6 +1,7 @@
 export type User = {
   name: string;
   email: string;
+  weddingDate: Date;
 };
 
 export type Login = {
@@ -14,8 +15,9 @@ export type UserResponse = {
   success: boolean;
   message?: string;
   user?: {
-    name: string;
     id: string;
+    name: string;
     email: string;
+    weddingDate: Date;
   };
 };

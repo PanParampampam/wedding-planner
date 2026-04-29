@@ -23,7 +23,6 @@ export default function GuestListSkeleton() {
                 gap: 1.5,
               }}
             >
-              <Skeleton variant="text" width="60%" height={32} sx={{ mb: 1 }} />
               <Skeleton
                 variant="rectangular"
                 width="50%"

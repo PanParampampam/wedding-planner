@@ -28,8 +28,7 @@ export default function GuestList({
   }
 
   return (
-    <Box sx={{ maxWidth: { xs: "100%", lg: 1200 }, marginX: "auto", mt: 8 }}>
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Guest List</h2>
+    <>
       <GuestsStats total={total} confirmed={confirmed} attending={attending} />
       <GuestAlert />
       <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
@@ -79,6 +78,6 @@ export default function GuestList({
           </Grid>
         )}
       </Grid>
-    </Box>
+    </>
   );
 }

@@ -8,3 +8,12 @@ export const setAuthCookie = (res: VercelResponse, token: string) => {
     }`,
   );
 };
+
+export const clearAuthCookie = (res: VercelResponse) => {
+  res.setHeader(
+    "Set-Cookie",
+    `token=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0; ${
+      process.env.NODE_ENV === "production" ? "Secure;" : ""
+    }`,
+  );
+};

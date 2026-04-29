@@ -5,6 +5,8 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { useDeleteGuest } from "../hooks/useDeleteGuest";
 import { Alert, Button } from "@mui/material";
 
@@ -191,6 +193,7 @@ export default function GuestItem({
           onClick={() => handler(guest.id)}
           loading={loading}
           loadingPosition="end"
+          endIcon={<DeleteOutlineRoundedIcon />}
           fullWidth
         >
           Delete Guest
@@ -201,6 +204,7 @@ export default function GuestItem({
           onClick={() => openEditGuestForm(guest)}
           loading={loading}
           loadingPosition="end"
+          endIcon={<EditRoundedIcon />}
           fullWidth
         >
           Edit Guest

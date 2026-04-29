@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { RegisterForm } from "../types/register.types";
+import type { RegisterForm, RegisterFormErrors } from "../types/register.types";
 
 export const useFormValidate = () => {
-  const [formErrors, setFormErrors] = useState<Partial<RegisterForm>>({});
+  const [formErrors, setFormErrors] = useState<RegisterFormErrors>({});
   const validate = (form: RegisterForm): boolean => {
-    const newErrors: Partial<RegisterForm> = {};
+    const newErrors: RegisterFormErrors = {};
 
     if (!form.name.trim()) {
       newErrors.name = "Name is required.";
@@ -26,6 +26,10 @@ export const useFormValidate = () => {
       newErrors.confirmPassword = "Please confirm your password.";
     } else if (form.password !== form.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    if (!form.weddingDate) {
+      newErrors.weddingDate = "Wedding date is required.";
     }
 
     setFormErrors(newErrors);

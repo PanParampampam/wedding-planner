@@ -1,5 +1,7 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/api/guests", "destination": "/api/guests/guests" }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",

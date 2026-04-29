@@ -13,6 +13,7 @@ export const useCreateUser = () => {
         name: user.name,
         email: user.email,
         password: user.password,
+        weddingDate: user.weddingDate,
       };
       const response = await createUser(newUser);
       if (response.success && response.user) {

@@ -1,10 +1,20 @@
-import { Box, CssBaseline, Toolbar } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
+import { useLocation } from "react-router-dom";
 import PublicRoutes from "./routes/PublicRoutes";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import { useAuthProvider } from "./features/authProvider/hooks/useAuthProvider";
+import LoadingLayout from "./shared/layouts/LoadingLayout";
 
 function App() {
-  const { user } = useAuthProvider();
+  const { user, authLoading } = useAuthProvider();
+  const { pathname } = useLocation();
+
+  const isPublicAuthPath = pathname === "/login" || pathname === "/register";
+
+  if (authLoading && !isPublicAuthPath) {
+    return <LoadingLayout />;
+  }
+
   return (
     <Box
       sx={{
@@ -15,7 +25,6 @@ function App() {
     >
       {user ? <ProtectedRoutes /> : <PublicRoutes />}
       <CssBaseline />
-      <Toolbar sx={{ display: { xs: "flex", md: "none" } }} />
     </Box>
   );
 }

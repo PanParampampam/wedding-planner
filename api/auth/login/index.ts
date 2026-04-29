@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import bcrypt from "bcrypt";
-import { prisma } from "../_lib/prisma";
-import { signToken } from "../../src/backend/shared/auth/jwt";
-import { setAuthCookie } from "../../src/backend/shared/auth/cookie";
-import type { UserResponse } from "src/shared/types/common.types";
+import { prisma } from "../../_lib/prisma.js";
+import { signToken } from "../../../src/backend/shared/auth/jwt.js";
+import { setAuthCookie } from "../../../src/backend/shared/auth/cookie.js";
+import type { UserResponse } from "../../../src/shared/types/common.types.js";
 
 export default async function handler(
   req: VercelRequest,
@@ -28,6 +28,7 @@ export default async function handler(
       user: {
         name: user.name,
         email: user.email,
+        weddingDate: user.weddingDate,
       },
     });
   } catch (e) {

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Box } from "@mui/material";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo-transparent.png";
 
 export default function LoginLayout({ children }: { children: ReactNode }) {
   return (
@@ -16,8 +16,12 @@ export default function LoginLayout({ children }: { children: ReactNode }) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: "100vw",
-          backgroundColor: "#FEFEFE",
+          justifyContent: "center",
+          width: "100%",
+          height: 200,
+          backgroundColor: "background.paper",
+          mb: 6,
+          mt: 4,
         }}
       >
         <Box

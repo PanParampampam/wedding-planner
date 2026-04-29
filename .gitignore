@@ -30,3 +30,5 @@ dist-ssr
 
 #vercel.json should stay only on prod
 vercel.json
+.github/github-instructions.mb
+.env

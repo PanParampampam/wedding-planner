@@ -1,6 +1,9 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider.context";
-import type { AuthProvider } from "../types/authProvider.types";
+import type {
+  AuthenticatedAuthProvider,
+  AuthProvider,
+} from "../types/authProvider.types";
 
 export const useAuthProvider = (): AuthProvider => {
   const context = useContext(AuthContext);
@@ -10,4 +13,19 @@ export const useAuthProvider = (): AuthProvider => {
   }
 
   return context;
+};
+
+export const useRequiredAuthProvider = (): AuthenticatedAuthProvider => {
+  const context = useAuthProvider();
+
+  if (!context.user) {
+    throw new Error(
+      "useRequiredAuthProvider must be used inside authenticated routes",
+    );
+  }
+
+  return {
+    ...context,
+    user: context.user,
+  };
 };

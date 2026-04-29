@@ -2,7 +2,6 @@ import {
   Alert,
   Box,
   Button,
-  CircularProgress,
   Divider,
   Link,
   Paper,
@@ -10,6 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -103,20 +103,25 @@ export default function Login() {
             component="form"
             onSubmit={handleSubmit}
             spacing={2.5}
+            autoComplete="on"
             noValidate
           >
             <TextField
+              id="email"
+              name="email"
               label="Email"
               type="email"
               value={form.email}
               onChange={handleChange("email")}
               error={!!formErrors.email}
               helperText={formErrors.email}
-              autoComplete="email"
+              autoComplete="username"
               fullWidth
             />
 
             <TextField
+              id="password"
+              name="password"
               label="Password"
               type="password"
               value={form.password}
@@ -133,14 +138,12 @@ export default function Login() {
               color="primary"
               size="large"
               fullWidth
-              disabled={loading}
+              loading={loading}
+              loadingPosition="end"
+              endIcon={<LoginRoundedIcon />}
               sx={{ mt: 0.5, py: 1.25 }}
             >
-              {loading ? (
-                <CircularProgress size={22} color="inherit" />
-              ) : (
-                "Sign in"
-              )}
+              Sign in
             </Button>
             {error && (
               <Alert
