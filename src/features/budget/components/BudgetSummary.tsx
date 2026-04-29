@@ -1,3 +1,4 @@
+import EventAvailableRoundedIcon from "@mui/icons-material/EventAvailableRounded";
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 import SavingsRoundedIcon from "@mui/icons-material/SavingsRounded";
 import TrendingDownRoundedIcon from "@mui/icons-material/TrendingDownRounded";
@@ -104,6 +105,7 @@ type BudgetSummaryProps = {
   actualExpenses: number;
   actualItemsCount: number;
   currencyCode?: string;
+  nearestDeadline?: { days: number; date: string; name: string } | null;
 };
 
 export default function BudgetSummary({
@@ -113,6 +115,7 @@ export default function BudgetSummary({
   actualExpenses,
   actualItemsCount,
   currencyCode,
+  nearestDeadline,
 }: BudgetSummaryProps) {
   const remainingAfterPlanned =
     budget === null ? null : budget - plannedExpenses;
@@ -140,7 +143,7 @@ export default function BudgetSummary({
           >
             <Box>
               <Typography variant="overline" sx={{ color: "text.secondary" }}>
-                Budget Snapshot
+                Your initial budget:
               </Typography>
               <Typography
                 variant="h4"
@@ -192,6 +195,50 @@ export default function BudgetSummary({
                 {formatMoney(remainingAfterActual, currencyCode)}
               </Typography>
             </Box>
+            {nearestDeadline !== undefined && nearestDeadline !== null && (
+              <Box sx={{ minWidth: 0 }}>
+                <Stack
+                  direction="row"
+                  spacing={0.75}
+                  sx={{ alignItems: "center", mb: 0.25 }}
+                >
+                  <EventAvailableRoundedIcon
+                    sx={{ fontSize: 14, color: "text.secondary" }}
+                  />
+                  <Typography
+                    variant="overline"
+                    sx={{ color: "text.secondary" }}
+                  >
+                    Nearest Deadline
+                  </Typography>
+                </Stack>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 700,
+                    color:
+                      nearestDeadline.days < 0
+                        ? "error.main"
+                        : nearestDeadline.days <= 7
+                          ? "warning.main"
+                          : nearestDeadline.days <= 30
+                            ? "primary.main"
+                            : "success.main",
+                  }}
+                >
+                  {nearestDeadline.days < 0
+                    ? `${Math.abs(nearestDeadline.days)}d overdue`
+                    : nearestDeadline.days === 0
+                      ? "Today"
+                      : nearestDeadline.days === 1
+                        ? "Tomorrow"
+                        : `${nearestDeadline.days}d left`}
+                </Typography>
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                  {nearestDeadline.name} · {nearestDeadline.date}
+                </Typography>
+              </Box>
+            )}
           </Stack>
         </Stack>
       </Paper>
