@@ -1,6 +1,6 @@
 import { apiClient } from "../../../shared/lib/apiClient";
 import type { Guest } from "../../../generated/prisma/client";
-import type { GuestResponse } from "src/backend/features/guests/guests.types";
+import type { GuestResponse } from "src/shared/types/common.types";
 import type { CreateGuest } from "../types/guest.types";
 
 export const getGuests = (): Promise<Guest[]> => {

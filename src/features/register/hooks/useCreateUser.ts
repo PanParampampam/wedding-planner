@@ -14,6 +14,8 @@ export const useCreateUser = () => {
         email: user.email,
         password: user.password,
         weddingDate: user.weddingDate,
+        budget: user.budget,
+        currencyCode: user.currencyCode,
       };
       const response = await createUser(newUser);
       if (response.success && response.user) {

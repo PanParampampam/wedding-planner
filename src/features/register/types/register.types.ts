@@ -1,4 +1,5 @@
 import type { Dayjs } from "dayjs";
+import type { CurrencyCode } from "src/shared/types/common.types";
 
 export type RegisterForm = {
   name: string;
@@ -6,6 +7,8 @@ export type RegisterForm = {
   password: string;
   confirmPassword: string;
   weddingDate: Dayjs | null;
+  budget: number;
+  currencyCode: CurrencyCode;
 };
 
 export type RegisterFormErrors = {
@@ -17,4 +20,6 @@ export type CreateUser = {
   email: string;
   password: string;
   weddingDate: string;
+  budget: number;
+  currencyCode: CurrencyCode;
 };

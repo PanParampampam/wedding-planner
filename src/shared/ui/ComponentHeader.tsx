@@ -36,7 +36,7 @@ export default function ComponentHeader({
       <Typography variant="h1" sx={{ color: "primary.main", fontWeight: 700 }}>
         {title}
       </Typography>
-      <Typography sx={{ mt: 1, color: "text.secondary", maxWidth: 700 }}>
+      <Typography sx={{ mt: 1, color: "text.secondary", maxWidth: 800 }}>
         {description}
       </Typography>
       {children}

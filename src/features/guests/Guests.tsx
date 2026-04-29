@@ -5,6 +5,7 @@ import { useState } from "react";
 import { GuestsContext } from "./context/GuestsContext";
 import type { Guest, GuestAction } from "./types/guest.types";
 import ComponentHeader from "../../shared/ui/ComponentHeader";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 export default function Guests() {
   const [guestFormOpen, setGuestFormOpen] = useState<boolean>(false);
@@ -34,6 +35,7 @@ export default function Guests() {
         >
           <Button
             variant="contained"
+            startIcon={<AddRoundedIcon />}
             onClick={openNewGuestForm}
             sx={{ width: "fit-content" }}
           >

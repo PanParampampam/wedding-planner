@@ -32,6 +32,16 @@ export const useFormValidate = () => {
       newErrors.weddingDate = "Wedding date is required.";
     }
 
+    if (!form.budget) {
+      newErrors.budget = "Budget is required.";
+    } else if (Number(form.budget) <= 0 || Number.isNaN(Number(form.budget))) {
+      newErrors.budget = "Budget must be greater than 0.";
+    }
+
+    if (!form.currencyCode) {
+      newErrors.currencyCode = "Currency is required.";
+    }
+
     setFormErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

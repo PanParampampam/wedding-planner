@@ -17,6 +17,8 @@ export const useLogin = () => {
           name: response.user.name,
           email: response.user.email,
           weddingDate: response.user.weddingDate,
+          budget: response.user.budget,
+          currencyCode: response.user.currencyCode,
         };
       } else {
         throw new Error(response.message);

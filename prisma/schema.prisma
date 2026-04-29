@@ -13,20 +13,24 @@ datasource db {
 }
 
 model User {
-  id            String  @id @default(uuid())
-  name          String
-  email         String  @unique
-  weddingDate   DateTime
-  password      String // hashed (bcrypt)
-  guests        Guest[]
+  id               String           @id @default(uuid())
+  name             String
+  email            String           @unique
+  weddingDate      DateTime
+  budget           Int?
+  currencyCode     String           @default("PLN")
+  password         String           // hashed (bcrypt)
+  guests           Guest[]
+  budgetCategories BudgetCategory[]
+  budgetEntries    BudgetEntry[]
 }
 
 model Guest {
-  id                  Int     @id @default(autoincrement())
+  id                  Int           @id @default(autoincrement())
   name                String
   status              String
-  email               String? @unique
-  phone               String? @unique
+  email               String?       @unique
+  phone               String?       @unique
   addressCountry      String?
   addressCity         String?
   addressStreet       String?
@@ -38,5 +42,37 @@ model Guest {
   dietaryRestrictions String?
   notes               String?
   userId              String
-  user                User    @relation(fields: [userId], references: [id])
+  user                User          @relation(fields: [userId], references: [id])
+}
+
+model BudgetCategory {
+  id        String                  @id @default(uuid())
+  name      String
+  userId    String
+  user      User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries   BudgetEntry[]
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+model BudgetEntry {
+  id            String              @id @default(uuid())
+  name          String              @unique
+  plannedAmount Int?
+  actualAmount  Int?
+  dueDate       DateTime?
+  paid          Boolean
+  categoryId    String
+  userId        String
+  note          String?
+  category      BudgetCategory      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([userId, categoryId])
+  @@index([userId, dueDate])
 }

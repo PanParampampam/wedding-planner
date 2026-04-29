@@ -1,17 +1,13 @@
 import { prisma } from "../_lib/prisma.js";
-import { setCorsHeaders } from "../_lib/cors.js";
 import { Prisma } from "../../src/generated/prisma/client.js";
-import { getUserFromRequest } from "../../src/backend/shared/auth/getUser.js";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import type { GuestResponse } from "../../src/shared/types/common.types.js";
-import type { UserResponse } from "../../src/shared/types/common.types.js";
+import { getUserFromRequest } from "./../../src/backend/shared/auth/getUser.js";
+import type { BudgetEntryResponse } from "./../../src/shared/types/common.types.js";
 
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
-): Promise<UserResponse | VercelResponse> {
-  setCorsHeaders(req, res);
-
+): Promise<VercelResponse | BudgetEntryResponse> {
   if (req.method === "OPTIONS") {
     return res.status(204).end();
   }
@@ -23,69 +19,60 @@ export default async function handler(
 
   if (req.method === "GET") {
     try {
-      const guests = await prisma.guest.findMany({
+      const budgetList = await prisma.budgetEntry.findMany({
         where: { userId: user.id },
       });
-      return res.status(200).json(guests);
+      return res.status(200).json(budgetList);
     } catch (e) {
-      console.error("Failed to fetch guests: ", e);
-
-      return res.status(500).json({
-        success: false,
-        message: "Something went wrong. Please try again later.",
-      });
+      console.error("Failed to fetch budget list: ", e);
     }
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong. Please try again later.",
+    });
   }
 
   if (req.method === "POST") {
     try {
-      const newGuest = await prisma.guest.create({
+      const newBudgetEntry = await prisma.budgetEntry.create({
         data: { ...req.body, userId: user.id },
       });
 
-      const response: GuestResponse = {
+      const response: BudgetEntryResponse = {
         success: true,
         message: "Guest created",
-        guest: {
-          id: newGuest.id,
-          name: newGuest.name,
+        budgetEntry: {
+          id: newBudgetEntry.id,
+          name: newBudgetEntry.name,
         },
       };
 
       return res.status(201).json(response);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        const response: GuestResponse = {
+        const response: BudgetEntryResponse = {
           success: false,
-          message: "Guest with this email and/or phone number already exist",
+          message: "You've already created that expense.",
         };
 
         return res.status(409).json(response);
       }
-
-      console.error(e);
-
-      const response: GuestResponse = {
-        success: false,
-        message: "Something went wrong. Please try again later.",
-      };
-
-      return res.status(500).json(response);
     }
   }
 
   if (req.method === "DELETE") {
     try {
-      const deletedGuest = await prisma.guest.delete({
-        where: { id: req.body, userId: user.id },
+      const deletedBudgetEntry = await prisma.budgetEntry.delete({
+        where: { id: req.body },
       });
 
-      const response: GuestResponse = {
+      const response: BudgetEntryResponse = {
         success: true,
         message: "Guest deleted",
-        guest: {
-          id: deletedGuest.id,
-          name: deletedGuest.name,
+        budgetEntry: {
+          id: deletedBudgetEntry.id,
+          name: deletedBudgetEntry.name,
         },
       };
 
@@ -93,7 +80,7 @@ export default async function handler(
     } catch (e) {
       console.error(e);
 
-      const response: GuestResponse = {
+      const response: BudgetEntryResponse = {
         success: false,
         message: "Something went wrong. Please try again later.",
       };
@@ -104,17 +91,17 @@ export default async function handler(
 
   if (req.method === "PUT") {
     try {
-      const updatedGuest = await prisma.guest.update({
-        where: { id: req.body.id, userId: user.id },
+      const updateBudgetEntry = await prisma.budgetEntry.update({
+        where: { id: req.body.id },
         data: { ...req.body },
       });
 
-      const response: GuestResponse = {
+      const response: BudgetEntryResponse = {
         success: true,
         message: "Guest updated",
-        guest: {
-          id: updatedGuest.id,
-          name: updatedGuest.name,
+        budgetEntry: {
+          id: updateBudgetEntry.id,
+          name: updateBudgetEntry.name,
         },
       };
 
@@ -122,7 +109,7 @@ export default async function handler(
     } catch (e) {
       console.error(e);
 
-      const response: GuestResponse = {
+      const response: BudgetEntryResponse = {
         success: false,
         message: "Something went wrong. Please try again later.",
       };
