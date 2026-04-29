@@ -16,6 +16,7 @@ export const useLogin = () => {
         return {
           name: response.user.name,
           email: response.user.email,
+          weddingDate: response.user.weddingDate,
         };
       } else {
         throw new Error(response.message);

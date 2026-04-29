@@ -6,3 +6,7 @@ export type AuthProvider = {
   login: (userData: User) => void;
   logout: () => Promise<void>;
 };
+
+export type AuthenticatedAuthProvider = Omit<AuthProvider, "user"> & {
+  user: User;
+};

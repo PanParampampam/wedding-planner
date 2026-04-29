@@ -28,6 +28,7 @@ export default async function handler(
       user: {
         name: user.name,
         email: user.email,
+        weddingDate: user.weddingDate,
       },
     });
   } catch (e) {

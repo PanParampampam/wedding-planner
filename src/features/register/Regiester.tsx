@@ -10,8 +10,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
 import AppRegistrationRoundedIcon from "@mui/icons-material/AppRegistrationRounded";
 import { useState } from "react";
+import type { Dayjs } from "dayjs";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import type { RegisterForm } from "./types/register.types";
 import { useCreateUser } from "./hooks/useCreateUser";
@@ -22,6 +24,7 @@ const initialForm: RegisterForm = {
   email: "",
   password: "",
   confirmPassword: "",
+  weddingDate: null,
 };
 
 export default function Register() {
@@ -40,10 +43,13 @@ export default function Register() {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate(form)) return;
+    if (!form.weddingDate) return;
+
     const newUser = {
       name: form.name,
       email: form.email,
       password: form.password,
+      weddingDate: form.weddingDate.toISOString(),
     };
     const userCreated = await handler(newUser);
     if (userCreated) {
@@ -120,6 +126,29 @@ export default function Register() {
               helperText={formErrors.email}
               autoComplete="email"
               fullWidth
+            />
+
+            <DatePicker
+              label="Wedding Date"
+              format="DD/MM/YYYY"
+              value={form.weddingDate}
+              onChange={(date: Dayjs | null) => {
+                setForm((prev) => ({
+                  ...prev,
+                  weddingDate: date,
+                }));
+                setFormErrors((prev) => ({ ...prev, weddingDate: undefined }));
+              }}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  error: !!formErrors.weddingDate,
+                  helperText:
+                    typeof formErrors.weddingDate === "string"
+                      ? formErrors.weddingDate
+                      : undefined,
+                },
+              }}
             />
 
             <TextField

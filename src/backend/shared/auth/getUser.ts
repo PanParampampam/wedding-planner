@@ -1,8 +1,11 @@
 import type { VercelRequest } from "@vercel/node";
 import { verifyToken } from "./jwt";
 import { prisma } from "../../../../api/_lib/prisma";
+import type { User } from "src/generated/prisma/client";
 
-export const getUserFromRequest = async (req: VercelRequest) => {
+export const getUserFromRequest = async (
+  req: VercelRequest,
+): Promise<User | null> => {
   const cookie = req.headers.cookie;
   if (!cookie) return null;
 

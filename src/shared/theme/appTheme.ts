@@ -37,8 +37,8 @@ const appTheme = createTheme({
       contrastText: "#ffffff",
     },
     text: {
-      primary: "#3d3242",
-      secondary: "#6b6375",
+      primary: "#6f5863",
+      secondary: "#8c6a78",
     },
     divider: "#eadfe3",
   },
@@ -55,6 +55,15 @@ const appTheme = createTheme({
       lineHeight: 1.235,
       letterSpacing: "0.00735em",
     },
+    h2: {
+      fontSize: "28px",
+      [`@media (min-width: 600px)`]: {
+        fontSize: "36px",
+      },
+      [`@media (min-width: 960px)`]: {
+        fontSize: "40px",
+      },
+    },
     h4: {
       fontWeight: 700,
     },
@@ -69,6 +78,13 @@ const appTheme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        ":root": {
+          "--wedding-countdown-gradient":
+            "linear-gradient(145deg, rgba(246, 221, 228, 0.9) 0%, rgba(255, 251, 246, 0.96) 52%, rgba(232, 217, 181, 0.72) 100%)",
+          "--wedding-heart-main": "#c96b86",
+          "--wedding-heart-soft": "rgba(248, 220, 229, 0.88)",
+          "--wedding-heart-border": "rgba(201, 107, 134, 0.32)",
+        },
         body: {
           backgroundColor: "#faf7f7",
         },

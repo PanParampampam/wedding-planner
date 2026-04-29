@@ -10,7 +10,7 @@ export default async function handler(
   try {
     const user = await getUserFromRequest(req);
     if (!user) {
-      return res.status(401).json({ success: false });
+      return res.status(200).json({ success: false });
     }
     return res.status(200).json({
       success: true,
@@ -18,6 +18,7 @@ export default async function handler(
         id: user.id,
         email: user.email,
         name: user.name,
+        weddingDate: user.weddingDate,
       },
     });
   } catch (e) {

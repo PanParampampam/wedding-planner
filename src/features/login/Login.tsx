@@ -103,20 +103,25 @@ export default function Login() {
             component="form"
             onSubmit={handleSubmit}
             spacing={2.5}
+            autoComplete="on"
             noValidate
           >
             <TextField
+              id="email"
+              name="email"
               label="Email"
               type="email"
               value={form.email}
               onChange={handleChange("email")}
               error={!!formErrors.email}
               helperText={formErrors.email}
-              autoComplete="email"
+              autoComplete="username"
               fullWidth
             />
 
             <TextField
+              id="password"
+              name="password"
               label="Password"
               type="password"
               value={form.password}

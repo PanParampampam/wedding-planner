@@ -13,11 +13,12 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  name     String
-  email    String  @unique
-  password String // hashed (bcrypt)
-  guests   Guest[]
+  id            String  @id @default(uuid())
+  name          String
+  email         String  @unique
+  weddingDate   DateTime
+  password      String // hashed (bcrypt)
+  guests        Guest[]
 }
 
 model Guest {

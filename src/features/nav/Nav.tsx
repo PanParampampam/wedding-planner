@@ -12,7 +12,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo-transparent.png";
 import { DRAWER_WIDTH } from "../../shared/constants/componentsSizes";
 import { routes } from "./routes/routes";
 import type { navItemProps } from "./types/Nav.types";
