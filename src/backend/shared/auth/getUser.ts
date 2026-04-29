@@ -1,7 +1,7 @@
 import type { VercelRequest } from "@vercel/node";
 import { verifyToken } from "./jwt.js";
 import { prisma } from "../../../../api/_lib/prisma.js";
-import type { User } from "src/generated/prisma/client";
+import type { User } from "../../../generated/prisma/client.js";
 
 export const getUserFromRequest = async (
   req: VercelRequest,
