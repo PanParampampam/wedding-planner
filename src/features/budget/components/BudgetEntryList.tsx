@@ -12,6 +12,8 @@ import BudgetEntryItem from "./BudgetEntryItem";
 import type { User } from "src/shared/types/common.types";
 import { formatDate } from "src/shared/utils/formatDate";
 import BudgetCategories from "./BudgetCategories";
+import BudgetEntryListSkeleton from "./BudgetEntryListSkeleton";
+import ComponentHeader from "src/shared/ui/ComponentHeader";
 
 type BudgetEntryListProps = {
   openEditBudgetForm: (budgetEntry: BudgetEntry) => void;
@@ -73,19 +75,7 @@ export default function BudgetEntryList({ openEditBudgetForm, categories }: Budg
   }, [budgetEntries]);
 
   if (loading) {
-    return (
-      <Paper
-        elevation={0}
-        sx={{
-          p: 3,
-          borderRadius: 3,
-          border: "1px solid",
-          borderColor: "divider",
-        }}
-      >
-        <Typography sx={{ color: "text.secondary" }}>Loading budget entries...</Typography>
-      </Paper>
-    );
+    return <BudgetEntryListSkeleton />;
   }
 
   if (error) {
@@ -107,12 +97,10 @@ export default function BudgetEntryList({ openEditBudgetForm, categories }: Budg
       <BudgetCategories categories={categories} />
 
       <Stack spacing={2}>
-        <Typography variant="h2" sx={{ color: "primary.main", fontWeight: 700 }}>
-          Expenses
-        </Typography>
-        <Typography sx={{ mt: 1, color: "text.secondary", maxWidth: 800 }}>
-          Unpaid entries appear first, ordered by due date
-        </Typography>
+        <ComponentHeader
+          title="Expenses"
+          text="Unpaid entries appear first, ordered by due date. You can edit or delete every expense."
+        />
         {sortedEntries.length > 0 ? (
           sortedEntries.map((entry) => {
             return (

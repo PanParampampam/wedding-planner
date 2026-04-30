@@ -65,25 +65,27 @@ export default function BudgetEntryItem({
           spacing={2}
           sx={{ justifyContent: "space-between" }}
         >
-          <Stack spacing={1.25} sx={{ minWidth: 0 }}>
+          <Stack spacing={1.25} sx={{ width: "100%" }}>
             <Stack
               direction={{ xs: "column", sm: "row" }}
               spacing={1}
-              sx={{ alignItems: { xs: "flex-start", sm: "center" }, minWidth: 0 }}
+              sx={{
+                alignItems: { xs: "flex-start", sm: "center" },
+                justifyContent: "space-between",
+              }}
             >
-              <Box sx={{ minWidth: 0, flex: 1 }}>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    color: "text.primary",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {entry.name}
-                </Typography>
-              </Box>
+              <Typography
+                variant="h3"
+                sx={{
+                  color: "text.primary",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {entry.name}
+              </Typography>
+
               <Stack
                 direction="row"
                 spacing={0.75}
@@ -123,7 +125,7 @@ export default function BudgetEntryItem({
                 },
               }}
             >
-              <Box sx={{ minWidth: 0 }}>
+              <Box>
                 <Typography variant="caption" sx={{ color: "text.secondary" }}>
                   Planned
                 </Typography>
@@ -131,7 +133,7 @@ export default function BudgetEntryItem({
                   {formatMoney(entry.plannedAmount, currencyCode)}
                 </Typography>
               </Box>
-              <Box sx={{ minWidth: 0 }}>
+              <Box>
                 <Typography variant="caption" sx={{ color: "text.secondary" }}>
                   Actual
                 </Typography>
@@ -139,7 +141,7 @@ export default function BudgetEntryItem({
                   {formatMoney(entry.actualAmount, currencyCode)}
                 </Typography>
               </Box>
-              <Box sx={{ minWidth: 0 }}>
+              <Box>
                 <Typography variant="caption" sx={{ color: "text.secondary" }}>
                   Due date
                 </Typography>
@@ -147,7 +149,7 @@ export default function BudgetEntryItem({
                   {formatDate(entry.dueDate)}
                 </Typography>
               </Box>
-              <Box sx={{ minWidth: 0 }}>
+              <Box>
                 <Typography variant="caption" sx={{ color: "text.secondary" }}>
                   Days remaining
                 </Typography>
@@ -168,27 +170,25 @@ export default function BudgetEntryItem({
           </Stack>
 
           <Stack
-            direction={{ xs: "row-reverse", md: "column" }}
+            direction={{ xs: "row", md: "column" }}
             spacing={1}
             sx={{ justifyContent: "space-between" }}
           >
             <Button
-              variant="outlined"
-              loading={loading}
-              endIcon={<EditRoundedIcon />}
-              onClick={() => openEditBudgetForm(entry)}
-            >
-              Edit
-            </Button>
-            <Button
-              variant="outlined"
+              variant="text"
+              sx={{ width: "fit-content" }}
               color="error"
               loading={loading}
               endIcon={<DeleteOutlineRoundedIcon />}
               onClick={() => handler(entry.id)}
-            >
-              Delete
-            </Button>
+            ></Button>
+            <Button
+              variant="text"
+              sx={{ width: "fit-content" }}
+              loading={loading}
+              endIcon={<EditRoundedIcon />}
+              onClick={() => openEditBudgetForm(entry)}
+            ></Button>
           </Stack>
           {error && (
             <Alert

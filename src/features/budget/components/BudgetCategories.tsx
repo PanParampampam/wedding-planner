@@ -1,5 +1,6 @@
+import ComponentHeader from "src/shared/ui/ComponentHeader";
 import type { BudgetCategory } from "../types/budget.types";
-import { Stack, Chip, Typography } from "@mui/material";
+import { Stack, Chip } from "@mui/material";
 
 type BudgetCategoriesProps = {
   categories: BudgetCategory[];
@@ -10,22 +11,31 @@ export default function BudgetCategories({ categories }: BudgetCategoriesProps) 
 
   return (
     <Stack spacing={2} sx={{ mb: 3 }}>
-      <Typography variant="h2" sx={{ color: "primary.main", fontWeight: 700 }}>
-        Categories
-      </Typography>
-      <Typography sx={{ mt: 1, color: "text.secondary", maxWidth: 800 }}>
-        List of the expenses's categories. You can filter expenses by category by clicking it,
-        delete a category or add a new one.
-      </Typography>
+      <ComponentHeader
+        title="Categories"
+        text="List of the expenses's categories. You can filter expenses by category by clicking it,
+        delete a category or add a new one."
+      />
+
       <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap", gap: 1 }}>
         {categories.map((category) => (
           <Chip
             key={category.id}
             label={category.name}
             variant="outlined"
+            onDelete={() => {
+              console.log("delete");
+            }}
+            onClick={() => {
+              console.log("click");
+            }}
             sx={{
               borderColor: "divider",
               color: "text.primary",
+              "& .MuiChip-deleteIcon": {
+                color: "text.disabled",
+                "&:hover": { color: "error.main" },
+              },
             }}
           />
         ))}

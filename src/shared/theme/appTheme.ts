@@ -62,6 +62,12 @@ const appTheme = createTheme({
         fontSize: "40px",
       },
     },
+    h3: {
+      fontSize: "1.25rem",
+      fontWeight: 700,
+      lineHeight: 1.6,
+      letterSpacing: "0.0075em",
+    },
     h4: {
       fontWeight: 700,
     },

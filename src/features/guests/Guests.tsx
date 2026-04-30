@@ -1,10 +1,10 @@
 import GuestList from "./components/GuestList";
-import { Button } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import GuestForm from "./components/GuestForm";
 import { useState } from "react";
 import { GuestsContext } from "./context/GuestsContext";
 import type { Guest, GuestAction } from "./types/guest.types";
-import ComponentHeader from "../../shared/ui/ComponentHeader";
+import PageHeader from "../../shared/ui/PageHeader";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 export default function Guests() {
@@ -28,9 +28,9 @@ export default function Guests() {
 
   return (
     <GuestsContext value={{ guestAction, setGuestAction }}>
-      <main>
-        <ComponentHeader
-          title="Guest List"
+      <Container component="main">
+        <PageHeader
+          title="Guests"
           description="Track, edit, and organize everyone invited to your wedding."
         >
           <Button
@@ -41,7 +41,7 @@ export default function Guests() {
           >
             Add a new guest
           </Button>
-        </ComponentHeader>
+        </PageHeader>
         <GuestList openEditGuestForm={openEditGuestForm} />
         <GuestForm
           open={guestFormOpen}
@@ -49,7 +49,7 @@ export default function Guests() {
           editGuest={editGuest}
           key={editGuest && editGuest.id}
         />
-      </main>
+      </Container>
     </GuestsContext>
   );
 }

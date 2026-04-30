@@ -1,7 +1,7 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import { Button, Stack } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import { useState } from "react";
-import ComponentHeader from "../../shared/ui/ComponentHeader";
+import PageHeader from "../../shared/ui/PageHeader";
 import type { BudgetEntry, BudgetAction } from "./types/budget.types";
 import { BudgetContext } from "./context/BudgetContext";
 import BudgetEntryList from "./components/BudgetEntryList";
@@ -28,22 +28,20 @@ export default function Budget() {
 
   return (
     <BudgetContext value={{ budgetAction, setBudgetAction }}>
-      <main>
-        <ComponentHeader
+      <Container component="main">
+        <PageHeader
           title="Budget"
           description="Build your spending plan, compare estimates with real costs, and keep every decision visible in one place."
         >
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
-            <Button
-              variant="contained"
-              startIcon={<AddRoundedIcon />}
-              onClick={openNewBudgetForm}
-              sx={{ width: "fit-content" }}
-            >
-              Add a new expense
-            </Button>
-          </Stack>
-        </ComponentHeader>
+          <Button
+            variant="contained"
+            startIcon={<AddRoundedIcon />}
+            onClick={openNewBudgetForm}
+            sx={{ width: "fit-content" }}
+          >
+            Add a new expense
+          </Button>
+        </PageHeader>
         <BudgetEntryList openEditBudgetForm={openEditBudgetForm} categories={categories} />
 
         <BudgetEntryForm
@@ -53,7 +51,7 @@ export default function Budget() {
           key={editBudgetEntry?.id}
           categories={categories}
         />
-      </main>
+      </Container>
     </BudgetContext>
   );
 }

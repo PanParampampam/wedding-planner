@@ -1,4 +1,4 @@
-import ComponentHeader from "../../shared/ui/ComponentHeader";
+import PageHeader from "../../shared/ui/PageHeader";
 import { useRequiredAuthProvider } from "../authProvider/hooks/useAuthProvider";
 import WeddingCountdown from "./components/WeddingCountdown";
 
@@ -7,7 +7,7 @@ export default function Home() {
 
   return (
     <main>
-      <ComponentHeader
+      <PageHeader
         title="Welcome to your Wedding Planner"
         description="Keep your guest list, budget, and wedding details organized in one place."
       />
