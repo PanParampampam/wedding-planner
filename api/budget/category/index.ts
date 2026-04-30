@@ -3,7 +3,7 @@ import { Prisma } from "../../../src/generated/prisma/client.js";
 import { setCorsHeaders } from "../../_lib/cors.js";
 import { prisma } from "../../_lib/prisma.js";
 import { getUserFromRequest } from "../../../src/backend/shared/auth/getUser.js";
-import type { BudgetCategoryResponse } from "src/shared/types/common.types.js";
+import type { BudgetCategoryResponse } from "../../../src/shared/types/common.types.js";
 
 export default async function handler(
   req: VercelRequest,
@@ -52,10 +52,7 @@ export default async function handler(
         },
       });
     } catch (e) {
-      if (
-        e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === "P2002"
-      ) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
         return res.status(409).json({
           success: false,
           message: "You already have this category.",
@@ -109,10 +106,7 @@ export default async function handler(
         },
       });
     } catch (e) {
-      if (
-        e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === "P2002"
-      ) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
         return res.status(409).json({
           success: false,
           message: "You already have this category.",
