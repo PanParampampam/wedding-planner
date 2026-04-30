@@ -44,7 +44,6 @@ export default function Budget() {
             </Button>
           </Stack>
         </ComponentHeader>
-
         <BudgetEntryList openEditBudgetForm={openEditBudgetForm} categories={categories} />
 
         <BudgetEntryForm

@@ -11,6 +11,7 @@ import { daysUntil } from "../utils/budget.utils";
 import BudgetEntryItem from "./BudgetEntryItem";
 import type { User } from "src/shared/types/common.types";
 import { formatDate } from "src/shared/utils/formatDate";
+import BudgetCategories from "./BudgetCategories";
 
 type BudgetEntryListProps = {
   openEditBudgetForm: (budgetEntry: BudgetEntry) => void;
@@ -102,6 +103,8 @@ export default function BudgetEntryList({ openEditBudgetForm, categories }: Budg
         currencyCode={user.currencyCode}
         nearestDeadline={nearestDeadline}
       />
+
+      <BudgetCategories categories={categories} />
 
       <Stack spacing={2}>
         <Typography variant="h2" sx={{ color: "primary.main", fontWeight: 700 }}>
