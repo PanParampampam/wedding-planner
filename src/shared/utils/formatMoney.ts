@@ -1,4 +1,4 @@
-export const formatMoney = (value: number | null, currencyCode?: string) => {
+export const formatMoney = (value: number | null, currencyCode?: string): string => {
   if (value === null) return "-";
   return new Intl.NumberFormat("de-DE", {
     useGrouping: true,

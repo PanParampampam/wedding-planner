@@ -46,9 +46,7 @@ const appTheme = createTheme({
     borderRadius: 12,
   },
   typography: {
-    fontFamily: ["Inter", "Segoe UI", "Roboto", "Arial", "sans-serif"].join(
-      ",",
-    ),
+    fontFamily: ["Inter", "Segoe UI", "Roboto", "Arial", "sans-serif"].join(","),
     h1: {
       fontSize: "2.125rem",
       fontWeight: 700,
@@ -85,8 +83,18 @@ const appTheme = createTheme({
           "--wedding-heart-soft": "rgba(248, 220, 229, 0.88)",
           "--wedding-heart-border": "rgba(201, 107, 134, 0.32)",
         },
+        html: {
+          maxWidth: "100%",
+          overflowX: "hidden",
+        },
         body: {
           backgroundColor: "#faf7f7",
+          maxWidth: "100%",
+          overflowX: "hidden",
+        },
+        "#root": {
+          maxWidth: "100%",
+          overflowX: "hidden",
         },
         "input[type=number]": {
           MozAppearance: "textfield",

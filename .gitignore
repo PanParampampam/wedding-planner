@@ -34,3 +34,4 @@ vercel.json
 .env
 vercel.local.json
 vercel.example.json
+.prettierrc

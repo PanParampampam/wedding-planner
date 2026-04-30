@@ -6,13 +6,13 @@ import type { BudgetEntry, BudgetAction } from "./types/budget.types";
 import { BudgetContext } from "./context/BudgetContext";
 import BudgetEntryList from "./components/BudgetEntryList";
 import BudgetEntryForm from "./components/BudgetEntryForm";
+import { useBudgetCategories } from "./hooks/useBudgetCategories";
 
 export default function Budget() {
   const [budgetFormOpen, setBudgetFormOpen] = useState(false);
   const [budgetAction, setBudgetAction] = useState<BudgetAction>();
-  const [editBudgetEntry, setEditBudgetEntry] = useState<
-    BudgetEntry | undefined
-  >();
+  const [editBudgetEntry, setEditBudgetEntry] = useState<BudgetEntry | undefined>();
+  const { categories } = useBudgetCategories();
 
   const openNewBudgetForm = () => {
     setEditBudgetEntry(undefined);
@@ -40,18 +40,19 @@ export default function Budget() {
               onClick={openNewBudgetForm}
               sx={{ width: "fit-content" }}
             >
-              Add new expense
+              Add a new expense
             </Button>
           </Stack>
         </ComponentHeader>
 
-        <BudgetEntryList openEditBudgetForm={openEditBudgetForm} />
+        <BudgetEntryList openEditBudgetForm={openEditBudgetForm} categories={categories} />
 
         <BudgetEntryForm
           open={budgetFormOpen}
           onClose={closeBudgetForm}
           editBudgetEntry={editBudgetEntry}
           key={editBudgetEntry?.id}
+          categories={categories}
         />
       </main>
     </BudgetContext>
