@@ -124,6 +124,21 @@ const appTheme = createTheme({
         disableElevation: true,
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        filled: ({ theme }) => ({
+          backgroundColor: theme.palette.secondary.dark,
+          color: theme.palette.primary.dark,
+          "& .MuiChip-label": {
+            color: theme.palette.primary.dark,
+          },
+
+          "&.MuiChip-clickable:hover": {
+            backgroundColor: theme.palette.secondary.dark,
+          },
+        }),
+      },
+    },
     MuiAlert: {
       variants: [
         {

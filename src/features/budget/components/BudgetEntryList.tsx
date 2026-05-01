@@ -1,7 +1,7 @@
 import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
 
 import { Alert, Paper, Stack, Typography } from "@mui/material";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useBudgetEntries } from "../hooks/useBudgetEntries";
 import type { BudgetCategory, BudgetEntry } from "../types/budget.types";
 import BudgetSummary from "./BudgetSummary";
@@ -23,10 +23,16 @@ type BudgetEntryListProps = {
 export default function BudgetEntryList({ openEditBudgetForm, categories }: BudgetEntryListProps) {
   const { budgetEntries, loading, error } = useBudgetEntries();
   const { user } = useAuthProvider() as { user: User };
+  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+
+  const filteredEntries =
+    categoryFilter.length !== 0
+      ? budgetEntries.filter((entry) => categoryFilter.includes(entry.categoryId))
+      : budgetEntries;
 
   const sortedEntries = useMemo(
     () =>
-      [...budgetEntries].sort((a, b) => {
+      [...filteredEntries].sort((a, b) => {
         if (a.paid !== b.paid) return a.paid ? 1 : -1;
         const da = daysUntil(a.dueDate);
         const db = daysUntil(b.dueDate);
@@ -35,7 +41,7 @@ export default function BudgetEntryList({ openEditBudgetForm, categories }: Budg
         if (db === null) return -1;
         return da - db;
       }),
-    [budgetEntries],
+    [filteredEntries],
   );
 
   const plannedExpenses = budgetEntries.reduce(
@@ -94,7 +100,11 @@ export default function BudgetEntryList({ openEditBudgetForm, categories }: Budg
         nearestDeadline={nearestDeadline}
       />
 
-      <BudgetCategories categories={categories} />
+      <BudgetCategories
+        categories={categories}
+        categoryFilter={categoryFilter}
+        setCategoryFilter={setCategoryFilter}
+      />
 
       <Stack spacing={2}>
         <ComponentHeader

@@ -1,5 +1,5 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import { Button, Container } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import { useState } from "react";
 import PageHeader from "../../shared/ui/PageHeader";
 import type { BudgetEntry, BudgetAction } from "./types/budget.types";
@@ -28,7 +28,7 @@ export default function Budget() {
 
   return (
     <BudgetContext value={{ budgetAction, setBudgetAction }}>
-      <Container component="main">
+      <Box component="main">
         <PageHeader
           title="Budget"
           description="Build your spending plan, compare estimates with real costs, and keep every decision visible in one place."
@@ -51,7 +51,7 @@ export default function Budget() {
           key={editBudgetEntry?.id}
           categories={categories}
         />
-      </Container>
+      </Box>
     </BudgetContext>
   );
 }

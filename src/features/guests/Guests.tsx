@@ -1,5 +1,5 @@
 import GuestList from "./components/GuestList";
-import { Button, Container } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import GuestForm from "./components/GuestForm";
 import { useState } from "react";
 import { GuestsContext } from "./context/GuestsContext";
@@ -28,7 +28,7 @@ export default function Guests() {
 
   return (
     <GuestsContext value={{ guestAction, setGuestAction }}>
-      <Container component="main">
+      <Box component="main">
         <PageHeader
           title="Guests"
           description="Track, edit, and organize everyone invited to your wedding."
@@ -49,7 +49,7 @@ export default function Guests() {
           editGuest={editGuest}
           key={editGuest && editGuest.id}
         />
-      </Container>
+      </Box>
     </GuestsContext>
   );
 }
