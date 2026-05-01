@@ -103,10 +103,7 @@ export default function GuestItem({
               >
                 {item.label}
               </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: item.valueColor, fontWeight: 600 }}
-              >
+              <Typography variant="body2" sx={{ color: item.valueColor, fontWeight: 600 }}>
                 {String(item.value)}
               </Typography>
             </Paper>
@@ -118,10 +115,7 @@ export default function GuestItem({
       <Stack spacing={0.5} sx={{ flexGrow: 1 }}>
         {guest.email && guest.email.trim() && (
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            <Box
-              component="span"
-              sx={{ color: "primary.main", fontWeight: 700 }}
-            >
+            <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
               Email:
             </Box>{" "}
             {guest.email}
@@ -129,10 +123,7 @@ export default function GuestItem({
         )}
         {guest.phone && guest.phone.trim() && (
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            <Box
-              component="span"
-              sx={{ color: "primary.main", fontWeight: 700 }}
-            >
+            <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
               Phone:
             </Box>{" "}
             {guest.phone}
@@ -148,10 +139,7 @@ export default function GuestItem({
             ].filter(Boolean);
             return addressParts.length > 0 ? (
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                <Box
-                  component="span"
-                  sx={{ color: "primary.main", fontWeight: 700 }}
-                >
+                <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
                   Address:
                 </Box>{" "}
                 {addressParts.join(", ")}
@@ -160,10 +148,7 @@ export default function GuestItem({
           })()}
         {guest.plusOneName && guest.plusOneName.trim() && (
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            <Box
-              component="span"
-              sx={{ color: "primary.main", fontWeight: 700 }}
-            >
+            <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
               Plus One Name:
             </Box>{" "}
             {guest.plusOneName}
@@ -171,10 +156,7 @@ export default function GuestItem({
         )}
         {guest.notes && guest.notes.trim() && (
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            <Box
-              component="span"
-              sx={{ color: "primary.main", fontWeight: 700 }}
-            >
+            <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
               Notes:
             </Box>{" "}
             {guest.notes}
@@ -188,27 +170,20 @@ export default function GuestItem({
         sx={{ mt: "auto", pt: 2, justifyContent: "space-between" }}
       >
         <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => handler(guest.id)}
+          variant="text"
+          sx={{ width: "fit-content" }}
+          color="error"
           loading={loading}
-          loadingPosition="end"
           endIcon={<DeleteOutlineRoundedIcon />}
-          fullWidth
-        >
-          Delete Guest
-        </Button>
+          onClick={() => handler(guest.id)}
+        ></Button>
         <Button
-          variant="contained"
-          color="primary"
-          onClick={() => openEditGuestForm(guest)}
+          variant="text"
+          sx={{ width: "fit-content" }}
           loading={loading}
-          loadingPosition="end"
           endIcon={<EditRoundedIcon />}
-          fullWidth
-        >
-          Edit Guest
-        </Button>
+          onClick={() => openEditGuestForm(guest)}
+        ></Button>
       </Stack>
 
       {error && (

@@ -3,9 +3,13 @@ import {
   Box,
   Button,
   Divider,
+  FormControl,
   InputAdornment,
+  InputLabel,
   Link,
+  MenuItem,
   Paper,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -25,6 +29,8 @@ const initialForm: RegisterForm = {
   password: "",
   confirmPassword: "",
   weddingDate: null,
+  budget: 0,
+  currencyCode: "PLN",
 };
 
 export default function Register() {
@@ -50,6 +56,8 @@ export default function Register() {
       email: form.email,
       password: form.password,
       weddingDate: form.weddingDate.toISOString(),
+      budget: form.budget,
+      currencyCode: form.currencyCode,
     };
     const userCreated = await handler(newUser);
     if (userCreated) {
@@ -150,6 +158,53 @@ export default function Register() {
                 },
               }}
             />
+
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextField
+                label="Planned budget"
+                type="number"
+                value={form.budget}
+                onChange={handleChange("budget")}
+                error={!!formErrors.budget}
+                helperText={formErrors.budget}
+                slotProps={{
+                  htmlInput: { min: 0, step: "0.01" },
+                }}
+                fullWidth
+              />
+
+              <FormControl fullWidth error={!!formErrors.currencyCode}>
+                <InputLabel id="currency-code-label">Currency</InputLabel>
+                <Select
+                  labelId="currency-code-label"
+                  label="Currency"
+                  value={form.currencyCode}
+                  onChange={(e) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      currencyCode: e.target
+                        .value as RegisterForm["currencyCode"],
+                    }));
+                    setFormErrors((prev) => ({
+                      ...prev,
+                      currencyCode: undefined,
+                    }));
+                  }}
+                >
+                  <MenuItem value="PLN">PLN</MenuItem>
+                  <MenuItem value="EUR">EUR</MenuItem>
+                  <MenuItem value="USD">USD</MenuItem>
+                </Select>
+                {formErrors.currencyCode && (
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "error.main", mt: 0.75, ml: 1.75 }}
+                  >
+                    {formErrors.currencyCode}
+                  </Typography>
+                )}
+              </FormControl>
+            </Stack>
 
             <TextField
               label="Password"

@@ -1,28 +1,86 @@
-import { Container, Stack, Typography } from "@mui/material";
+import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
+import HowToRegRoundedIcon from "@mui/icons-material/HowToRegRounded";
+import MarkEmailReadRoundedIcon from "@mui/icons-material/MarkEmailReadRounded";
+import ChildCareRoundedIcon from "@mui/icons-material/ChildCareRounded";
+import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
+import { Box, Stack } from "@mui/material";
+import GuestsStatCard from "./GuestsStatCard";
+import ComponentHeader from "src/shared/ui/ComponentHeader";
 
-export default function GuestsStats({ total, confirmed, attending }: { total: number; confirmed: number; attending: number }) {
+type GuestsStatsProps = {
+  total: number;
+  invited: number;
+  confirmed: number;
+  declined: number;
+  children: number;
+  groupCounts: {
+    family: number;
+    friends: number;
+    coworkers: number;
+    other: number;
+  };
+  dietaryCounts: {
+    vegetarian: number;
+    vegan: number;
+    glutenFree: number;
+  };
+};
+
+export default function GuestsStats({
+  total,
+  invited,
+  confirmed,
+  declined,
+  children,
+}: GuestsStatsProps) {
   return (
-    <Container
-      sx={{
-        bgcolor: "background.paper",
-        borderRadius: 2,
-        mb: 3,
-        display: "flex",
-        alignContent: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Stack direction="row" spacing={3}>
-        <Typography variant="body1" color="text.secondary">
-          Total: <strong>{total}</strong>
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Confirmed: <strong>{confirmed}</strong>
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Attending: <strong>{attending}</strong>
-        </Typography>
-      </Stack>
-    </Container>
+    <Stack spacing={2} sx={{ mb: 3 }}>
+      <ComponentHeader
+        title="Guest stats"
+        text="Track the status of invited guests and declined invitations. Click on a card to filter guests by given category (to be implemented)"
+      />
+      <Box
+        sx={{
+          display: "grid",
+          gap: 2,
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(2, minmax(0, 1fr))",
+            lg: "repeat(5, minmax(0, 1fr))",
+          },
+        }}
+      >
+        <GuestsStatCard
+          label="Total"
+          value={total}
+          helper="Everyone currently in your list."
+          icon={<GroupRoundedIcon fontSize="small" />}
+        />
+        <GuestsStatCard
+          label="Invited"
+          value={invited}
+          helper="Guests who already got an invite."
+          icon={<MarkEmailReadRoundedIcon fontSize="small" />}
+        />
+        <GuestsStatCard
+          label="Confirmed"
+          value={confirmed}
+          helper="Guests who have replied yes."
+          icon={<HowToRegRoundedIcon fontSize="small" />}
+        />
+        <GuestsStatCard
+          label="Declined"
+          value={declined}
+          helper="Guests who declined the invitation."
+          icon={<BlockRoundedIcon fontSize="small" />}
+        />
+        <GuestsStatCard
+          label="Children"
+          value={children}
+          helper="Children count across all guests."
+          icon={<ChildCareRoundedIcon fontSize="small" />}
+        />
+      </Box>
+    </Stack>
   );
 }

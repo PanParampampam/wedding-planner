@@ -1,7 +1,11 @@
+export type CurrencyCode = "PLN" | "EUR" | "USD";
+
 export type User = {
   name: string;
   email: string;
   weddingDate: Date;
+  budget: number | null;
+  currencyCode: CurrencyCode;
 };
 
 export type Login = {
@@ -11,6 +15,15 @@ export type Login = {
 
 // API Response
 
+export type GuestResponse = {
+  success: boolean;
+  message: string;
+  guest?: {
+    id: number;
+    name: string;
+  };
+};
+
 export type UserResponse = {
   success: boolean;
   message?: string;
@@ -19,5 +32,25 @@ export type UserResponse = {
     name: string;
     email: string;
     weddingDate: Date;
+    budget: number | null;
+    currencyCode: CurrencyCode;
+  };
+};
+
+export type BudgetEntryResponse = {
+  success: boolean;
+  message?: string;
+  budgetEntry?: {
+    id: string;
+    name: string;
+  };
+};
+
+export type BudgetCategoryResponse = {
+  success: boolean;
+  message?: string;
+  budgetCategory?: {
+    id: string;
+    name: string;
   };
 };

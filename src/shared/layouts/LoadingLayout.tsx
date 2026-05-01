@@ -38,15 +38,8 @@ export default function LoadingLayout() {
           mt: 8,
         }}
       >
-        <CircularProgress
-          size={48}
-          thickness={3}
-          sx={{ color: "primary.main" }}
-        />
-        <Typography
-          variant="h6"
-          sx={{ color: "text.primary", fontStyle: "italic" }}
-        >
+        <CircularProgress size={48} thickness={3} sx={{ color: "primary.main" }} />
+        <Typography variant="h6" sx={{ color: "text.primary", fontStyle: "italic" }}>
           Setting up your planner...
         </Typography>
       </Stack>

@@ -29,6 +29,8 @@ export default async function handler(
         name: user.name,
         email: user.email,
         weddingDate: user.weddingDate,
+        budget: user.budget ? Number(user.budget) : null,
+        currencyCode: user.currencyCode,
       },
     });
   } catch (e) {

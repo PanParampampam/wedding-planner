@@ -5,7 +5,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 const home: navItemProps = { label: "Home", path: "/home", icon: HomeIcon };
 const guestList: navItemProps = {
-  label: "Guest List",
+  label: "Guests",
   path: "/guests",
   icon: PeopleIcon,
 };

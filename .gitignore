@@ -32,3 +32,6 @@ dist-ssr
 vercel.json
 .github/github-instructions.mb
 .env
+vercel.local.json
+vercel.example.json
+.prettierrc

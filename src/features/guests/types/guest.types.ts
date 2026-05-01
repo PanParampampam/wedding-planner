@@ -15,6 +15,7 @@ export type Guest = {
   group: "family" | "friends" | "coworkers" | "other";
   plusOne: "on the list" | "outside the list" | "none";
   plusOneName: string | null;
+  children?: number | null;
   dietaryRestrictions: "vegetarian" | "vegan" | "gluten free" | null;
   notes: string | null;
 };
