@@ -1,6 +1,7 @@
 import ComponentHeader from "src/shared/ui/ComponentHeader";
-import type { BudgetCategory } from "../types/budget.types";
+import type { BudgetCategory } from "../../types/budget.types";
 import { Stack, Chip } from "@mui/material";
+import AddBudgetCategoryChip from "./AddBudgetCategoryChip";
 
 type BudgetCategoriesProps = {
   categories: BudgetCategory[];
@@ -60,14 +61,7 @@ export default function BudgetCategories({
             }}
           />
         ))}
-        <Chip
-          label="Add a new category"
-          variant="outlined"
-          sx={{
-            borderColor: "divider",
-            color: "text.primary",
-          }}
-        />
+        <AddBudgetCategoryChip />
       </Stack>
     </Stack>
   );

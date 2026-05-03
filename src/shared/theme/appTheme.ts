@@ -126,17 +126,36 @@ const appTheme = createTheme({
     },
     MuiChip: {
       styleOverrides: {
-        filled: ({ theme }) => ({
-          backgroundColor: theme.palette.secondary.dark,
-          color: theme.palette.primary.dark,
-          "& .MuiChip-label": {
-            color: theme.palette.primary.dark,
-          },
+        filled: ({ theme, ownerState }) => {
+          const isSuccessFilled = ownerState.variant === "filled" && ownerState.color === "success";
 
-          "&.MuiChip-clickable:hover": {
-            backgroundColor: theme.palette.secondary.dark,
-          },
-        }),
+          if (isSuccessFilled) {
+            return {
+              backgroundColor: theme.palette.success.main,
+              color: theme.palette.success.contrastText,
+              "& .MuiChip-label": {
+                color: theme.palette.success.contrastText,
+              },
+              "& .MuiChip-icon": {
+                color: theme.palette.success.contrastText,
+              },
+              "&.MuiChip-clickable:hover": {
+                backgroundColor: theme.palette.success.dark,
+              },
+            };
+          }
+
+          return {
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.primary.dark,
+            "& .MuiChip-label": {
+              color: theme.palette.primary.dark,
+            },
+            "&.MuiChip-clickable:hover": {
+              backgroundColor: theme.palette.secondary.dark,
+            },
+          };
+        },
       },
     },
     MuiAlert: {

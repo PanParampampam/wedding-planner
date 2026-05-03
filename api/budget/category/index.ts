@@ -40,7 +40,7 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const newCategory = await prisma.budgetCategory.create({
-        data: { ...req.body, userId: user.id },
+        data: { name: req.body, userId: user.id },
       });
 
       return res.status(201).json({

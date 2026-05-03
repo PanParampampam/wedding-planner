@@ -1,23 +1,24 @@
 import { useContext, useState } from "react";
-import { updateBudgetEntry } from "../api/budget.api";
+import { createBudgetCategory } from "../api/budget.api";
 import { BudgetContext } from "../context/BudgetContext";
-import type { BudgetEntry } from "../types/budget.types";
+import type { CreateBudgetCategory } from "../types/budget.types";
 
-export const useUpdateBudgetEntry = () => {
+export const useCreateBudgetCategory = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>("");
   const budgetContext = useContext(BudgetContext);
 
-  const handler = async (budgetEntry: BudgetEntry) => {
+  const handler = async (budgetCategory: CreateBudgetCategory) => {
     setLoading(true);
     try {
-      const response = await updateBudgetEntry(budgetEntry);
-      if (response.success && response.budgetEntry) {
+      const response = await createBudgetCategory(budgetCategory);
+      if (response.success && response.budgetCategory) {
         setError("");
         budgetContext?.setBudgetAction({
-          actionType: "updated",
-          entryName: response.budgetEntry.name,
+          actionType: "createdCategory",
+          entryName: response.budgetCategory.name,
         });
+        console.log(budgetContext?.budgetAction);
         return true;
       }
 

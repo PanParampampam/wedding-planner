@@ -1,8 +1,9 @@
 import { apiClient } from "../../../shared/lib/apiClient";
-import type { BudgetEntryResponse } from "src/shared/types/common.types";
+import type { BudgetCategoryResponse, BudgetEntryResponse } from "src/shared/types/common.types";
 import type {
   BudgetCategory,
   BudgetEntry,
+  CreateBudgetCategory,
   CreateBudgetEntry,
 } from "../types/budget.types";
 
@@ -16,9 +17,17 @@ export const getBudgetCategories = (): Promise<BudgetCategory[]> => {
   });
 };
 
-export const createBudgetEntry = (
-  budgetEntry: CreateBudgetEntry,
-): Promise<BudgetEntryResponse> => {
+export const createBudgetCategory = (
+  budgetCategory: CreateBudgetCategory,
+): Promise<BudgetCategoryResponse> => {
+  return apiClient<BudgetCategoryResponse>("/api/budget/category", {
+    method: "POST",
+    body: JSON.stringify(budgetCategory),
+    credentials: "include",
+  });
+};
+
+export const createBudgetEntry = (budgetEntry: CreateBudgetEntry): Promise<BudgetEntryResponse> => {
   return apiClient<BudgetEntryResponse>("/api/budget", {
     method: "POST",
     body: JSON.stringify(budgetEntry),
@@ -26,9 +35,7 @@ export const createBudgetEntry = (
   });
 };
 
-export const updateBudgetEntry = (
-  budgetEntry: BudgetEntry,
-): Promise<BudgetEntryResponse> => {
+export const updateBudgetEntry = (budgetEntry: BudgetEntry): Promise<BudgetEntryResponse> => {
   return apiClient<BudgetEntryResponse>("/api/budget", {
     method: "PUT",
     body: JSON.stringify(budgetEntry),

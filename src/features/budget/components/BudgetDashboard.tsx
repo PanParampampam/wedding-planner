@@ -1,26 +1,22 @@
-import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
-
-import { Alert, Paper, Stack, Typography } from "@mui/material";
+import { Alert } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useBudgetEntries } from "../hooks/useBudgetEntries";
 import type { BudgetCategory, BudgetEntry } from "../types/budget.types";
-import BudgetSummary from "./BudgetSummary";
+import BudgetSummary from "./budgetSummary/BudgetSummary";
 import { useAuthProvider } from "src/features/authProvider/hooks/useAuthProvider";
-
 import { daysUntil } from "../utils/budget.utils";
-import BudgetEntryItem from "./BudgetEntryItem";
 import type { User } from "src/shared/types/common.types";
 import { formatDate } from "src/shared/utils/formatDate";
-import BudgetCategories from "./BudgetCategories";
-import BudgetEntryListSkeleton from "./BudgetEntryListSkeleton";
-import ComponentHeader from "src/shared/ui/ComponentHeader";
+import BudgetCategories from "./budgetCategories/BudgetCategories";
+import BudgetEntryListSkeleton from "./BudgetDashboardSkeleton";
+import BudgetEntryList from "./budgetEntryList/BudgetEntryList";
 
 type BudgetEntryListProps = {
-  openEditBudgetForm: (budgetEntry: BudgetEntry) => void;
   categories: BudgetCategory[];
+  openEditBudgetForm: (budgetEntry: BudgetEntry) => void;
 };
 
-export default function BudgetEntryList({ openEditBudgetForm, categories }: BudgetEntryListProps) {
+export default function BudgetDashboard({ categories, openEditBudgetForm }: BudgetEntryListProps) {
   const { budgetEntries, loading, error } = useBudgetEntries();
   const { user } = useAuthProvider() as { user: User };
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
@@ -106,44 +102,12 @@ export default function BudgetEntryList({ openEditBudgetForm, categories }: Budg
         setCategoryFilter={setCategoryFilter}
       />
 
-      <Stack spacing={2}>
-        <ComponentHeader
-          title="Expenses"
-          text="Unpaid entries appear first, ordered by due date. You can edit or delete every expense."
-        />
-        {sortedEntries.length > 0 ? (
-          sortedEntries.map((entry) => {
-            return (
-              <BudgetEntryItem
-                key={entry.id}
-                entry={entry}
-                categories={categories}
-                currencyCode={user?.currencyCode}
-                openEditBudgetForm={openEditBudgetForm}
-              />
-            );
-          })
-        ) : (
-          <Paper
-            elevation={0}
-            sx={{
-              p: 4,
-              borderRadius: 3,
-              border: "1px dashed",
-              borderColor: "divider",
-              backgroundColor: "background.paper",
-            }}
-          >
-            <Stack spacing={1.5} sx={{ alignItems: "flex-start" }}>
-              <ReceiptLongRoundedIcon color="primary" />
-              <Typography variant="h6">No budget entries yet</Typography>
-              <Typography sx={{ color: "text.secondary", maxWidth: 800 }}>
-                Start with the biggest costs first, then add the smaller details as they come in.
-              </Typography>
-            </Stack>
-          </Paper>
-        )}
-      </Stack>
+      <BudgetEntryList
+        entries={sortedEntries}
+        categories={categories}
+        currencyCode={user.currencyCode}
+        openEditBudgetForm={openEditBudgetForm}
+      />
     </>
   );
 }

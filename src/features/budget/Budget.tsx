@@ -3,14 +3,14 @@ import { Button, Box } from "@mui/material";
 import { useState } from "react";
 import PageHeader from "../../shared/ui/PageHeader";
 import type { BudgetEntry, BudgetAction } from "./types/budget.types";
-import { BudgetContext } from "./context/BudgetContext";
-import BudgetEntryList from "./components/BudgetEntryList";
 import BudgetEntryForm from "./components/BudgetEntryForm";
+import { BudgetContext } from "./context/BudgetContext";
+import BudgetDashboard from "./components/BudgetDashboard";
 import { useBudgetCategories } from "./hooks/useBudgetCategories";
 
 export default function Budget() {
-  const [budgetFormOpen, setBudgetFormOpen] = useState(false);
   const [budgetAction, setBudgetAction] = useState<BudgetAction>();
+  const [budgetFormOpen, setBudgetFormOpen] = useState(false);
   const [editBudgetEntry, setEditBudgetEntry] = useState<BudgetEntry | undefined>();
   const { categories } = useBudgetCategories();
 
@@ -42,8 +42,7 @@ export default function Budget() {
             Add a new expense
           </Button>
         </PageHeader>
-        <BudgetEntryList openEditBudgetForm={openEditBudgetForm} categories={categories} />
-
+        <BudgetDashboard categories={categories} openEditBudgetForm={openEditBudgetForm} />
         <BudgetEntryForm
           open={budgetFormOpen}
           onClose={closeBudgetForm}

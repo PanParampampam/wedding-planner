@@ -16,8 +16,7 @@ export const useCreateBudgetEntry = () => {
         setError("");
         budgetContext?.setBudgetAction({
           actionType: "created",
-          budgetEntryId: response.budgetEntry.id,
-          budgetEntryName: response.budgetEntry.name,
+          entryName: response.budgetEntry.name,
         });
         return true;
       }

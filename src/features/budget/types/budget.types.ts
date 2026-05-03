@@ -22,8 +22,9 @@ export type BudgetCategory = {
 
 export type CreateBudgetEntry = Omit<BudgetEntry, "id" | "userId">;
 
+export type CreateBudgetCategory = string;
+
 export type BudgetAction = {
-  actionType: "created" | "deleted" | "updated";
-  budgetEntryId: string;
-  budgetEntryName: string;
+  actionType: "created" | "deleted" | "updated" | "createdCategory";
+  entryName: string;
 };

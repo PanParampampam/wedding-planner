@@ -1,14 +1,14 @@
-import type { BudgetCategory, BudgetEntry } from "../types/budget.types";
+import type { BudgetCategory, BudgetEntry } from "../../types/budget.types";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 import ScheduleRoundedIcon from "@mui/icons-material/ScheduleRounded";
 import { formatMoney } from "src/shared/utils/formatMoney";
-import { daysUntil, deadlineColor } from "../utils/budget.utils";
+import { daysUntil, deadlineColor } from "../../utils/budget.utils";
 import { Alert, Box, Button, Chip, Divider, Paper, Stack, Typography } from "@mui/material";
 import type { CurrencyCode } from "src/shared/types/common.types";
 import { formatDate } from "src/shared/utils/formatDate";
-import { useDeleteBudgetEntry } from "../hooks/useDeleteBudgetEntry";
+import { useDeleteBudgetEntry } from "../../hooks/useDeleteBudgetEntry";
 
 type BudgetEntryItemProps = {
   entry: BudgetEntry;

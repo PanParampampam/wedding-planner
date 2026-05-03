@@ -15,8 +15,7 @@ export const useDeleteBudgetEntry = () => {
         setError("");
         budgetContext?.setBudgetAction({
           actionType: "deleted",
-          budgetEntryId: response.budgetEntry.id,
-          budgetEntryName: response.budgetEntry.name,
+          entryName: response.budgetEntry.name,
         });
         return true;
       }

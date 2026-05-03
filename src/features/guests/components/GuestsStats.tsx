@@ -1,6 +1,7 @@
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
 import HowToRegRoundedIcon from "@mui/icons-material/HowToRegRounded";
 import MarkEmailReadRoundedIcon from "@mui/icons-material/MarkEmailReadRounded";
+import MarkEmailUnreadRoundedIcon from "@mui/icons-material/MarkEmailUnreadRounded";
 import ChildCareRoundedIcon from "@mui/icons-material/ChildCareRounded";
 import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
 import { Box, Stack } from "@mui/material";
@@ -9,6 +10,7 @@ import ComponentHeader from "src/shared/ui/ComponentHeader";
 
 type GuestsStatsProps = {
   total: number;
+  notYetInvited: number;
   invited: number;
   confirmed: number;
   declined: number;
@@ -28,6 +30,7 @@ type GuestsStatsProps = {
 
 export default function GuestsStats({
   total,
+  notYetInvited,
   invited,
   confirmed,
   declined,
@@ -45,8 +48,8 @@ export default function GuestsStats({
           gap: 2,
           gridTemplateColumns: {
             xs: "1fr",
-            sm: "repeat(2, minmax(0, 1fr))",
-            lg: "repeat(5, minmax(0, 1fr))",
+            sm: "repeat(3, minmax(0, 1fr))",
+            xl: "repeat(6, minmax(0, 1fr))",
           },
         }}
       >
@@ -55,6 +58,12 @@ export default function GuestsStats({
           value={total}
           helper="Everyone currently in your list."
           icon={<GroupRoundedIcon fontSize="small" />}
+        />
+        <GuestsStatCard
+          label="Not invited"
+          value={notYetInvited}
+          helper="Guests who didn't get an invite yet."
+          icon={<MarkEmailUnreadRoundedIcon fontSize="small" />}
         />
         <GuestsStatCard
           label="Invited"

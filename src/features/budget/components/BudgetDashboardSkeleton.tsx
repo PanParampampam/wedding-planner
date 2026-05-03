@@ -1,6 +1,6 @@
 import { Box, Paper, Skeleton, Stack } from "@mui/material";
 
-export default function BudgetEntryListSkeleton() {
+export default function BudgetDashboardSkeleton() {
   return (
     <Stack spacing={2}>
       <Skeleton variant="text" width={180} height={52} />

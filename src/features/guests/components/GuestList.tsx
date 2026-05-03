@@ -16,8 +16,16 @@ export default function GuestList({
   openEditGuestForm: (guest: Guest) => void;
 }) {
   const { guests, loading, error } = useGuests();
-  const { total, invited, confirmed, declined, children, groupCounts, dietaryCounts } =
-    useGuestsStats(guests);
+  const {
+    total,
+    notYetInvited,
+    invited,
+    confirmed,
+    declined,
+    children,
+    groupCounts,
+    dietaryCounts,
+  } = useGuestsStats(guests);
 
   if (loading) {
     return <GuestListSkeleton />;
@@ -32,6 +40,7 @@ export default function GuestList({
       <GuestsStats
         total={total}
         invited={invited}
+        notYetInvited={notYetInvited}
         confirmed={confirmed}
         declined={declined}
         children={children}
