@@ -1,12 +1,12 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { createGuest } from "../api/guests.api";
 import type { CreateGuest } from "../types/guest.types";
-import { GuestsContext } from "../context/GuestsContext";
+import { useGuestsStore } from "../store/guests.store";
 
 export const useCreateGuest = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>("");
-  const guestsContext = useContext(GuestsContext);
+  const { setGuest } = useGuestsStore();
 
   const handler = async (guest: CreateGuest) => {
     setLoading(true);
@@ -14,7 +14,7 @@ export const useCreateGuest = () => {
       const response = await createGuest(guest);
       if (response.success && response.guest) {
         setError("");
-        guestsContext?.setGuestAction({
+        setGuest({
           actionType: "created",
           guestId: response.guest.id,
           guestName: response.guest.name,

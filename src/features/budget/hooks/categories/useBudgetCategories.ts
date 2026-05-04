@@ -1,13 +1,13 @@
-import { useEffect, useState, useContext } from "react";
-import { BudgetContext } from "../context/BudgetContext";
-import { getBudgetCategories } from "../api/budget.api";
-import type { BudgetCategory } from "../types/budget.types";
+import { useEffect, useState } from "react";
+import { getBudgetCategories } from "../../api/budget.api";
+import type { BudgetCategory } from "../../types/budget.types";
+import { useBudgetStore } from "../../store/budget.store";
 
 export const useBudgetCategories = () => {
   const [categories, setCategories] = useState<BudgetCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const budgetContext = useContext(BudgetContext);
+  const { entry } = useBudgetStore();
 
   useEffect(() => {
     setLoading(true);
@@ -25,7 +25,7 @@ export const useBudgetCategories = () => {
     };
 
     getBudgetCategoriesHandler();
-  }, [budgetContext?.budgetAction]);
+  }, [entry.entryId]);
 
   return { categories, loading, error };
 };

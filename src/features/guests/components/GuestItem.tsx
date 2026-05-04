@@ -9,15 +9,15 @@ import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { useDeleteGuest } from "../hooks/useDeleteGuest";
 import { Alert, Button } from "@mui/material";
+import { useGuestsStore } from "../store/guests.store";
 
-export default function GuestItem({
-  guest,
-  openEditGuestForm,
-}: {
+type GuestItemProps = {
   guest: Guest;
-  openEditGuestForm: (guest: Guest) => void;
-}) {
+};
+
+export default function GuestItem({ guest }: GuestItemProps) {
   const { handler, loading, error } = useDeleteGuest();
+  const { setForm } = useGuestsStore();
 
   const summaryItems = [
     {
@@ -182,7 +182,12 @@ export default function GuestItem({
           sx={{ width: "fit-content" }}
           loading={loading}
           endIcon={<EditRoundedIcon />}
-          onClick={() => openEditGuestForm(guest)}
+          onClick={() =>
+            setForm({
+              isOpen: true,
+              guest: guest,
+            })
+          }
         ></Button>
       </Stack>
 

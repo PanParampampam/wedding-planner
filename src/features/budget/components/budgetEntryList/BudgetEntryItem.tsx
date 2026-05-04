@@ -8,23 +8,19 @@ import { daysUntil, deadlineColor } from "../../utils/budget.utils";
 import { Alert, Box, Button, Chip, Divider, Paper, Stack, Typography } from "@mui/material";
 import type { CurrencyCode } from "src/shared/types/common.types";
 import { formatDate } from "src/shared/utils/formatDate";
-import { useDeleteBudgetEntry } from "../../hooks/useDeleteBudgetEntry";
+import { useDeleteBudgetEntry } from "../../hooks/entries/useDeleteBudgetEntry";
+import { useBudgetStore } from "../../store/budget.store";
 
 type BudgetEntryItemProps = {
   entry: BudgetEntry;
   categories: BudgetCategory[];
   currencyCode: CurrencyCode;
-  openEditBudgetForm: (budgetEntry: BudgetEntry) => void;
 };
 
-export default function BudgetEntryItem({
-  entry,
-  categories,
-  currencyCode,
-  openEditBudgetForm,
-}: BudgetEntryItemProps) {
+export default function BudgetEntryItem({ entry, categories, currencyCode }: BudgetEntryItemProps) {
   const entryCategory = categories.find((category) => category.id === entry.categoryId);
   const { handler, loading, error } = useDeleteBudgetEntry();
+  const { setForm } = useBudgetStore();
   const remainingDays = daysUntil(entry.dueDate);
 
   const remainingDaysLabel = (() => {
@@ -187,7 +183,12 @@ export default function BudgetEntryItem({
               sx={{ width: "fit-content" }}
               loading={loading}
               endIcon={<EditRoundedIcon />}
-              onClick={() => openEditBudgetForm(entry)}
+              onClick={() =>
+                setForm({
+                  isOpen: true,
+                  entry: entry,
+                })
+              }
             ></Button>
           </Stack>
           {error && (

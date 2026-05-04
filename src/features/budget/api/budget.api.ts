@@ -3,7 +3,8 @@ import type { BudgetCategoryResponse, BudgetEntryResponse } from "src/shared/typ
 import type {
   BudgetCategory,
   BudgetEntry,
-  CreateBudgetCategory,
+  BudgetCategoryName,
+  BudgetCategoryId,
   CreateBudgetEntry,
 } from "../types/budget.types";
 
@@ -18,7 +19,7 @@ export const getBudgetCategories = (): Promise<BudgetCategory[]> => {
 };
 
 export const createBudgetCategory = (
-  budgetCategory: CreateBudgetCategory,
+  budgetCategory: BudgetCategoryName,
 ): Promise<BudgetCategoryResponse> => {
   return apiClient<BudgetCategoryResponse>("/api/budget/category", {
     method: "POST",
@@ -47,6 +48,16 @@ export const deleteBudgetEntry = (id: string): Promise<BudgetEntryResponse> => {
   return apiClient<BudgetEntryResponse>("/api/budget", {
     method: "DELETE",
     body: JSON.stringify(id),
+    credentials: "include",
+  });
+};
+
+export const deleteBudgetCategory = (
+  budgetCategory: BudgetCategoryId,
+): Promise<BudgetCategoryResponse> => {
+  return apiClient<BudgetCategoryResponse>("/api/budget/category", {
+    method: "DELETE",
+    body: JSON.stringify(budgetCategory),
     credentials: "include",
   });
 };

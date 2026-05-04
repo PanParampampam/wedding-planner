@@ -1,21 +1,22 @@
-import { useContext, useState } from "react";
-import { updateBudgetEntry } from "../api/budget.api";
-import { BudgetContext } from "../context/BudgetContext";
-import type { BudgetEntry } from "../types/budget.types";
+import { useState } from "react";
+import { deleteBudgetEntry } from "../../api/budget.api";
+import { useBudgetStore } from "../../store/budget.store";
 
-export const useUpdateBudgetEntry = () => {
+export const useDeleteBudgetEntry = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>("");
-  const budgetContext = useContext(BudgetContext);
+  const { setEntry } = useBudgetStore();
 
-  const handler = async (budgetEntry: BudgetEntry) => {
+  const handler = async (id: string) => {
     setLoading(true);
     try {
-      const response = await updateBudgetEntry(budgetEntry);
+      const response = await deleteBudgetEntry(id);
       if (response.success && response.budgetEntry) {
         setError("");
-        budgetContext?.setBudgetAction({
-          actionType: "updated",
+        setEntry({
+          entryType: "expense",
+          actionType: "deleted",
+          entryId: response.budgetEntry.id,
           entryName: response.budgetEntry.name,
         });
         return true;

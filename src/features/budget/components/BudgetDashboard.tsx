@@ -1,7 +1,7 @@
 import { Alert } from "@mui/material";
 import { useMemo, useState } from "react";
-import { useBudgetEntries } from "../hooks/useBudgetEntries";
-import type { BudgetCategory, BudgetEntry } from "../types/budget.types";
+import { useBudgetEntries } from "../hooks/entries/useBudgetEntries";
+import type { BudgetCategory } from "../types/budget.types";
 import BudgetSummary from "./budgetSummary/BudgetSummary";
 import { useAuthProvider } from "src/features/authProvider/hooks/useAuthProvider";
 import { daysUntil } from "../utils/budget.utils";
@@ -13,10 +13,9 @@ import BudgetEntryList from "./budgetEntryList/BudgetEntryList";
 
 type BudgetEntryListProps = {
   categories: BudgetCategory[];
-  openEditBudgetForm: (budgetEntry: BudgetEntry) => void;
 };
 
-export default function BudgetDashboard({ categories, openEditBudgetForm }: BudgetEntryListProps) {
+export default function BudgetDashboard({ categories }: BudgetEntryListProps) {
   const { budgetEntries, loading, error } = useBudgetEntries();
   const { user } = useAuthProvider() as { user: User };
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
@@ -106,7 +105,6 @@ export default function BudgetDashboard({ categories, openEditBudgetForm }: Budg
         entries={sortedEntries}
         categories={categories}
         currencyCode={user.currencyCode}
-        openEditBudgetForm={openEditBudgetForm}
       />
     </>
   );

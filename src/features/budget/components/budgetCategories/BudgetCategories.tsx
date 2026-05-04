@@ -1,7 +1,8 @@
 import ComponentHeader from "src/shared/ui/ComponentHeader";
 import type { BudgetCategory } from "../../types/budget.types";
-import { Stack, Chip } from "@mui/material";
+import { Stack, Chip, Alert } from "@mui/material";
 import AddBudgetCategoryChip from "./AddBudgetCategoryChip";
+import { useDeleteBudgetCategory } from "../../hooks/categories/useDeleteBudgetCategory";
 
 type BudgetCategoriesProps = {
   categories: BudgetCategory[];
@@ -14,6 +15,7 @@ export default function BudgetCategories({
   categoryFilter,
   setCategoryFilter,
 }: BudgetCategoriesProps) {
+  const { loading, error, handler } = useDeleteBudgetCategory();
   const filterCategoryHandler = (categoryId?: string) => {
     if (!categoryId) {
       setCategoryFilter([]);
@@ -48,8 +50,9 @@ export default function BudgetCategories({
             label={category.name}
             variant={categoryFilter.includes(category.id) ? "filled" : "outlined"}
             onDelete={() => {
-              console.log("delete");
+              handler(category.id);
             }}
+            disabled={loading}
             onClick={() => filterCategoryHandler(category.id)}
             sx={{
               borderColor: "divider",
@@ -63,6 +66,8 @@ export default function BudgetCategories({
         ))}
         <AddBudgetCategoryChip />
       </Stack>
+
+      {!!error && <Alert severity="error">{error}</Alert>}
     </Stack>
   );
 }

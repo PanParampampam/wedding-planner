@@ -9,14 +9,12 @@ type BudgetEntryListProps = {
   entries: BudgetEntry[];
   categories: BudgetCategory[];
   currencyCode: CurrencyCode;
-  openEditBudgetForm: (budgetEntry: BudgetEntry) => void;
 };
 
 export default function BudgetEntryList({
   entries,
   categories,
   currencyCode,
-  openEditBudgetForm,
 }: BudgetEntryListProps) {
   return (
     <Stack spacing={2}>
@@ -32,7 +30,6 @@ export default function BudgetEntryList({
               entry={entry}
               categories={categories}
               currencyCode={currencyCode}
-              openEditBudgetForm={openEditBudgetForm}
             />
           );
         })

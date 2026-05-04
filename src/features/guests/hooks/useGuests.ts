@@ -1,13 +1,13 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { getGuests } from "../api/guests.api";
 import type { Guest } from "../types/guest.types";
-import { GuestsContext } from "../context/GuestsContext";
+import { useGuestsStore } from "../store/guests.store";
 
 export const useGuests = () => {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const guestsContext = useContext(GuestsContext);
+  const { guest } = useGuestsStore();
 
   useEffect(() => {
     setLoading(true);
@@ -29,8 +29,7 @@ export const useGuests = () => {
           group: guest.group as Guest["group"],
           plusOne: guest.plusOne as Guest["plusOne"],
           plusOneName: guest.plusOneName,
-          dietaryRestrictions:
-            guest.dietaryRestrictions as Guest["dietaryRestrictions"],
+          dietaryRestrictions: guest.dietaryRestrictions as Guest["dietaryRestrictions"],
           notes: guest.notes,
         }));
         setGuests(guestsData);
@@ -42,7 +41,7 @@ export const useGuests = () => {
       }
     };
     getGuestsHandler();
-  }, [guestsContext?.guestAction]);
+  }, [guest.guestId]);
 
   return { guests, loading, error };
 };

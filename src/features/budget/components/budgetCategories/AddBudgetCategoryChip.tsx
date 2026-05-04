@@ -3,7 +3,7 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Chip, CircularProgress, IconButton, InputBase, Stack, Typography } from "@mui/material";
-import { useCreateBudgetCategory } from "../../hooks/useCreateBudgetCategory";
+import { useCreateBudgetCategory } from "../../hooks/categories/useCreateBudgetCategory";
 
 export default function AddBudgetCategoryChip() {
   const { loading, error, handler } = useCreateBudgetCategory();

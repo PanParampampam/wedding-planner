@@ -13,13 +13,15 @@ export type Login = {
   password: string;
 };
 
+export type StoreActionTypes = "created" | "deleted" | "updated" | null;
+
 // API Response
 
 export type GuestResponse = {
   success: boolean;
   message: string;
   guest?: {
-    id: number;
+    id: string;
     name: string;
   };
 };

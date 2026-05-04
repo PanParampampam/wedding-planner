@@ -1,55 +1,37 @@
 import GuestList from "./components/GuestList";
 import { Button, Box } from "@mui/material";
 import GuestForm from "./components/GuestForm";
-import { useState } from "react";
-import { GuestsContext } from "./context/GuestsContext";
-import type { Guest, GuestAction } from "./types/guest.types";
 import PageHeader from "../../shared/ui/PageHeader";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import { useGuestsStore } from "./store/guests.store";
+import ActionToast from "src/shared/ui/ActionToast";
 
 export default function Guests() {
-  const [guestFormOpen, setGuestFormOpen] = useState<boolean>(false);
-  const [guestAction, setGuestAction] = useState<GuestAction>();
-  const [editGuest, setEditGuest] = useState<Guest | undefined>(undefined);
-
-  const openNewGuestForm = () => {
-    setGuestFormOpen(true);
-    setEditGuest(undefined);
-  };
-
-  const openEditGuestForm = (guest: Guest) => {
-    setGuestFormOpen(true);
-    setEditGuest(guest);
-  };
-
-  const handleFormClose = () => {
-    setGuestFormOpen(false);
-  };
+  const { guest, form, setForm } = useGuestsStore();
 
   return (
-    <GuestsContext value={{ guestAction, setGuestAction }}>
-      <Box component="main">
-        <PageHeader
-          title="Guests"
-          description="Track, edit, and organize everyone invited to your wedding."
+    <Box component="main">
+      <ActionToast actionType={guest.actionType} category="guest" name={guest.guestName} />
+      <PageHeader
+        title="Guests"
+        description="Track, edit, and organize everyone invited to your wedding."
+      >
+        <Button
+          variant="contained"
+          startIcon={<AddRoundedIcon />}
+          onClick={() =>
+            setForm({
+              isOpen: true,
+              guest: null,
+            })
+          }
+          sx={{ width: "fit-content" }}
         >
-          <Button
-            variant="contained"
-            startIcon={<AddRoundedIcon />}
-            onClick={openNewGuestForm}
-            sx={{ width: "fit-content" }}
-          >
-            Add a new guest
-          </Button>
-        </PageHeader>
-        <GuestList openEditGuestForm={openEditGuestForm} />
-        <GuestForm
-          open={guestFormOpen}
-          onClose={handleFormClose}
-          editGuest={editGuest}
-          key={editGuest && editGuest.id}
-        />
-      </Box>
-    </GuestsContext>
+          Add a new guest
+        </Button>
+      </PageHeader>
+      <GuestList />
+      <GuestForm key={form.guest?.id ?? "new-guest-form"} />
+    </Box>
   );
 }

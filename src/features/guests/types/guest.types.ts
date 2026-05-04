@@ -1,7 +1,8 @@
 import type { Guest as PrismaGuest } from "../../../generated/prisma/client";
+import type { StoreActionTypes } from "src/shared/types/common.types";
 
 export type Guest = {
-  id: number;
+  id: string;
   name: string;
   email: string | null;
   phone: string | null;
@@ -22,8 +23,22 @@ export type Guest = {
 
 export type CreateGuest = Omit<PrismaGuest, "id">;
 
-export type GuestAction = {
-  actionType: "created" | "deleted" | "updated";
-  guestId: number;
+//store
+
+type GuestsStateEntry = {
+  actionType: StoreActionTypes;
+  guestId: string;
   guestName: string;
+};
+
+type GuestsStateForm = {
+  isOpen: boolean;
+  guest: Guest | null;
+};
+
+export type GuestsState = {
+  guest: GuestsStateEntry;
+  form: GuestsStateForm;
+  setGuest: (guestAction: GuestsStateEntry) => void;
+  setForm: (formAction: GuestsStateForm) => void;
 };

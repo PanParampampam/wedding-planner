@@ -1,12 +1,12 @@
-import { useContext, useState } from "react";
-import { createBudgetEntry } from "../api/budget.api";
-import { BudgetContext } from "../context/BudgetContext";
-import type { CreateBudgetEntry } from "../types/budget.types";
+import { useState } from "react";
+import { createBudgetEntry } from "../../api/budget.api";
+import type { CreateBudgetEntry } from "../../types/budget.types";
+import { useBudgetStore } from "../../store/budget.store";
 
 export const useCreateBudgetEntry = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>("");
-  const budgetContext = useContext(BudgetContext);
+  const { setEntry } = useBudgetStore();
 
   const handler = async (budgetEntry: CreateBudgetEntry) => {
     setLoading(true);
@@ -14,8 +14,10 @@ export const useCreateBudgetEntry = () => {
       const response = await createBudgetEntry(budgetEntry);
       if (response.success && response.budgetEntry) {
         setError("");
-        budgetContext?.setBudgetAction({
+        setEntry({
+          entryType: "expense",
           actionType: "created",
+          entryId: response.budgetEntry.id,
           entryName: response.budgetEntry.name,
         });
         return true;

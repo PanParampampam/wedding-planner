@@ -6,9 +6,9 @@ npx prisma db push
 
 npx prisma generate
 
-## Run project with backend server:
+## Run project with backend server on localhost settings:
 
-Vercel dev
+npm run dev:vercel
 
 ## Clean the Prisma database and generate it anew based on your schema:
 
@@ -21,6 +21,7 @@ The backend is implemented as serverless functions deployed on Vercel, using a N
 I chose a serverless architecture on Vercel because the application is primarily CRUD-based and doesn’t require persistent connections or complex background processing. This allows me to focus on frontend development while still having a scalable backend.
 
 - **Frontend:** React, React Router, Material UI, Tailwind CSS, Vite, TypeScript
+- **State:** Zustand
 - **Backend:** Node.js
   Serverless backend using Vercel Functions (Node.js runtime) with Prisma as ORM (Object-relational mapping)
 - **API:** REST (custom endpoints in `api/`)

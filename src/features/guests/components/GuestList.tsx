@@ -3,18 +3,12 @@ import { useGuests } from "../hooks/useGuests";
 import GuestListSkeleton from "./GuestListSkeleton";
 import { Grid, Paper, Stack, Typography } from "@mui/material";
 import { useGuestsStats } from "../hooks/useGuestsStats";
-import GuestAlert from "./GuestAlert";
 import GuestsStats from "./GuestsStats";
-import type { Guest } from "../types/guest.types";
 import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 import ComponentHeader from "src/shared/ui/ComponentHeader";
 import GuestsStatsOverview from "./GuestsStatsOverview";
 
-export default function GuestList({
-  openEditGuestForm,
-}: {
-  openEditGuestForm: (guest: Guest) => void;
-}) {
+export default function GuestList() {
   const { guests, loading, error } = useGuests();
   const {
     total,
@@ -47,7 +41,6 @@ export default function GuestList({
         groupCounts={groupCounts}
         dietaryCounts={dietaryCounts}
       />
-      <GuestAlert />
       <ComponentHeader
         title="Guest list"
         text="Manage every guest in one place, track responses, and your guests's preferences."
@@ -64,7 +57,7 @@ export default function GuestList({
                 maxWidth: { xs: "100%", md: "48%" },
               }}
             >
-              <GuestItem guest={guest} openEditGuestForm={openEditGuestForm} />
+              <GuestItem guest={guest} />
             </Grid>
           ))
         ) : (

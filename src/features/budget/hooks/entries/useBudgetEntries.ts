@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from "react";
-import { BudgetContext } from "../context/BudgetContext";
-import { getBudgetList } from "../api/budget.api";
-import type { BudgetEntry } from "../types/budget.types";
+import { useEffect, useState } from "react";
+import { getBudgetList } from "../../api/budget.api";
+import type { BudgetEntry } from "../../types/budget.types";
+import { useBudgetStore } from "../../store/budget.store";
 
 export const useBudgetEntries = () => {
   const [budgetEntries, setBudgetEntries] = useState<BudgetEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const budgetContext = useContext(BudgetContext);
+  const { entry } = useBudgetStore();
 
   useEffect(() => {
     setLoading(true);
@@ -25,7 +25,7 @@ export const useBudgetEntries = () => {
     };
 
     getBudgetEntriesHandler();
-  }, [budgetContext?.budgetAction]);
+  }, [entry.entryId]);
 
   return { budgetEntries, loading, error };
 };

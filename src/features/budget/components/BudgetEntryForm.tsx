@@ -20,14 +20,12 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import { useState } from "react";
 import dayjs from "dayjs";
 
-import { useCreateBudgetEntry } from "../hooks/useCreateBudgetEntry";
-import { useUpdateBudgetEntry } from "../hooks/useUpdateBudgetEntry";
+import { useCreateBudgetEntry } from "../hooks/entries/useCreateBudgetEntry";
+import { useUpdateBudgetEntry } from "../hooks/entries/useUpdateBudgetEntry";
 import type { BudgetCategory, BudgetEntry, CreateBudgetEntry } from "../types/budget.types";
+import { useBudgetStore } from "../store/budget.store";
 
 type BudgetEntryFormProps = {
-  open: boolean;
-  onClose: () => void;
-  editBudgetEntry?: BudgetEntry;
   categories: BudgetCategory[];
 };
 
@@ -41,23 +39,19 @@ const emptyBudgetEntry: CreateBudgetEntry = {
   note: null,
 };
 
-export default function BudgetEntryForm({
-  open,
-  onClose,
-  editBudgetEntry,
-  categories,
-}: BudgetEntryFormProps) {
-  const initialBudgetEntryData: CreateBudgetEntry | BudgetEntry = editBudgetEntry
+export default function BudgetEntryForm({ categories }: BudgetEntryFormProps) {
+  const { form, setForm } = useBudgetStore();
+  const initialBudgetEntryData: CreateBudgetEntry | BudgetEntry = form.entry
     ? ({
-        id: editBudgetEntry.id,
-        name: editBudgetEntry.name,
-        plannedAmount: editBudgetEntry.plannedAmount,
-        actualAmount: editBudgetEntry.actualAmount,
-        dueDate: editBudgetEntry.dueDate,
-        paid: editBudgetEntry.paid,
-        categoryId: editBudgetEntry.categoryId,
-        userId: editBudgetEntry.userId,
-        note: editBudgetEntry.note,
+        id: form.entry.id,
+        name: form.entry.name,
+        plannedAmount: form.entry.plannedAmount,
+        actualAmount: form.entry.actualAmount,
+        dueDate: form.entry.dueDate,
+        paid: form.entry.paid,
+        categoryId: form.entry.categoryId,
+        userId: form.entry.userId,
+        note: form.entry.note,
       } as BudgetEntry)
     : ({ ...emptyBudgetEntry } as CreateBudgetEntry);
 
@@ -66,7 +60,7 @@ export default function BudgetEntryForm({
   const createBudgetEntryHook = useCreateBudgetEntry();
   const updateBudgetEntryHook = useUpdateBudgetEntry();
 
-  const { loading, error } = editBudgetEntry ? updateBudgetEntryHook : createBudgetEntryHook;
+  const { loading, error } = form.entry ? updateBudgetEntryHook : createBudgetEntryHook;
 
   const formFieldHandler = (
     key: keyof (CreateBudgetEntry | BudgetEntry),
@@ -95,15 +89,27 @@ export default function BudgetEntryForm({
     }
 
     if (response) {
-      onClose();
-      setBudgetEntryData(initialBudgetEntryData);
+      setForm({
+        isOpen: false,
+        entry: null,
+      });
     }
   };
 
   return (
-    <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      open={form.isOpen}
+      onClose={() =>
+        setForm({
+          isOpen: false,
+          entry: null,
+        })
+      }
+    >
       <DialogTitle color="textPrimary" align="center">
-        {editBudgetEntry ? "Edit an expense" : "Add a new expense"}
+        {form.entry ? "Edit an expense" : "Add a new expense"}
       </DialogTitle>
       <DialogContent>
         <Stack component="form" spacing={2} onSubmit={handleFormSubmit} sx={{ pt: 1 }}>
@@ -196,10 +202,10 @@ export default function BudgetEntryForm({
               size="large"
               loading={loading}
               loadingPosition="end"
-              endIcon={editBudgetEntry ? <SaveRoundedIcon /> : <AddRoundedIcon />}
+              endIcon={form.entry ? <SaveRoundedIcon /> : <AddRoundedIcon />}
               sx={{ width: "fit-content" }}
             >
-              {editBudgetEntry ? "Save changes" : "Create"}
+              {form.entry ? "Save changes" : "Create"}
             </Button>
           </Stack>
 

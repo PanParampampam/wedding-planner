@@ -18,38 +18,32 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useCreateGuest } from "../hooks/useCreateGuest";
-import type { Guest } from "../types/guest.types";
 import type { Guest as PrismaGuest } from "../../../generated/prisma/client";
 import type { CreateGuest } from "../types/guest.types";
 import { useUpdateGuest } from "../hooks/useUpdateGuest";
+import { useGuestsStore } from "../store/guests.store";
 
-type GuestFormProps = {
-  open: boolean;
-  onClose: () => void;
-  editGuest: Guest | undefined;
-};
-
-export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) {
-  const [showAddress, setShowAddress] = useState(Boolean(editGuest?.address));
-  const [showDietary, setShowDietary] = useState(Boolean(editGuest?.dietaryRestrictions));
-
-  const initialGuestData: CreateGuest | PrismaGuest = editGuest
+export default function GuestForm() {
+  const { form, setForm } = useGuestsStore();
+  const [showAddress, setShowAddress] = useState(Boolean(form.guest?.address));
+  const [showDietary, setShowDietary] = useState(Boolean(form.guest?.dietaryRestrictions));
+  const initialGuestData: CreateGuest | PrismaGuest = form.guest
     ? ({
-        id: editGuest.id,
-        name: editGuest.name,
-        email: editGuest.email,
-        phone: editGuest.phone,
-        addressCountry: editGuest.address?.country || "",
-        addressCity: editGuest.address?.city || "",
-        addressStreet: editGuest.address?.street || "",
-        addressZipCode: editGuest.address?.zipCode || "",
-        status: editGuest.status,
-        group: editGuest.group,
-        plusOne: editGuest.plusOne,
-        plusOneName: editGuest.plusOneName,
-        children: editGuest.children ?? null,
-        dietaryRestrictions: editGuest.dietaryRestrictions,
-        notes: editGuest.notes,
+        id: form.guest.id,
+        name: form.guest.name,
+        email: form.guest.email,
+        phone: form.guest.phone,
+        addressCountry: form.guest.address?.country || "",
+        addressCity: form.guest.address?.city || "",
+        addressStreet: form.guest.address?.street || "",
+        addressZipCode: form.guest.address?.zipCode || "",
+        status: form.guest.status,
+        group: form.guest.group,
+        plusOne: form.guest.plusOne,
+        plusOneName: form.guest.plusOneName,
+        children: form.guest.children ?? null,
+        dietaryRestrictions: form.guest.dietaryRestrictions,
+        notes: form.guest.notes,
       } as PrismaGuest)
     : ({
         name: "",
@@ -73,7 +67,7 @@ export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) 
   const createGuestHook = useCreateGuest();
   const updateGuestHook = useUpdateGuest();
 
-  const { loading, error } = editGuest ? updateGuestHook : createGuestHook;
+  const { loading, error } = form.guest ? updateGuestHook : createGuestHook;
 
   const formFieldHandler = (key: keyof PrismaGuest, value: string | number | null) => {
     setGuestData((g) => ({ ...g, [key]: value }));
@@ -88,15 +82,27 @@ export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) 
       guestOperationResponse = await createGuestHook.handler(guestData as CreateGuest);
     }
     if (guestOperationResponse) {
-      onClose();
-      setGuestData(initialGuestData);
+      setForm({
+        isOpen: false,
+        guest: null,
+      });
     }
   };
 
   return (
-    <Dialog fullWidth maxWidth="sm" onClose={onClose} open={open}>
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      open={form.isOpen}
+      onClose={() =>
+        setForm({
+          isOpen: false,
+          guest: null,
+        })
+      }
+    >
       <DialogTitle color="textPrimary" align="center">
-        {editGuest ? "Edit guest" : "Add a new guest"}
+        {form.guest ? "Edit guest" : "Add a new guest"}
       </DialogTitle>
       <DialogContent>
         <Stack component="form" spacing={2} sx={{ pt: 1 }} onSubmit={handleFormSubmit}>
@@ -292,10 +298,10 @@ export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) 
             type="submit"
             loading={loading}
             loadingPosition="end"
-            endIcon={editGuest ? <SaveRoundedIcon /> : <AddRoundedIcon />}
+            endIcon={form.guest ? <SaveRoundedIcon /> : <AddRoundedIcon />}
             sx={{ width: "fit-content", alignSelf: "flex-end" }}
           >
-            {editGuest ? "Save changes" : "Create guest"}
+            {form.guest ? "Save changes" : "Create guest"}
           </Button>
 
           {error && (
