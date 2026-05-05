@@ -15,6 +15,8 @@ export type Login = {
 
 export type StoreActionTypes = "created" | "deleted" | "updated" | null;
 
+export type GuestInvitationStatus = "not yet invited" | "invited" | "confirmed" | "declined";
+
 // API Response
 
 export type GuestResponse = {

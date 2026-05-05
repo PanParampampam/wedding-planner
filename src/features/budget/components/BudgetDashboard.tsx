@@ -1,6 +1,6 @@
 import { Alert } from "@mui/material";
 import { useMemo, useState } from "react";
-import { useBudgetEntries } from "../hooks/entries/useBudgetEntries";
+import { useFetchExpenses } from "../hooks/expenses/useFetchExpenses";
 import type { BudgetCategory } from "../types/budget.types";
 import BudgetSummary from "./budgetSummary/BudgetSummary";
 import { useAuthProvider } from "src/features/authProvider/hooks/useAuthProvider";
@@ -16,7 +16,7 @@ type BudgetEntryListProps = {
 };
 
 export default function BudgetDashboard({ categories }: BudgetEntryListProps) {
-  const { budgetEntries, loading, error } = useBudgetEntries();
+  const { budgetEntries, loading, error } = useFetchExpenses();
   const { user } = useAuthProvider() as { user: User };
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
@@ -91,6 +91,7 @@ export default function BudgetDashboard({ categories }: BudgetEntryListProps) {
         plannedItemsCount={plannedItemsCount}
         actualExpenses={actualExpenses}
         actualItemsCount={actualItemsCount}
+        totalExpensesCount={budgetEntries.length}
         currencyCode={user.currencyCode}
         nearestDeadline={nearestDeadline}
       />

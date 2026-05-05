@@ -1,17 +1,18 @@
 import GuestItem from "./GuestItem";
-import { useGuests } from "../hooks/useGuests";
-import GuestListSkeleton from "./GuestListSkeleton";
+import { useFetchGuests } from "../hooks/useFetchGuests";
+import GuestListSkeleton from "./GuestsDashboardSkeleton";
 import { Grid, Paper, Stack, Typography } from "@mui/material";
 import { useGuestsStats } from "../hooks/useGuestsStats";
 import GuestsStats from "./GuestsStats";
 import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
 import ComponentHeader from "src/shared/ui/ComponentHeader";
-import GuestsStatsOverview from "./GuestsStatsOverview";
+import GuestsOverview from "./GuestsOverview/GuestsOverview";
 
-export default function GuestList() {
-  const { guests, loading, error } = useGuests();
+export default function GuestsDashboard() {
+  const { guests, loading, error } = useFetchGuests();
   const {
-    total,
+    totalGuests,
+    totalEstimated,
     notYetInvited,
     invited,
     confirmed,
@@ -30,17 +31,16 @@ export default function GuestList() {
 
   return (
     <Stack spacing={2}>
-      <GuestsStatsOverview groupCounts={groupCounts} dietaryCounts={dietaryCounts} />
-      <GuestsStats
-        total={total}
-        invited={invited}
+      <GuestsOverview
+        totalGuests={totalGuests}
+        totalEstimated={totalEstimated}
         notYetInvited={notYetInvited}
+        invited={invited}
         confirmed={confirmed}
         declined={declined}
         children={children}
-        groupCounts={groupCounts}
-        dietaryCounts={dietaryCounts}
       />
+      <GuestsStats groupCounts={groupCounts} dietaryCounts={dietaryCounts} />
       <ComponentHeader
         title="Guest list"
         text="Manage every guest in one place, track responses, and your guests's preferences."

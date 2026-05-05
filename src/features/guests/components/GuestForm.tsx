@@ -82,6 +82,7 @@ export default function GuestForm() {
       guestOperationResponse = await createGuestHook.handler(guestData as CreateGuest);
     }
     if (guestOperationResponse) {
+      setGuestData(initialGuestData);
       setForm({
         isOpen: false,
         guest: null,

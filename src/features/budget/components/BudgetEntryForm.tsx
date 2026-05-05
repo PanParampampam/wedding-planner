@@ -20,8 +20,8 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import { useState } from "react";
 import dayjs from "dayjs";
 
-import { useCreateBudgetEntry } from "../hooks/entries/useCreateBudgetEntry";
-import { useUpdateBudgetEntry } from "../hooks/entries/useUpdateBudgetEntry";
+import { useCreateExpense } from "../hooks/expenses/useCreateExpense";
+import { useUpdateExpense } from "../hooks/expenses/useUpdateExpense";
 import type { BudgetCategory, BudgetEntry, CreateBudgetEntry } from "../types/budget.types";
 import { useBudgetStore } from "../store/budget.store";
 
@@ -57,8 +57,8 @@ export default function BudgetEntryForm({ categories }: BudgetEntryFormProps) {
 
   const [budgetEntryData, setBudgetEntryData] =
     useState<typeof initialBudgetEntryData>(initialBudgetEntryData);
-  const createBudgetEntryHook = useCreateBudgetEntry();
-  const updateBudgetEntryHook = useUpdateBudgetEntry();
+  const createBudgetEntryHook = useCreateExpense();
+  const updateBudgetEntryHook = useUpdateExpense();
 
   const { loading, error } = form.entry ? updateBudgetEntryHook : createBudgetEntryHook;
 
@@ -89,6 +89,7 @@ export default function BudgetEntryForm({ categories }: BudgetEntryFormProps) {
     }
 
     if (response) {
+      setBudgetEntryData(initialBudgetEntryData);
       setForm({
         isOpen: false,
         entry: null,

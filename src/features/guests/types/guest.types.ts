@@ -1,5 +1,5 @@
 import type { Guest as PrismaGuest } from "../../../generated/prisma/client";
-import type { StoreActionTypes } from "src/shared/types/common.types";
+import type { GuestInvitationStatus, StoreActionTypes } from "src/shared/types/common.types";
 
 export type Guest = {
   id: string;
@@ -12,7 +12,7 @@ export type Guest = {
     street: string | null;
     zipCode: string | null;
   } | null;
-  status: "not yet invited" | "invited" | "confirmed" | "declined";
+  status: GuestInvitationStatus;
   group: "family" | "friends" | "coworkers" | "other";
   plusOne: "on the list" | "outside the list" | "none";
   plusOneName: string | null;

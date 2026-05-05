@@ -1,4 +1,4 @@
-import GuestList from "./components/GuestList";
+import GuestsDashboard from "./components/GuestsDashboard";
 import { Button, Box } from "@mui/material";
 import GuestForm from "./components/GuestForm";
 import PageHeader from "../../shared/ui/PageHeader";
@@ -7,11 +7,22 @@ import { useGuestsStore } from "./store/guests.store";
 import ActionToast from "src/shared/ui/ActionToast";
 
 export default function Guests() {
-  const { guest, form, setForm } = useGuestsStore();
+  const { guest, setGuest, form, setForm } = useGuestsStore();
 
   return (
-    <Box component="main">
-      <ActionToast actionType={guest.actionType} category="guest" name={guest.guestName} />
+    <Box>
+      <ActionToast
+        actionType={guest.actionType}
+        category="guest"
+        name={guest.guestName}
+        onDismiss={() =>
+          setGuest({
+            actionType: null,
+            guestId: "",
+            guestName: "",
+          })
+        }
+      />
       <PageHeader
         title="Guests"
         description="Track, edit, and organize everyone invited to your wedding."
@@ -30,8 +41,8 @@ export default function Guests() {
           Add a new guest
         </Button>
       </PageHeader>
-      <GuestList />
-      <GuestForm key={form.guest?.id ?? "new-guest-form"} />
+      <GuestsDashboard />
+      <GuestForm key={form.guest?.id} />
     </Box>
   );
 }

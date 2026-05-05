@@ -1,20 +1,15 @@
-import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
-import HowToRegRoundedIcon from "@mui/icons-material/HowToRegRounded";
-import MarkEmailReadRoundedIcon from "@mui/icons-material/MarkEmailReadRounded";
-import MarkEmailUnreadRoundedIcon from "@mui/icons-material/MarkEmailUnreadRounded";
-import ChildCareRoundedIcon from "@mui/icons-material/ChildCareRounded";
-import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
+import Diversity3RoundedIcon from "@mui/icons-material/Diversity3Rounded";
+import Groups2RoundedIcon from "@mui/icons-material/Groups2Rounded";
+import ApartmentRoundedIcon from "@mui/icons-material/ApartmentRounded";
+import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+import DinnerDiningRoundedIcon from "@mui/icons-material/DinnerDiningRounded";
+import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
+import BakeryDiningRoundedIcon from "@mui/icons-material/BakeryDiningRounded";
 import { Box, Stack } from "@mui/material";
 import GuestsStatCard from "./GuestsStatCard";
 import ComponentHeader from "src/shared/ui/ComponentHeader";
 
 type GuestsStatsProps = {
-  total: number;
-  notYetInvited: number;
-  invited: number;
-  confirmed: number;
-  declined: number;
-  children: number;
   groupCounts: {
     family: number;
     friends: number;
@@ -28,19 +23,12 @@ type GuestsStatsProps = {
   };
 };
 
-export default function GuestsStats({
-  total,
-  notYetInvited,
-  invited,
-  confirmed,
-  declined,
-  children,
-}: GuestsStatsProps) {
+export default function GuestsStats({ groupCounts, dietaryCounts }: GuestsStatsProps) {
   return (
     <Stack spacing={2} sx={{ mb: 3 }}>
       <ComponentHeader
         title="Guest stats"
-        text="Track the status of invited guests and declined invitations. Click on a card to filter guests by given category (to be implemented)"
+        text="Detailed information about who is coming from each part of your list and what dietary planning you need to account for."
       />
       <Box
         sx={{
@@ -54,40 +42,46 @@ export default function GuestsStats({
         }}
       >
         <GuestsStatCard
-          label="Total"
-          value={total}
-          helper="Everyone currently in your list."
-          icon={<GroupRoundedIcon fontSize="small" />}
+          label="Family"
+          value={groupCounts.family}
+          helper="Guests connected through close family relationships."
+          icon={<Diversity3RoundedIcon fontSize="small" />}
         />
         <GuestsStatCard
-          label="Not invited"
-          value={notYetInvited}
-          helper="Guests who didn't get an invite yet."
-          icon={<MarkEmailUnreadRoundedIcon fontSize="small" />}
+          label="Friends"
+          value={groupCounts.friends}
+          helper="Friends currently included in your celebration plans."
+          icon={<Groups2RoundedIcon fontSize="small" />}
         />
         <GuestsStatCard
-          label="Invited"
-          value={invited}
-          helper="Guests who already got an invite."
-          icon={<MarkEmailReadRoundedIcon fontSize="small" />}
+          label="Coworkers"
+          value={groupCounts.coworkers}
+          helper="People invited from work or professional circles."
+          icon={<ApartmentRoundedIcon fontSize="small" />}
         />
         <GuestsStatCard
-          label="Confirmed"
-          value={confirmed}
-          helper="Guests who have replied yes."
-          icon={<HowToRegRoundedIcon fontSize="small" />}
+          label="Other"
+          value={groupCounts.other}
+          helper="Everyone else who does not fit the main guest groups."
+          icon={<MoreHorizRoundedIcon fontSize="small" />}
         />
         <GuestsStatCard
-          label="Declined"
-          value={declined}
-          helper="Guests who declined the invitation."
-          icon={<BlockRoundedIcon fontSize="small" />}
+          label="Vegetarian"
+          value={dietaryCounts.vegetarian}
+          helper="Guests who need a vegetarian meal option."
+          icon={<DinnerDiningRoundedIcon fontSize="small" />}
         />
         <GuestsStatCard
-          label="Children"
-          value={children}
-          helper="Children count across all guests."
-          icon={<ChildCareRoundedIcon fontSize="small" />}
+          label="Vegan"
+          value={dietaryCounts.vegan}
+          helper="Guests who need a fully plant-based meal option."
+          icon={<SpaRoundedIcon fontSize="small" />}
+        />
+        <GuestsStatCard
+          label="Gluten free"
+          value={dietaryCounts.glutenFree}
+          helper="Guests who need gluten-free planning support."
+          icon={<BakeryDiningRoundedIcon fontSize="small" />}
         />
       </Box>
     </Stack>

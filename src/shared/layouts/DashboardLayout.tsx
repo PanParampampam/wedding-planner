@@ -12,6 +12,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         sx={{
           flexGrow: 1,
           width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
+          maxWidth: { md: `calc(1400px + ${DRAWER_WIDTH}px)` },
+          mx: { md: "auto" },
           p: { xs: 2, sm: 3, md: 4 },
         }}
       >

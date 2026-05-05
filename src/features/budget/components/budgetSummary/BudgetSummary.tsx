@@ -5,7 +5,7 @@ import WalletRoundedIcon from "@mui/icons-material/WalletRounded";
 import { Box, Stack } from "@mui/material";
 import { formatMoney } from "src/shared/utils/formatMoney";
 import BudgetSummaryCard from "./BudgetSummaryCard";
-import BudgetSummaryOverview from "./BudgetSummaryOverview";
+import BudgetOverview from "./BudgetOverview";
 
 type BudgetSummaryProps = {
   budget: number | null;
@@ -13,6 +13,7 @@ type BudgetSummaryProps = {
   plannedItemsCount: number;
   actualExpenses: number;
   actualItemsCount: number;
+  totalExpensesCount: number;
   currencyCode?: string;
   nearestDeadline?: { days: number; date: string; name: string } | null;
 };
@@ -23,6 +24,7 @@ export default function BudgetSummary({
   plannedItemsCount,
   actualExpenses,
   actualItemsCount,
+  totalExpensesCount,
   currencyCode,
   nearestDeadline,
 }: BudgetSummaryProps) {
@@ -31,10 +33,11 @@ export default function BudgetSummary({
 
   return (
     <Stack direction={{ xs: "column", xl: "row" }} spacing={2} sx={{ mb: 3 }}>
-      <BudgetSummaryOverview
+      <BudgetOverview
         budget={budget}
         remainingAfterPlanned={remainingAfterPlanned}
         remainingAfterActual={remainingAfterActual}
+        totalExpensesCount={totalExpensesCount}
         currencyCode={currencyCode}
         nearestDeadline={nearestDeadline}
       />

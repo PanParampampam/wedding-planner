@@ -1,38 +1,87 @@
 import EventAvailableRoundedIcon from "@mui/icons-material/EventAvailableRounded";
-import WalletRoundedIcon from "@mui/icons-material/WalletRounded";
-import { Box, Paper, Stack, Typography } from "@mui/material";
+import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
+import SavingsRoundedIcon from "@mui/icons-material/SavingsRounded";
+import { Box, Chip, Paper, Stack, Typography } from "@mui/material";
 import { formatMoney } from "src/shared/utils/formatMoney";
 
-type BudgetSummaryOverviewProps = {
+type BudgetOverviewProps = {
   budget: number | null;
   remainingAfterPlanned: number | null;
   remainingAfterActual: number | null;
+  totalExpensesCount: number;
   currencyCode?: string;
   nearestDeadline?: { days: number; date: string; name: string } | null;
 };
 
-export default function BudgetSummaryOverview({
+export default function BudgetOverview({
   budget,
   remainingAfterPlanned,
   remainingAfterActual,
+  totalExpensesCount,
   currencyCode,
   nearestDeadline,
-}: BudgetSummaryOverviewProps) {
+}: BudgetOverviewProps) {
   return (
     <Paper
       elevation={0}
       sx={{
-        p: { xs: 2, sm: 3 },
+        position: "relative",
+        overflow: "hidden",
+        px: { xs: 2.5, sm: 4 },
+        py: { xs: 3, sm: 4 },
         borderRadius: 4,
         border: "1px solid",
         borderColor: "divider",
-        background:
-          "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,246,243,0.94) 100%)",
+        background: "var(--budget-overview-gradient)",
         minWidth: 0,
         flex: { xs: "1 1 auto", xl: "1.2 1 0" },
       }}
     >
-      <Stack spacing={2}>
+      <Box
+        sx={{
+          position: "absolute",
+          top: -36,
+          right: -24,
+          width: 140,
+          height: 140,
+          borderRadius: "50%",
+          backgroundColor: "rgba(255, 255, 255, 0.45)",
+        }}
+      />
+
+      <Stack spacing={2.5} sx={{ position: "relative" }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={1.5}
+          sx={{
+            justifyContent: "space-between",
+            alignItems: { xs: "flex-start", sm: "center" },
+          }}
+        >
+          <Chip
+            icon={<SavingsRoundedIcon />}
+            label="Budget summary"
+            sx={{
+              fontWeight: 700,
+              px: 0.5,
+              color: "var(--budget-overview-main)",
+              backgroundColor: "var(--budget-overview-soft)",
+              border: "1px solid var(--budget-overview-border)",
+              "& .MuiChip-icon": {
+                color: "var(--budget-overview-main)",
+              },
+            }}
+          />
+
+          <Chip
+            icon={<ReceiptLongRoundedIcon />}
+            label={`${totalExpensesCount} total expenses`}
+            color="primary"
+            variant="outlined"
+            sx={{ backgroundColor: "rgba(255, 255, 255, 0.65)" }}
+          />
+        </Stack>
+
         <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "flex-start" }}>
           <Box>
             <Typography variant="overline" sx={{ color: "text.secondary" }}>
@@ -40,23 +89,15 @@ export default function BudgetSummaryOverview({
             </Typography>
             <Typography
               variant="h4"
-              sx={{ fontWeight: 800, lineHeight: 1.1, color: "text.primary" }}
+              sx={{
+                fontWeight: 800,
+                lineHeight: 1.1,
+                color: "primary.main",
+                letterSpacing: "-0.02em",
+              }}
             >
               {formatMoney(budget, currencyCode)}
             </Typography>
-          </Box>
-          <Box
-            sx={{
-              width: 48,
-              height: 48,
-              borderRadius: 3,
-              display: "grid",
-              placeItems: "center",
-              backgroundColor: "secondary.light",
-              color: "primary.main",
-            }}
-          >
-            <WalletRoundedIcon />
           </Box>
         </Stack>
 

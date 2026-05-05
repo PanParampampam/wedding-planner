@@ -88,6 +88,16 @@ const appTheme = createTheme({
           "--wedding-heart-main": "#c96b86",
           "--wedding-heart-soft": "rgba(248, 220, 229, 0.88)",
           "--wedding-heart-border": "rgba(201, 107, 134, 0.32)",
+          "--guests-overview-gradient":
+            "linear-gradient(145deg, rgba(250, 232, 240, 0.9) 0%, rgba(255, 251, 246, 0.96) 52%, rgba(240, 215, 230, 0.74) 100%)",
+          "--guests-overview-main": "#b9678a",
+          "--guests-overview-soft": "rgba(240, 215, 230, 0.56)",
+          "--guests-overview-border": "rgba(185, 103, 138, 0.32)",
+          "--budget-overview-gradient":
+            "linear-gradient(145deg, rgba(245, 230, 207, 0.9) 0%, rgba(255, 251, 246, 0.96) 52%, rgba(234, 214, 180, 0.74) 100%)",
+          "--budget-overview-main": "#c68a2f",
+          "--budget-overview-soft": "rgba(234, 214, 180, 0.56)",
+          "--budget-overview-border": "rgba(198, 138, 47, 0.32)",
         },
         html: {
           maxWidth: "100%",
@@ -122,6 +132,11 @@ const appTheme = createTheme({
     MuiButton: {
       defaultProps: {
         disableElevation: true,
+      },
+    },
+    MuiModal: {
+      defaultProps: {
+        disableScrollLock: true,
       },
     },
     MuiChip: {

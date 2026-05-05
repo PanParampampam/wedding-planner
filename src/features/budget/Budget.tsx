@@ -9,14 +9,22 @@ import ActionToast from "src/shared/ui/ActionToast";
 
 export default function Budget() {
   const { categories } = useBudgetCategories();
-  const { entry, form, setForm } = useBudgetStore();
+  const { entry, setEntry, form, setForm } = useBudgetStore();
 
   return (
-    <Box component="main">
+    <Box>
       <ActionToast
         actionType={entry.actionType}
         category={entry.entryType}
         name={entry.entryName}
+        onDismiss={() =>
+          setEntry({
+            entryType: null,
+            actionType: null,
+            entryId: "",
+            entryName: "",
+          })
+        }
       />
       <PageHeader
         title="Budget"

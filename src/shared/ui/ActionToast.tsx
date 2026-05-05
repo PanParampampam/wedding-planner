@@ -7,9 +7,10 @@ type ActionAlertProps = {
   actionType: StoreActionTypes;
   category: string | null;
   name: string;
+  onDismiss: () => void;
 };
 
-export default function ActionToast({ actionType, category, name }: ActionAlertProps) {
+export default function ActionToast({ actionType, category, name, onDismiss }: ActionAlertProps) {
   const [dismissedKey, setDismissedKey] = useState<string | null>(null);
 
   const alertConfig = useMemo(() => {
@@ -45,12 +46,19 @@ export default function ActionToast({ actionType, category, name }: ActionAlertP
   useEffect(() => {
     if (!alertKey) return;
 
-    const timer = window.setTimeout(() => {
+    const dismissTimer = window.setTimeout(() => {
       setDismissedKey(alertKey);
     }, 5000);
 
-    return () => window.clearTimeout(timer);
-  }, [alertKey]);
+    const clearActionTimer = window.setTimeout(() => {
+      onDismiss();
+    }, 5500);
+
+    return () => {
+      window.clearTimeout(dismissTimer);
+      window.clearTimeout(clearActionTimer);
+    };
+  }, [alertKey, onDismiss]);
 
   if (!alertConfig) {
     return null;

@@ -1,6 +1,6 @@
 import { Box, Grid, Paper, Skeleton, Stack } from "@mui/material";
 
-export default function GuestListSkeleton() {
+export default function GuestsDashboardSkeleton() {
   return (
     <Stack spacing={3} sx={{ mt: 1 }}>
       <Box

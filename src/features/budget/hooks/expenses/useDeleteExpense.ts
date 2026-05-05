@@ -1,22 +1,21 @@
 import { useState } from "react";
-import { updateBudgetEntry } from "../../api/budget.api";
-import type { BudgetEntry } from "../../types/budget.types";
+import { deleteBudgetEntry } from "../../api/budget.api";
 import { useBudgetStore } from "../../store/budget.store";
 
-export const useUpdateBudgetEntry = () => {
+export const useDeleteExpense = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>("");
   const { setEntry } = useBudgetStore();
 
-  const handler = async (budgetEntry: BudgetEntry) => {
+  const handler = async (id: string) => {
     setLoading(true);
     try {
-      const response = await updateBudgetEntry(budgetEntry);
+      const response = await deleteBudgetEntry(id);
       if (response.success && response.budgetEntry) {
         setError("");
         setEntry({
           entryType: "expense",
-          actionType: "updated",
+          actionType: "deleted",
           entryId: response.budgetEntry.id,
           entryName: response.budgetEntry.name,
         });

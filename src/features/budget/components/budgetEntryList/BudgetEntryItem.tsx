@@ -8,7 +8,7 @@ import { daysUntil, deadlineColor } from "../../utils/budget.utils";
 import { Alert, Box, Button, Chip, Divider, Paper, Stack, Typography } from "@mui/material";
 import type { CurrencyCode } from "src/shared/types/common.types";
 import { formatDate } from "src/shared/utils/formatDate";
-import { useDeleteBudgetEntry } from "../../hooks/entries/useDeleteBudgetEntry";
+import { useDeleteExpense } from "../../hooks/expenses/useDeleteExpense";
 import { useBudgetStore } from "../../store/budget.store";
 
 type BudgetEntryItemProps = {
@@ -19,7 +19,7 @@ type BudgetEntryItemProps = {
 
 export default function BudgetEntryItem({ entry, categories, currencyCode }: BudgetEntryItemProps) {
   const entryCategory = categories.find((category) => category.id === entry.categoryId);
-  const { handler, loading, error } = useDeleteBudgetEntry();
+  const { handler, loading, error } = useDeleteExpense();
   const { setForm } = useBudgetStore();
   const remainingDays = daysUntil(entry.dueDate);
 

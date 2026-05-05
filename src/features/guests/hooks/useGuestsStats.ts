@@ -1,10 +1,12 @@
 import type { Guest } from "../types/guest.types";
 
 export const useGuestsStats = (guests: Guest[]) => {
+  const totalGuests = guests.length;
+  const declined = guests.filter((g) => g.status === "declined").length;
+  const totalEstimated = totalGuests - declined;
   const confirmed = guests.filter((g) => g.status === "confirmed");
-  const notYetInvited = guests.filter((g) => g.status === "not yet invited");
-  const invited = guests.filter((g) => g.status !== "not yet invited");
-  const declined = guests.filter((g) => g.status === "declined");
+  const notYetInvited = guests.filter((g) => g.status === "not yet invited").length;
+  const invited = guests.filter((g) => g.status !== "not yet invited").length;
   const children = guests.reduce((acc, guest) => acc + (guest.children ?? 0), 0);
 
   const groupCounts = guests.reduce(
@@ -30,11 +32,12 @@ export const useGuestsStats = (guests: Guest[]) => {
   );
 
   return {
-    total: guests.length,
-    notYetInvited: notYetInvited.length,
-    invited: invited.length,
+    totalGuests: totalGuests,
+    totalEstimated: totalEstimated,
+    notYetInvited: notYetInvited,
+    invited: invited,
     confirmed: confirmed.length,
-    declined: declined.length,
+    declined: declined,
     attending,
     children,
     groupCounts,
