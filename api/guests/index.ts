@@ -39,8 +39,28 @@ export default async function handler(
 
   if (req.method === "POST") {
     try {
-      const newGuest = await prisma.guest.create({
-        data: { ...req.body, userId: user.id },
+      const newGuest = await prisma.$transaction(async (tx) => {
+        const createdGuest = await tx.guest.create({
+          data: { ...req.body, userId: user.id },
+        });
+
+        if (req.body?.plusOneId) {
+          const linkedGuestUpdate = await tx.guest.updateMany({
+            where: {
+              id: req.body.plusOneId,
+              userId: user.id,
+            },
+            data: {
+              plusOneId: createdGuest.id,
+            },
+          });
+
+          if (linkedGuestUpdate.count === 0) {
+            throw new Error("Selected plus one guest was not found.");
+          }
+        }
+
+        return createdGuest;
       });
 
       const response: GuestResponse = {
@@ -48,12 +68,21 @@ export default async function handler(
         message: "Guest created",
         guest: {
           id: newGuest.id,
-          name: newGuest.name,
+          name: `${newGuest.name} ${newGuest.surname}`,
         },
       };
 
       return res.status(201).json(response);
     } catch (e) {
+      if (e instanceof Error && e.message === "Selected plus one guest was not found.") {
+        const response: GuestResponse = {
+          success: false,
+          message: "Selected plus one guest was not found.",
+        };
+
+        return res.status(400).json(response);
+      }
+
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         const response: GuestResponse = {
           success: false,
@@ -76,8 +105,24 @@ export default async function handler(
 
   if (req.method === "DELETE") {
     try {
-      const deletedGuest = await prisma.guest.delete({
-        where: { id: req.body, userId: user.id },
+      const deletedGuest = await prisma.$transaction(async (tx) => {
+        const removedGuest = await tx.guest.delete({
+          where: { id: req.body, userId: user.id },
+        });
+
+        if (removedGuest.plusOneId) {
+          await tx.guest.updateMany({
+            where: {
+              id: removedGuest.plusOneId,
+              userId: user.id,
+            },
+            data: {
+              plusOneId: null,
+            },
+          });
+        }
+
+        return removedGuest;
       });
 
       const response: GuestResponse = {
@@ -85,7 +130,7 @@ export default async function handler(
         message: "Guest deleted",
         guest: {
           id: deletedGuest.id,
-          name: deletedGuest.name,
+          name: `${deletedGuest.name} ${deletedGuest.surname}`,
         },
       };
 
@@ -114,7 +159,7 @@ export default async function handler(
         message: "Guest updated",
         guest: {
           id: updatedGuest.id,
-          name: updatedGuest.name,
+          name: `${updatedGuest.name} ${updatedGuest.surname}`,
         },
       };
 

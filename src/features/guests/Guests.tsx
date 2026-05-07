@@ -1,13 +1,12 @@
 import GuestsDashboard from "./components/GuestsDashboard";
 import { Button, Box } from "@mui/material";
-import GuestForm from "./components/GuestForm";
 import PageHeader from "../../shared/ui/PageHeader";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { useGuestsStore } from "./store/guests.store";
 import ActionToast from "src/shared/ui/ActionToast";
 
 export default function Guests() {
-  const { guest, setGuest, form, setForm } = useGuestsStore();
+  const { guest, setGuest, setForm } = useGuestsStore();
 
   return (
     <Box>
@@ -42,7 +41,6 @@ export default function Guests() {
         </Button>
       </PageHeader>
       <GuestsDashboard />
-      <GuestForm key={form.guest?.id} />
     </Box>
   );
 }

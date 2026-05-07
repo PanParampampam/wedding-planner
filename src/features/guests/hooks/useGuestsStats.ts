@@ -7,7 +7,7 @@ export const useGuestsStats = (guests: Guest[]) => {
   const confirmed = guests.filter((g) => g.status === "confirmed");
   const notYetInvited = guests.filter((g) => g.status === "not yet invited").length;
   const invited = guests.filter((g) => g.status !== "not yet invited").length;
-  const children = guests.reduce((acc, guest) => acc + (guest.children ?? 0), 0);
+  const children = guests.filter((guest) => guest.isChild).length;
 
   const groupCounts = guests.reduce(
     (acc, guest) => {
@@ -18,7 +18,7 @@ export const useGuestsStats = (guests: Guest[]) => {
   );
 
   const attending = confirmed.reduce((acc: number, guest) => {
-    return acc + 1 + (guest.plusOne === "outside the list" ? 1 : 0);
+    return acc + 1 + (guest.plusOneId ? 1 : 0);
   }, 0);
 
   const dietaryCounts = guests.reduce(

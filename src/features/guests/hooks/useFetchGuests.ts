@@ -16,6 +16,12 @@ export const useFetchGuests = () => {
       const guestsData: Guest[] = guestsResponse.map((guest) => ({
         id: guest.id,
         name: guest.name,
+        surname: guest.surname,
+        side: guest.side as Guest["side"],
+        isChild: guest.isChild,
+        alcoholFree: guest.alcoholFree,
+        staysOvernight: guest.staysOvernight,
+        needsTransportation: guest.needsTransportation,
         email: guest.email,
         phone: guest.phone,
         address: {
@@ -26,8 +32,7 @@ export const useFetchGuests = () => {
         },
         status: guest.status as Guest["status"],
         group: guest.group as Guest["group"],
-        plusOne: guest.plusOne as Guest["plusOne"],
-        plusOneName: guest.plusOneName,
+        plusOneId: guest.plusOneId,
         dietaryRestrictions: guest.dietaryRestrictions as Guest["dietaryRestrictions"],
         notes: guest.notes,
       }));

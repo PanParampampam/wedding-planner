@@ -36,6 +36,12 @@ const appTheme = createTheme({
       dark: "#9c4760",
       contrastText: "#ffffff",
     },
+    info: {
+      main: "#5b8db8",
+      light: "#a8c8e8",
+      dark: "#3d6a94",
+      contrastText: "#ffffff",
+    },
     text: {
       primary: "#6f5863",
       secondary: "#8c6a78",
@@ -98,6 +104,12 @@ const appTheme = createTheme({
           "--budget-overview-main": "#c68a2f",
           "--budget-overview-soft": "rgba(234, 214, 180, 0.56)",
           "--budget-overview-border": "rgba(198, 138, 47, 0.32)",
+          "--guest-form-gradient-both":
+            "linear-gradient(145deg, rgb(195, 220, 245) 0%, rgb(255, 251, 246) 50%, rgb(250, 220, 232) 100%)",
+          "--guest-form-gradient-bride":
+            "linear-gradient(145deg, rgb(250, 220, 232) 0%, rgb(255, 245, 249) 50%, rgb(245, 200, 220) 100%)",
+          "--guest-form-gradient-groom":
+            "linear-gradient(145deg, rgb(185, 215, 245) 0%, rgb(245, 250, 255) 50%, rgb(170, 205, 235) 100%)",
         },
         html: {
           maxWidth: "100%",
