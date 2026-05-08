@@ -1,3 +1,5 @@
+import type { StoreActionTypes } from "src/shared/types/common.types";
+
 export type BudgetEntry = {
   id: string;
   name: string;
@@ -12,6 +14,8 @@ export type BudgetEntry = {
   updatedAt?: string;
 };
 
+export type CreateBudgetEntry = Omit<BudgetEntry, "id" | "userId">;
+
 export type BudgetCategory = {
   id: string;
   name: string;
@@ -20,10 +24,26 @@ export type BudgetCategory = {
   updatedAt?: string;
 };
 
-export type CreateBudgetEntry = Omit<BudgetEntry, "id" | "userId">;
+export type BudgetCategoryId = BudgetCategory["id"];
+export type BudgetCategoryName = BudgetCategory["name"];
 
-export type BudgetAction = {
-  actionType: "created" | "deleted" | "updated";
-  budgetEntryId: string;
-  budgetEntryName: string;
+//store
+
+type BudgetStateEntry = {
+  entryType: "expense" | "category" | null;
+  actionType: StoreActionTypes;
+  entryId: string;
+  entryName: string;
+};
+
+type BudgetStateForm = {
+  isOpen: boolean;
+  entry: BudgetEntry | null;
+};
+
+export type BudgetState = {
+  entry: BudgetStateEntry;
+  form: BudgetStateForm;
+  setEntry: (newEntry: BudgetStateEntry) => void;
+  setForm: (form: BudgetStateForm) => void;
 };

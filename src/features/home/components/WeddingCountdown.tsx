@@ -13,9 +13,7 @@ export default function WeddingCountdown({
 }) {
   const normalizedWeddingDate = dayjs(weddingDate);
   const today = dayjs().startOf("day");
-  const daysUntilWedding = normalizedWeddingDate
-    .startOf("day")
-    .diff(today, "day");
+  const daysUntilWedding = normalizedWeddingDate.startOf("day").diff(today, "day");
 
   const countdownLabel = (daysUntilWedding: number) => {
     if (daysUntilWedding > 0) {
@@ -92,7 +90,7 @@ export default function WeddingCountdown({
 
         <Stack spacing={0.75}>
           <Typography variant="overline" sx={{ color: "text.secondary" }}>
-            {`${userName}, you have`}
+            {`${userName}, you have:`}
           </Typography>
           <Typography
             variant="h2"

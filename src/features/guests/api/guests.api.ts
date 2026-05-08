@@ -23,7 +23,7 @@ export const updateGuest = (guest: Guest): Promise<GuestResponse> => {
   });
 };
 
-export const deleteGuest = (id: number): Promise<GuestResponse> => {
+export const deleteGuest = (id: string): Promise<GuestResponse> => {
   return apiClient<GuestResponse>("/api/guests", {
     method: "DELETE",
     body: JSON.stringify(id),

@@ -11,7 +11,7 @@ export default function ComponentHeader({ title, text }: ComponentHeaderProps) {
       <Typography variant="h2" sx={{ color: "primary.main", fontWeight: 700 }}>
         {title}
       </Typography>
-      <Typography sx={{ mt: 1, color: "text.secondary", maxWidth: 800 }}>{text}</Typography>
+      <Typography sx={{ mt: 1, color: "text.secondary", maxWidth: 1200 }}>{text}</Typography>
     </Box>
   );
 }

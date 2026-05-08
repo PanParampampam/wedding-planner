@@ -36,6 +36,12 @@ const appTheme = createTheme({
       dark: "#9c4760",
       contrastText: "#ffffff",
     },
+    info: {
+      main: "#5b8db8",
+      light: "#a8c8e8",
+      dark: "#3d6a94",
+      contrastText: "#ffffff",
+    },
     text: {
       primary: "#6f5863",
       secondary: "#8c6a78",
@@ -88,6 +94,22 @@ const appTheme = createTheme({
           "--wedding-heart-main": "#c96b86",
           "--wedding-heart-soft": "rgba(248, 220, 229, 0.88)",
           "--wedding-heart-border": "rgba(201, 107, 134, 0.32)",
+          "--guests-overview-gradient":
+            "linear-gradient(145deg, rgba(250, 232, 240, 0.9) 0%, rgba(255, 251, 246, 0.96) 52%, rgba(240, 215, 230, 0.74) 100%)",
+          "--guests-overview-main": "#b9678a",
+          "--guests-overview-soft": "rgba(240, 215, 230, 0.56)",
+          "--guests-overview-border": "rgba(185, 103, 138, 0.32)",
+          "--budget-overview-gradient":
+            "linear-gradient(145deg, rgba(245, 230, 207, 0.9) 0%, rgba(255, 251, 246, 0.96) 52%, rgba(234, 214, 180, 0.74) 100%)",
+          "--budget-overview-main": "#c68a2f",
+          "--budget-overview-soft": "rgba(234, 214, 180, 0.56)",
+          "--budget-overview-border": "rgba(198, 138, 47, 0.32)",
+          "--guest-form-gradient-both":
+            "linear-gradient(145deg, rgb(195, 220, 245) 0%, rgb(255, 251, 246) 50%, rgb(250, 220, 232) 100%)",
+          "--guest-form-gradient-bride":
+            "linear-gradient(145deg, rgb(250, 220, 232) 0%, rgb(255, 245, 249) 50%, rgb(245, 200, 220) 100%)",
+          "--guest-form-gradient-groom":
+            "linear-gradient(145deg, rgb(185, 215, 245) 0%, rgb(245, 250, 255) 50%, rgb(170, 205, 235) 100%)",
         },
         html: {
           maxWidth: "100%",
@@ -124,19 +146,43 @@ const appTheme = createTheme({
         disableElevation: true,
       },
     },
+    MuiModal: {
+      defaultProps: {
+        disableScrollLock: true,
+      },
+    },
     MuiChip: {
       styleOverrides: {
-        filled: ({ theme }) => ({
-          backgroundColor: theme.palette.secondary.dark,
-          color: theme.palette.primary.dark,
-          "& .MuiChip-label": {
-            color: theme.palette.primary.dark,
-          },
+        filled: ({ theme, ownerState }) => {
+          const isSuccessFilled = ownerState.variant === "filled" && ownerState.color === "success";
 
-          "&.MuiChip-clickable:hover": {
-            backgroundColor: theme.palette.secondary.dark,
-          },
-        }),
+          if (isSuccessFilled) {
+            return {
+              backgroundColor: theme.palette.success.main,
+              color: theme.palette.success.contrastText,
+              "& .MuiChip-label": {
+                color: theme.palette.success.contrastText,
+              },
+              "& .MuiChip-icon": {
+                color: theme.palette.success.contrastText,
+              },
+              "&.MuiChip-clickable:hover": {
+                backgroundColor: theme.palette.success.dark,
+              },
+            };
+          }
+
+          return {
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.primary.dark,
+            "& .MuiChip-label": {
+              color: theme.palette.primary.dark,
+            },
+            "&.MuiChip-clickable:hover": {
+              backgroundColor: theme.palette.secondary.dark,
+            },
+          };
+        },
       },
     },
     MuiAlert: {

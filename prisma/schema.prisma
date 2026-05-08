@@ -26,20 +26,24 @@ model User {
 }
 
 model Guest {
-  id                  Int           @id @default(autoincrement())
+  id                  String        @id @default(uuid())
   name                String
+  surname             String
+  plusOneId           String?
   status              String
+  group               String
+  side                String
+  alcoholFree         String
+  isChild             Boolean
+  staysOvernight      String
+  needsTransportation String
+  dietaryRestrictions String
   email               String?       @unique
   phone               String?       @unique
   addressCountry      String?
   addressCity         String?
   addressStreet       String?
   addressZipCode      String?
-  group               String
-  plusOne             String
-  plusOneName         String?
-  children            Int?
-  dietaryRestrictions String?
   notes               String?
   userId              String
   user                User          @relation(fields: [userId], references: [id])

@@ -1,6 +1,7 @@
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import {
+  Autocomplete,
   Alert,
   Button,
   Checkbox,
@@ -18,41 +19,47 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useCreateGuest } from "../hooks/useCreateGuest";
-import type { Guest } from "../types/guest.types";
 import type { Guest as PrismaGuest } from "../../../generated/prisma/client";
-import type { CreateGuest } from "../types/guest.types";
+import type { CreateGuest, GuestPreferenceState, PlusOne } from "../types/guest.types";
 import { useUpdateGuest } from "../hooks/useUpdateGuest";
+import { useGuestsStore } from "../store/guests.store";
 
 type GuestFormProps = {
-  open: boolean;
-  onClose: () => void;
-  editGuest: Guest | undefined;
+  plusOneList: PlusOne[];
+  allGuestsList: PlusOne[];
 };
 
-export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) {
-  const [showAddress, setShowAddress] = useState(Boolean(editGuest?.address));
-  const [showDietary, setShowDietary] = useState(Boolean(editGuest?.dietaryRestrictions));
+const DEFAULT_PREFERENCE_STATE: GuestPreferenceState = "not sure yet";
 
-  const initialGuestData: CreateGuest | PrismaGuest = editGuest
+export default function GuestForm({ plusOneList, allGuestsList }: GuestFormProps) {
+  const { form, setForm } = useGuestsStore();
+  const [showAddress, setShowAddress] = useState(Boolean(form.guest?.address));
+  const [showContact, setShowContact] = useState(Boolean(form.guest?.email || form.guest?.phone));
+  const initialGuestData: CreateGuest | PrismaGuest = form.guest
     ? ({
-        id: editGuest.id,
-        name: editGuest.name,
-        email: editGuest.email,
-        phone: editGuest.phone,
-        addressCountry: editGuest.address?.country || "",
-        addressCity: editGuest.address?.city || "",
-        addressStreet: editGuest.address?.street || "",
-        addressZipCode: editGuest.address?.zipCode || "",
-        status: editGuest.status,
-        group: editGuest.group,
-        plusOne: editGuest.plusOne,
-        plusOneName: editGuest.plusOneName,
-        children: editGuest.children ?? null,
-        dietaryRestrictions: editGuest.dietaryRestrictions,
-        notes: editGuest.notes,
+        id: form.guest.id,
+        name: form.guest.name,
+        surname: form.guest.surname,
+        plusOneId: form.guest.plusOneId ?? null,
+        email: form.guest.email,
+        phone: form.guest.phone,
+        addressCountry: form.guest.address?.country || "",
+        addressCity: form.guest.address?.city || "",
+        addressStreet: form.guest.address?.street || "",
+        addressZipCode: form.guest.address?.zipCode || "",
+        status: form.guest.status,
+        group: form.guest.group,
+        side: form.guest.side,
+        isChild: form.guest.isChild,
+        staysOvernight: form.guest.staysOvernight ?? DEFAULT_PREFERENCE_STATE,
+        needsTransportation: form.guest.needsTransportation ?? DEFAULT_PREFERENCE_STATE,
+        alcoholFree: form.guest.alcoholFree ?? DEFAULT_PREFERENCE_STATE,
+        dietaryRestrictions: form.guest.dietaryRestrictions ?? DEFAULT_PREFERENCE_STATE,
+        notes: form.guest.notes,
       } as PrismaGuest)
     : ({
         name: "",
+        surname: "",
         email: null,
         phone: null,
         addressCountry: null,
@@ -61,10 +68,13 @@ export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) 
         addressZipCode: null,
         status: "not yet invited",
         group: "family",
-        plusOne: "none",
-        plusOneName: null,
-        children: null,
-        dietaryRestrictions: null,
+        side: "both",
+        plusOneId: null,
+        isChild: false,
+        staysOvernight: DEFAULT_PREFERENCE_STATE,
+        needsTransportation: DEFAULT_PREFERENCE_STATE,
+        alcoholFree: DEFAULT_PREFERENCE_STATE,
+        dietaryRestrictions: DEFAULT_PREFERENCE_STATE,
         notes: null,
       } as CreateGuest);
 
@@ -73,9 +83,9 @@ export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) 
   const createGuestHook = useCreateGuest();
   const updateGuestHook = useUpdateGuest();
 
-  const { loading, error } = editGuest ? updateGuestHook : createGuestHook;
+  const { loading, error } = form.guest ? updateGuestHook : createGuestHook;
 
-  const formFieldHandler = (key: keyof PrismaGuest, value: string | number | null) => {
+  const formFieldHandler = (key: keyof PrismaGuest, value: string | number | boolean | null) => {
     setGuestData((g) => ({ ...g, [key]: value }));
   };
 
@@ -88,15 +98,44 @@ export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) 
       guestOperationResponse = await createGuestHook.handler(guestData as CreateGuest);
     }
     if (guestOperationResponse) {
-      onClose();
       setGuestData(initialGuestData);
+      setForm({
+        isOpen: false,
+        guest: null,
+      });
     }
   };
 
+  const sideGradient =
+    guestData.side === "groom"
+      ? "var(--guest-form-gradient-groom)"
+      : guestData.side === "bride"
+        ? "var(--guest-form-gradient-bride)"
+        : "var(--guest-form-gradient-both)";
+
+  const selectablePlusOneList = plusOneList.filter(
+    (plusOne) => !("id" in guestData) || plusOne.id !== guestData.id,
+  );
+  const selectedPlusOne =
+    allGuestsList.find((plusOne) => plusOne.id === guestData.plusOneId) ?? null;
+  const hasPlusOneOptions = selectablePlusOneList.length > 0;
+  const isEditMode = Boolean(form.guest && form.guest.plusOneId);
+  console.log(plusOneList);
+  console.log(selectablePlusOneList);
   return (
-    <Dialog fullWidth maxWidth="sm" onClose={onClose} open={open}>
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      open={form.isOpen}
+      onClose={() =>
+        setForm({
+          isOpen: false,
+          guest: null,
+        })
+      }
+    >
       <DialogTitle color="textPrimary" align="center">
-        {editGuest ? "Edit guest" : "Add a new guest"}
+        {form.guest ? "Edit guest" : "Add a new guest"}
       </DialogTitle>
       <DialogContent>
         <Stack component="form" spacing={2} sx={{ pt: 1 }} onSubmit={handleFormSubmit}>
@@ -104,32 +143,46 @@ export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) 
             Keep your guest list accurate and actionable so planning stays easy.
           </Typography>
 
-          <TextField
-            label="Name"
-            name="name"
-            required
-            value={guestData.name || ""}
-            onChange={(e) => formFieldHandler("name", e.target.value)}
-          />
-
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
             <TextField
-              label="Email"
-              name="email"
-              type="email"
+              label="Name"
+              name="name"
+              required
               fullWidth
-              value={guestData.email || ""}
-              onChange={(e) => formFieldHandler("email", e.target.value || null)}
+              value={guestData.name || ""}
+              onChange={(e) => formFieldHandler("name", e.target.value)}
             />
             <TextField
-              label="Phone"
-              name="phone"
-              type="tel"
+              label="Surname"
+              name="surname"
+              required
               fullWidth
-              value={guestData.phone || ""}
-              onChange={(e) => formFieldHandler("phone", e.target.value || null)}
+              value={guestData.surname || ""}
+              onChange={(e) => formFieldHandler("surname", e.target.value)}
             />
           </Stack>
+
+          <Autocomplete
+            options={selectablePlusOneList}
+            value={selectedPlusOne}
+            disabled={isEditMode || !hasPlusOneOptions}
+            getOptionLabel={(option) => option.fullName}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            onChange={(_, option) => formFieldHandler("plusOneId", option?.id ?? null)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Plus One"
+                helperText={
+                  isEditMode
+                    ? "You can't change already linked plus one. Edit or delete the plus one guest's info."
+                    : hasPlusOneOptions
+                      ? "Search and select an existing guest"
+                      : "You don't have any guests to select from. You can link a plus one to this guest while creating."
+                }
+              />
+            )}
+          />
 
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
             <FormControl required fullWidth>
@@ -161,75 +214,139 @@ export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) 
                 <MenuItem value="other">Other</MenuItem>
               </Select>
             </FormControl>
-          </Stack>
 
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-            <FormControl required fullWidth>
-              <InputLabel id="plusone-select">Plus One</InputLabel>
+            <FormControl required fullWidth sx={{ background: sideGradient, borderRadius: 1 }}>
+              <InputLabel id="side-select">Side</InputLabel>
               <Select
-                id="plusone-select"
-                label="Plus One"
-                value={guestData.plusOne}
-                onChange={(e) => formFieldHandler("plusOne", e.target.value)}
+                id="side-select"
+                label="Side"
+                value={guestData.side}
+                onChange={(e) => formFieldHandler("side", e.target.value)}
               >
-                <MenuItem value="none">None</MenuItem>
-                <MenuItem value="on the list">On the list</MenuItem>
-                <MenuItem value="outside the list">Outside the list</MenuItem>
+                <MenuItem value="groom">Groom</MenuItem>
+                <MenuItem value="bride">Bride</MenuItem>
+                <MenuItem value="both">Both</MenuItem>
               </Select>
             </FormControl>
-
-            <TextField
-              label="Children"
-              type="number"
-              fullWidth
-              value={guestData.children ?? ""}
-              onChange={(e) =>
-                formFieldHandler("children", e.target.value === "" ? null : Number(e.target.value))
-              }
-              slotProps={{ htmlInput: { min: 0 } }}
-            />
           </Stack>
 
-          {guestData.plusOne !== "none" && (
-            <TextField
-              label="Plus One Name"
-              name="plusOneName"
-              value={guestData.plusOneName || ""}
-              onChange={(e) => formFieldHandler("plusOneName", e.target.value || null)}
-            />
-          )}
-          <Typography sx={{ color: "text.secondary" }}>
-            If your guest is having some a specific diet (like vegan or no gluten), you can select
-            it here.
-          </Typography>
           <FormControlLabel
             control={
               <Checkbox
-                checked={showDietary}
-                onChange={(e) => setShowDietary(e.target.checked)}
+                checked={Boolean(guestData.isChild)}
+                onChange={(e) => {
+                  formFieldHandler("isChild", e.target.checked);
+                  if (e.target.checked) formFieldHandler("alcoholFree", "yes");
+                  else formFieldHandler("alcoholFree", DEFAULT_PREFERENCE_STATE);
+                }}
                 color="primary"
               />
             }
-            label="Add dietary restrictions"
+            label="Is guest a child?"
           />
 
-          {showDietary && (
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
             <FormControl fullWidth>
-              <InputLabel id="dietary-select">Dietary Restrictions</InputLabel>
+              <InputLabel id="staysovernight-select">Stays overnight</InputLabel>
               <Select
-                id="dietary-select"
-                label="Dietary Restrictions"
-                value={guestData.dietaryRestrictions || ""}
-                onChange={(e) => formFieldHandler("dietaryRestrictions", e.target.value || null)}
+                id="staysovernight-select"
+                label="Stays overnight"
+                value={guestData.staysOvernight}
+                onChange={(e) =>
+                  formFieldHandler("staysOvernight", e.target.value as GuestPreferenceState)
+                }
               >
-                <MenuItem value="vegetarian">Vegetarian</MenuItem>
-                <MenuItem value="vegan">Vegan</MenuItem>
-                <MenuItem value="gluten free">Gluten Free</MenuItem>
+                <MenuItem value="yes">Yes</MenuItem>
+                <MenuItem value="no">No</MenuItem>
+                <MenuItem value="not sure yet">Not sure yet</MenuItem>
               </Select>
             </FormControl>
+
+            <FormControl fullWidth>
+              <InputLabel id="needstransportation-select">Needs transportation</InputLabel>
+              <Select
+                id="needstransportation-select"
+                label="Needs transportation"
+                value={guestData.needsTransportation}
+                onChange={(e) =>
+                  formFieldHandler("needsTransportation", e.target.value as GuestPreferenceState)
+                }
+              >
+                <MenuItem value="yes">Yes</MenuItem>
+                <MenuItem value="no">No</MenuItem>
+                <MenuItem value="not sure yet">Not sure yet</MenuItem>
+              </Select>
+            </FormControl>
+          </Stack>
+
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <FormControl fullWidth>
+              <InputLabel id="dietary-select">Dietary restrictions</InputLabel>
+              <Select
+                id="dietary-select"
+                label="Dietary restrictions"
+                value={guestData.dietaryRestrictions || "none"}
+                onChange={(e) => formFieldHandler("dietaryRestrictions", e.target.value)}
+              >
+                <MenuItem value="not sure yet">Not sure yet</MenuItem>
+                <MenuItem value="none">None</MenuItem>
+                <MenuItem value="vegetarian">Vegetarian</MenuItem>
+                <MenuItem value="vegan">Vegan</MenuItem>
+                <MenuItem value="gluten free">Gluten free</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth disabled={Boolean(guestData.isChild)}>
+              <InputLabel id="alcoholfree-select">Alcohol free</InputLabel>
+              <Select
+                id="alcoholfree-select"
+                label="Alcohol free"
+                value={guestData.alcoholFree}
+                onChange={(e) =>
+                  formFieldHandler("alcoholFree", e.target.value as GuestPreferenceState)
+                }
+              >
+                <MenuItem value="yes">Yes</MenuItem>
+                <MenuItem value="no">No</MenuItem>
+                <MenuItem value="not sure yet">Not sure yet</MenuItem>
+              </Select>
+            </FormControl>
+          </Stack>
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showContact}
+                onChange={(e) => setShowContact(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="Add the contact details"
+          />
+
+          {showContact && (
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <TextField
+                label="Email"
+                name="email"
+                type="email"
+                fullWidth
+                value={guestData.email || ""}
+                onChange={(e) => formFieldHandler("email", e.target.value || null)}
+              />
+              <TextField
+                label="Phone"
+                name="phone"
+                type="tel"
+                fullWidth
+                value={guestData.phone || ""}
+                onChange={(e) => formFieldHandler("phone", e.target.value || null)}
+              />
+            </Stack>
           )}
+
           <Typography sx={{ color: "text.secondary" }}>
-            If you're intending to sent an invitation via email, you can store the address of your
+            If you're intending to sent an invitation via mail, you can store the address of your
             guest.
           </Typography>
           <FormControlLabel
@@ -240,7 +357,7 @@ export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) 
                 color="primary"
               />
             }
-            label="Add address"
+            label="Add an address"
           />
 
           {showAddress && (
@@ -292,10 +409,10 @@ export default function GuestForm({ open, onClose, editGuest }: GuestFormProps) 
             type="submit"
             loading={loading}
             loadingPosition="end"
-            endIcon={editGuest ? <SaveRoundedIcon /> : <AddRoundedIcon />}
+            endIcon={form.guest ? <SaveRoundedIcon /> : <AddRoundedIcon />}
             sx={{ width: "fit-content", alignSelf: "flex-end" }}
           >
-            {editGuest ? "Save changes" : "Create guest"}
+            {form.guest ? "Save changes" : "Create guest"}
           </Button>
 
           {error && (

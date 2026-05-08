@@ -1,12 +1,12 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { updateGuest } from "../api/guests.api";
-import { GuestsContext } from "../context/GuestsContext";
 import type { Guest } from "../../../generated/prisma/client";
+import { useGuestsStore } from "../store/guests.store";
 
 export const useUpdateGuest = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>("");
-  const guestsContext = useContext(GuestsContext);
+  const { setGuest } = useGuestsStore();
 
   const handler = async (guest: Guest) => {
     setLoading(true);
@@ -14,7 +14,7 @@ export const useUpdateGuest = () => {
       const response = await updateGuest(guest);
       if (response.success && response.guest) {
         setError("");
-        guestsContext?.setGuestAction({
+        setGuest({
           actionType: "updated",
           guestId: response.guest.id,
           guestName: response.guest.name,
