@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import GuestItem from "../../components/GuestItem";
+import GuestItem from "../../components/GuestList/GuestItem";
 import type { Guest } from "../../types/guest.types";
 
 describe("GuestItem", () => {

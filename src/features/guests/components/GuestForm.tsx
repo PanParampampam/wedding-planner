@@ -74,7 +74,7 @@ export default function GuestForm({ plusOneList, allGuestsList }: GuestFormProps
         staysOvernight: DEFAULT_PREFERENCE_STATE,
         needsTransportation: DEFAULT_PREFERENCE_STATE,
         alcoholFree: DEFAULT_PREFERENCE_STATE,
-        dietaryRestrictions: "unknown",
+        dietaryRestrictions: DEFAULT_PREFERENCE_STATE,
         notes: null,
       } as CreateGuest);
 
@@ -288,7 +288,7 @@ export default function GuestForm({ plusOneList, allGuestsList }: GuestFormProps
                 value={guestData.dietaryRestrictions || "none"}
                 onChange={(e) => formFieldHandler("dietaryRestrictions", e.target.value)}
               >
-                <MenuItem value="unknown">Not sure yet</MenuItem>
+                <MenuItem value="not sure yet">Not sure yet</MenuItem>
                 <MenuItem value="none">None</MenuItem>
                 <MenuItem value="vegetarian">Vegetarian</MenuItem>
                 <MenuItem value="vegan">Vegan</MenuItem>

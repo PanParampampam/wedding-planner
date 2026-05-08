@@ -26,7 +26,7 @@ export default async function handler(
             where: { userId: user.id },
             select: {
               status: true,
-              children: true,
+              isChild: true,
             },
           }),
           prisma.budgetEntry.aggregate({

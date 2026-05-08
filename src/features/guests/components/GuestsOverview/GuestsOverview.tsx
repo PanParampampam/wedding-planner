@@ -88,7 +88,7 @@ export default function GuestsOverview({
 
         <Box>
           <Typography variant="overline" sx={{ color: "text.secondary" }}>
-            Your guest list right now
+            Your estimated guests number (total number of guests minus declined):
           </Typography>
           <Typography
             variant="h4"
@@ -99,11 +99,11 @@ export default function GuestsOverview({
               letterSpacing: "-0.02em",
             }}
           >
-            {confirmed} confirmed, {invited} waiting on a reply
+            {totalEstimated} guests
           </Typography>
         </Box>
 
-        <Typography sx={{ color: "text.secondary", maxWidth: 520 }}>
+        <Typography sx={{ color: "text.secondary" }}>
           Keep the most important guest planning metrics visible at a glance: total headcount,
           invitation progress, confirmed responses, declines, and children count.
         </Typography>
@@ -118,11 +118,6 @@ export default function GuestsOverview({
             },
           }}
         >
-          <GuestsOverviewItem
-            icon={<GroupsRoundedIcon sx={{ fontSize: 16, color: "text.secondary" }} />}
-            label="Estimated (total minus declined)"
-            value={totalEstimated}
-          />
           <GuestsOverviewItem
             icon={<MarkEmailUnreadRoundedIcon sx={{ fontSize: 16, color: "text.secondary" }} />}
             label="Not yet invited"

@@ -23,6 +23,7 @@ export type Guest = {
   status: GuestInvitationStatus;
   group: "family" | "friends" | "coworkers" | "other";
   plusOneId: string | null;
+  plusOneFullName: string | null;
   dietaryRestrictions: "vegetarian" | "vegan" | "gluten free" | "not sure yet" | "none";
   notes: string | null;
 };

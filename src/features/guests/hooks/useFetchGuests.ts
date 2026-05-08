@@ -13,15 +13,19 @@ export const useFetchGuests = () => {
     setLoading(true);
     try {
       const guestsResponse = await getGuests();
+      const guestFullNamesById = new Map(
+        guestsResponse.map((guest) => [guest.id, `${guest.name} ${guest.surname}`.trim()]),
+      );
+
       const guestsData: Guest[] = guestsResponse.map((guest) => ({
         id: guest.id,
         name: guest.name,
         surname: guest.surname,
         side: guest.side as Guest["side"],
         isChild: guest.isChild,
-        alcoholFree: guest.alcoholFree,
-        staysOvernight: guest.staysOvernight,
-        needsTransportation: guest.needsTransportation,
+        alcoholFree: guest.alcoholFree as Guest["alcoholFree"],
+        staysOvernight: guest.staysOvernight as Guest["staysOvernight"],
+        needsTransportation: guest.needsTransportation as Guest["needsTransportation"],
         email: guest.email,
         phone: guest.phone,
         address: {
@@ -33,6 +37,7 @@ export const useFetchGuests = () => {
         status: guest.status as Guest["status"],
         group: guest.group as Guest["group"],
         plusOneId: guest.plusOneId,
+        plusOneFullName: guest.plusOneId ? (guestFullNamesById.get(guest.plusOneId) ?? null) : null,
         dietaryRestrictions: guest.dietaryRestrictions as Guest["dietaryRestrictions"],
         notes: guest.notes,
       }));

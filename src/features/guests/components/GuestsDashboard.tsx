@@ -1,15 +1,13 @@
-import GuestItem from "./GuestItem";
 import { useFetchGuests } from "../hooks/useFetchGuests";
 import GuestListSkeleton from "./GuestsDashboardSkeleton";
-import { Grid, Paper, Stack, Typography } from "@mui/material";
-import { useGuestsStats } from "../hooks/useGuestsStats";
-import GuestsStats from "./GuestsStats";
-import PeopleOutlineRoundedIcon from "@mui/icons-material/PeopleOutlineRounded";
-import ComponentHeader from "src/shared/ui/ComponentHeader";
+import { Stack } from "@mui/material";
+import { guestsStatsHandler } from "../utils/guestsStatsHandler";
+import GuestsStats from "./GuestsStats/GuestsStats";
 import GuestsOverview from "./GuestsOverview/GuestsOverview";
 import GuestForm from "./GuestForm";
 import { useGuestsStore } from "../store/guests.store";
 import type { PlusOne } from "../types/guest.types";
+import GuestList from "./GuestList/GuestList";
 
 export default function GuestsDashboard() {
   const { guests, loading, error } = useFetchGuests();
@@ -24,11 +22,17 @@ export default function GuestsDashboard() {
     children,
     groupCounts,
     dietaryCounts,
-  } = useGuestsStats(guests);
+    staysOvernightCounts,
+    needsTransportCounts,
+    alcoholFreeCounts,
+    side,
+  } = guestsStatsHandler(guests);
+
   const allGuestsList: PlusOne[] = guests.map((guest) => ({
     id: guest.id,
     fullName: `${guest.name} ${guest.surname}`,
   }));
+
   const plusOneList: PlusOne[] = guests
     .filter((guest) => !guest.plusOneId)
     .map((guest) => {
@@ -37,6 +41,21 @@ export default function GuestsDashboard() {
         fullName: `${guest.name} ${guest.surname}`,
       };
     });
+
+  const sortedGuests = guests.sort((a, b) => {
+    const surnameA = a.surname.toLowerCase();
+    const surnameB = b.surname.toLowerCase();
+
+    if (surnameA > surnameB) {
+      return 1;
+    }
+
+    if (surnameA < surnameB) {
+      return -1;
+    }
+
+    return 0;
+  });
 
   if (loading) {
     return <GuestListSkeleton />;
@@ -57,50 +76,15 @@ export default function GuestsDashboard() {
           declined={declined}
           children={children}
         />
-        <GuestsStats groupCounts={groupCounts} dietaryCounts={dietaryCounts} />
-        <ComponentHeader
-          title="Guest list"
-          text="Manage every guest in one place, track responses, and your guests's preferences."
+        <GuestsStats
+          groupCounts={groupCounts}
+          dietaryCounts={dietaryCounts}
+          staysOvernightCounts={staysOvernightCounts}
+          needsTransportCounts={needsTransportCounts}
+          alcoholFreeCounts={alcoholFreeCounts}
+          side={side}
         />
-        <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
-          {guests && guests.length > 0 ? (
-            guests.map((guest) => (
-              <Grid
-                size={{ xs: 12, md: 6 }}
-                key={guest.id}
-                sx={{
-                  display: "flex",
-                  flexBasis: { xs: "100%", md: "48%" },
-                  maxWidth: { xs: "100%", md: "48%" },
-                }}
-              >
-                <GuestItem guest={guest} />
-              </Grid>
-            ))
-          ) : (
-            <Grid size={{ xs: 12 }}>
-              <Paper
-                elevation={0}
-                sx={{
-                  p: 4,
-                  borderRadius: 3,
-                  border: "1px dashed",
-                  borderColor: "divider",
-                  backgroundColor: "background.paper",
-                }}
-              >
-                <Stack spacing={1.5} sx={{ alignItems: "flex-start" }}>
-                  <PeopleOutlineRoundedIcon color="primary" />
-                  <Typography variant="h6">No guests yet</Typography>
-                  <Typography sx={{ color: "text.secondary", maxWidth: 800 }}>
-                    Start by adding your closest family and friends, then work your way through the
-                    full list.
-                  </Typography>
-                </Stack>
-              </Paper>
-            </Grid>
-          )}
-        </Grid>
+        <GuestList guests={sortedGuests} />
       </Stack>
       <GuestForm key={form.guest?.id} plusOneList={plusOneList} allGuestsList={allGuestsList} />
     </>
