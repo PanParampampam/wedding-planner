@@ -10,6 +10,7 @@ import { useDeleteGuest } from "../../hooks/useDeleteGuest";
 import { Alert, Button } from "@mui/material";
 import { useGuestsStore } from "../../store/guests.store";
 import { GuestItemInfoRow } from "./GuestItemInfoRow";
+import { useAuthProvider } from "src/features/authProvider/hooks/useAuthProvider";
 
 type GuestItemProps = {
   guest: Guest;
@@ -18,6 +19,8 @@ type GuestItemProps = {
 export default function GuestItem({ guest }: GuestItemProps) {
   const { handler, loading, error } = useDeleteGuest();
   const { setForm } = useGuestsStore();
+  const { user } = useAuthProvider();
+  const isReadOnly = Boolean(user?.readOnly);
   const statusColor =
     guest.status === "confirmed" ? "success" : guest.status === "declined" ? "error" : "default";
   const addressParts = [
@@ -101,32 +104,34 @@ export default function GuestItem({ guest }: GuestItemProps) {
         )}
       </Stack>
 
-      <Stack
-        direction="row"
-        spacing={1.5}
-        sx={{ mt: "auto", pt: 2, justifyContent: "space-between" }}
-      >
-        <Button
-          variant="text"
-          sx={{ width: "fit-content" }}
-          color="error"
-          loading={loading}
-          endIcon={<DeleteOutlineRoundedIcon />}
-          onClick={() => handler(guest.id)}
-        ></Button>
-        <Button
-          variant="text"
-          sx={{ width: "fit-content" }}
-          loading={loading}
-          endIcon={<EditRoundedIcon />}
-          onClick={() =>
-            setForm({
-              isOpen: true,
-              guest: guest,
-            })
-          }
-        ></Button>
-      </Stack>
+      {!isReadOnly && (
+        <Stack
+          direction="row"
+          spacing={1.5}
+          sx={{ mt: "auto", pt: 2, justifyContent: "space-between" }}
+        >
+          <Button
+            variant="text"
+            sx={{ width: "fit-content" }}
+            color="error"
+            loading={loading}
+            endIcon={<DeleteOutlineRoundedIcon />}
+            onClick={() => handler(guest.id)}
+          ></Button>
+          <Button
+            variant="text"
+            sx={{ width: "fit-content" }}
+            loading={loading}
+            endIcon={<EditRoundedIcon />}
+            onClick={() =>
+              setForm({
+                isOpen: true,
+                guest: guest,
+              })
+            }
+          ></Button>
+        </Stack>
+      )}
 
       {error && (
         <Alert severity="error" sx={{ mt: 2, textAlign: "center", fontWeight: 600 }}>

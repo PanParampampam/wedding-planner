@@ -91,7 +91,7 @@ export default function GuestsOverview({
             Your estimated guests number (total number of guests minus declined):
           </Typography>
           <Typography
-            variant="h4"
+            variant="h2"
             sx={{
               fontWeight: 800,
               lineHeight: 1.1,

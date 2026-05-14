@@ -7,3 +7,9 @@ export const login = (user: Login): Promise<UserResponse> => {
     body: JSON.stringify(user),
   });
 };
+
+export const demoLogin = (): Promise<UserResponse> => {
+  return apiClient<UserResponse>("/api/auth/demo-login", {
+    method: "POST",
+  });
+};

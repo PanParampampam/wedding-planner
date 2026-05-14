@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getUserFromRequest } from "../../src/backend/shared/auth/getUser.js";
+import { getAuthContextFromRequest } from "../../src/backend/shared/auth/getUser.js";
 import type { UserResponse } from "../../src/shared/types/common.types.js";
 
 export default async function handler(
@@ -8,10 +8,13 @@ export default async function handler(
 ): Promise<UserResponse | VercelResponse> {
   if (req.method !== "GET") return res.status(405).end();
   try {
-    const user = await getUserFromRequest(req);
-    if (!user) {
+    const authContext = await getAuthContextFromRequest(req);
+    if (!authContext?.user) {
       return res.status(200).json({ success: false });
     }
+
+    const { user, readOnly, isDemo } = authContext;
+
     return res.status(200).json({
       success: true,
       user: {
@@ -21,6 +24,8 @@ export default async function handler(
         weddingDate: user.weddingDate,
         budget: user.budget ? Number(user.budget) : null,
         currencyCode: user.currencyCode,
+        readOnly,
+        isDemo,
       },
     });
   } catch (e) {

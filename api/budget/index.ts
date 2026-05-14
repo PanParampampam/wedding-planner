@@ -1,7 +1,7 @@
 import { prisma } from "../_lib/prisma.js";
 import { Prisma } from "../../src/generated/prisma/client.js";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getUserFromRequest } from "./../../src/backend/shared/auth/getUser.js";
+import { getAuthContextFromRequest } from "./../../src/backend/shared/auth/getUser.js";
 import type { BudgetEntryResponse } from "./../../src/shared/types/common.types.js";
 
 export default async function handler(
@@ -12,9 +12,18 @@ export default async function handler(
     return res.status(204).end();
   }
 
-  const user = await getUserFromRequest(req);
-  if (!user) {
+  const authContext = await getAuthContextFromRequest(req);
+  if (!authContext?.user) {
     return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const { user, readOnly } = authContext;
+
+  if (readOnly && req.method !== "GET") {
+    return res.status(403).json({
+      success: false,
+      message: "Demo mode is read-only.",
+    });
   }
 
   if (req.method === "GET") {

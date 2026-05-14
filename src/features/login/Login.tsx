@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -18,6 +19,7 @@ import { useFormValidate } from "./hooks/useFormValidate";
 import { useLogin } from "./hooks/useLogin";
 import type { Login } from "src/shared/types/common.types";
 import { useAuthProvider } from "../authProvider/hooks/useAuthProvider";
+import { demoLogin } from "./api/login.api";
 
 const initialForm: LoginForm = {
   email: "",
@@ -26,22 +28,23 @@ const initialForm: LoginForm = {
 
 export default function Login() {
   const [form, setForm] = useState<LoginForm>(initialForm);
+  const [demoLoading, setDemoLoading] = useState<boolean>(false);
+  const [demoError, setDemoError] = useState<string>("");
   const { formErrors, setFormErrors, validate } = useFormValidate();
   const { loading, error, handler } = useLogin();
   const location = useLocation();
   const navigate = useNavigate();
   const { login } = useAuthProvider();
-  const userCreatedMessage = (location.state as { message?: string } | null)
-    ?.message;
+  const userCreatedMessage = (location.state as { message?: string } | null)?.message;
 
-  const handleChange =
-    (field: keyof LoginForm) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setForm((prev) => ({ ...prev, [field]: e.target.value }));
-      setFormErrors((prev) => ({ ...prev, [field]: undefined }));
-    };
+  const handleChange = (field: keyof LoginForm) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    setFormErrors((prev) => ({ ...prev, [field]: undefined }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setDemoError("");
 
     if (!validate(form)) return;
     const user: Login = {
@@ -54,6 +57,37 @@ export default function Login() {
       navigate("/home", {
         replace: true,
       });
+    }
+  };
+
+  const handleDemoLogin = async () => {
+    setDemoError("");
+    setDemoLoading(true);
+
+    try {
+      const response = await demoLogin();
+
+      if (!response.success || !response.user) {
+        throw new Error(response.message ?? "Could not start demo mode.");
+      }
+
+      login({
+        name: response.user.name,
+        email: response.user.email,
+        weddingDate: response.user.weddingDate,
+        budget: response.user.budget,
+        currencyCode: response.user.currencyCode,
+        readOnly: response.user.readOnly,
+        isDemo: response.user.isDemo,
+      });
+
+      navigate("/home", {
+        replace: true,
+      });
+    } catch (e) {
+      setDemoError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setDemoLoading(false);
     }
   };
 
@@ -82,10 +116,7 @@ export default function Login() {
         <Stack spacing={3}>
           {/* Header */}
           <Stack spacing={0.5}>
-            <Typography
-              variant="h4"
-              sx={{ color: "primary.main", fontWeight: 700 }}
-            >
+            <Typography variant="h4" sx={{ color: "primary.main", fontWeight: 700 }}>
               Sign in
             </Typography>
             {userCreatedMessage ? (
@@ -145,7 +176,23 @@ export default function Login() {
             >
               Sign in
             </Button>
-            {error && (
+
+            <Button
+              variant="contained"
+              color="secondary"
+              size="large"
+              fullWidth
+              loading={demoLoading}
+              disabled={loading}
+              loadingPosition="end"
+              endIcon={<VisibilityRoundedIcon />}
+              sx={{ py: 1.25 }}
+              onClick={handleDemoLogin}
+            >
+              Check the demo
+            </Button>
+
+            {(error || demoError) && (
               <Alert
                 severity="error"
                 sx={{
@@ -154,13 +201,10 @@ export default function Login() {
                   fontWeight: 600,
                 }}
               >
-                {error}
+                {error || demoError}
               </Alert>
             )}
-            <Typography
-              variant="body2"
-              sx={{ color: "text.secondary", textAlign: "center" }}
-            >
+            <Typography variant="body2" sx={{ color: "text.secondary", textAlign: "center" }}>
               Don&apos;t have an account yet?{" "}
               <Link component={RouterLink} to="/register" underline="hover">
                 Register here

@@ -10,6 +10,7 @@ import type { CurrencyCode } from "src/shared/types/common.types";
 import { formatDate } from "src/shared/utils/formatDate";
 import { useDeleteExpense } from "../../hooks/expenses/useDeleteExpense";
 import { useBudgetStore } from "../../store/budget.store";
+import { useAuthProvider } from "src/features/authProvider/hooks/useAuthProvider";
 
 type BudgetEntryItemProps = {
   entry: BudgetEntry;
@@ -21,6 +22,8 @@ export default function BudgetEntryItem({ entry, categories, currencyCode }: Bud
   const entryCategory = categories.find((category) => category.id === entry.categoryId);
   const { handler, loading, error } = useDeleteExpense();
   const { setForm } = useBudgetStore();
+  const { user } = useAuthProvider();
+  const isReadOnly = Boolean(user?.readOnly);
   const remainingDays = daysUntil(entry.dueDate);
 
   const remainingDaysLabel = (() => {
@@ -165,32 +168,34 @@ export default function BudgetEntryItem({ entry, categories, currencyCode }: Bud
             )}
           </Stack>
 
-          <Stack
-            direction={{ xs: "row", md: "column" }}
-            spacing={1}
-            sx={{ justifyContent: "space-between" }}
-          >
-            <Button
-              variant="text"
-              sx={{ width: "fit-content" }}
-              color="error"
-              loading={loading}
-              endIcon={<DeleteOutlineRoundedIcon />}
-              onClick={() => handler(entry.id)}
-            ></Button>
-            <Button
-              variant="text"
-              sx={{ width: "fit-content" }}
-              loading={loading}
-              endIcon={<EditRoundedIcon />}
-              onClick={() =>
-                setForm({
-                  isOpen: true,
-                  entry: entry,
-                })
-              }
-            ></Button>
-          </Stack>
+          {!isReadOnly && (
+            <Stack
+              direction={{ xs: "row", md: "column" }}
+              spacing={1}
+              sx={{ justifyContent: "space-between" }}
+            >
+              <Button
+                variant="text"
+                sx={{ width: "fit-content" }}
+                color="error"
+                loading={loading}
+                endIcon={<DeleteOutlineRoundedIcon />}
+                onClick={() => handler(entry.id)}
+              ></Button>
+              <Button
+                variant="text"
+                sx={{ width: "fit-content" }}
+                loading={loading}
+                endIcon={<EditRoundedIcon />}
+                onClick={() =>
+                  setForm({
+                    isOpen: true,
+                    entry: entry,
+                  })
+                }
+              ></Button>
+            </Stack>
+          )}
           {error && (
             <Alert
               severity="error"

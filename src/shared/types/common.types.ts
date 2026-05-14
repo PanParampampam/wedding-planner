@@ -6,6 +6,8 @@ export type User = {
   weddingDate: Date;
   budget: number | null;
   currencyCode: CurrencyCode;
+  readOnly?: boolean;
+  isDemo?: boolean;
 };
 
 export type Login = {
@@ -38,6 +40,8 @@ export type UserResponse = {
     weddingDate: Date;
     budget: number | null;
     currencyCode: CurrencyCode;
+    readOnly?: boolean;
+    isDemo?: boolean;
   };
 };
 

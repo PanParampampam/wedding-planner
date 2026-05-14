@@ -1,105 +1,155 @@
 import { Box, Grid, Paper, Skeleton, Stack } from "@mui/material";
 
+const statsSections = [
+  {
+    key: "sides",
+    cards: 3,
+    columns: { xs: "1fr", sm: "repeat(3, minmax(0, 1fr))" },
+  },
+  {
+    key: "groups",
+    cards: 4,
+    columns: {
+      xs: "1fr",
+      sm: "repeat(2, minmax(0, 1fr))",
+      md: "repeat(4, minmax(0, 1fr))",
+    },
+  },
+  {
+    key: "preferences",
+    cards: 3,
+    columns: { xs: "1fr", sm: "repeat(3, minmax(0, 1fr))" },
+  },
+  {
+    key: "dietary",
+    cards: 3,
+    columns: { xs: "1fr", sm: "repeat(3, minmax(0, 1fr))" },
+  },
+] as const;
+
 export default function GuestsDashboardSkeleton() {
   return (
-    <Stack spacing={3} sx={{ mt: 1 }}>
-      <Box
+    <Stack spacing={2}>
+      <Paper
+        elevation={0}
         sx={{
-          display: "grid",
-          gap: 2,
-          gridTemplateColumns: { xs: "1fr", lg: "repeat(2, minmax(0, 1fr))" },
+          position: "relative",
+          overflow: "hidden",
+          px: { xs: 2.5, sm: 4 },
+          py: { xs: 3, sm: 4 },
+          borderRadius: 4,
+          border: "1px solid",
+          borderColor: "divider",
+          background: "var(--guests-overview-gradient)",
         }}
       >
-        {Array.from({ length: 2 }).map((_, overviewIndex) => (
-          <Paper
-            key={overviewIndex}
-            elevation={0}
+        <Box
+          sx={{
+            position: "absolute",
+            top: -36,
+            right: -24,
+            width: 140,
+            height: 140,
+            borderRadius: "50%",
+            backgroundColor: "rgba(255, 255, 255, 0.45)",
+          }}
+        />
+
+        <Stack spacing={2.5} sx={{ position: "relative" }}>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+            <Skeleton variant="rounded" width={148} height={32} />
+            <Skeleton variant="rounded" width={168} height={32} />
+          </Stack>
+
+          <Box>
+            <Skeleton variant="text" width={320} height={24} />
+            <Skeleton variant="text" width={220} height={66} />
+          </Box>
+
+          <Skeleton variant="text" width="88%" height={24} />
+
+          <Box
             sx={{
-              p: { xs: 2, sm: 3 },
-              borderRadius: 4,
-              border: "1px solid",
-              borderColor: "divider",
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,246,243,0.94) 100%)",
+              display: "grid",
+              gap: 1,
+              gridTemplateColumns: {
+                xs: "repeat(2, minmax(0, 1fr))",
+                md: "repeat(3, minmax(0, 1fr))",
+              },
             }}
           >
-            <Stack spacing={1.5}>
-              <Skeleton variant="text" width={140} height={24} />
-              <Box
+            {Array.from({ length: 5 }).map((_, tileIndex) => (
+              <Paper
+                key={tileIndex}
+                elevation={0}
                 sx={{
-                  display: "grid",
-                  gap: 1,
-                  gridTemplateColumns: {
-                    xs: "repeat(2, minmax(0, 1fr))",
-                    sm:
-                      overviewIndex === 0
-                        ? "repeat(4, minmax(0, 1fr))"
-                        : "repeat(3, minmax(0, 1fr))",
-                  },
+                  p: 1.25,
+                  borderRadius: 2,
+                  backgroundColor: "secondary.light",
+                  border: "1px solid",
+                  borderColor: "divider",
                 }}
               >
-                {Array.from({ length: overviewIndex === 0 ? 4 : 3 }).map((__, tileIndex) => (
-                  <Paper
-                    key={tileIndex}
-                    elevation={0}
-                    sx={{
-                      p: 1.25,
-                      borderRadius: 2,
-                      backgroundColor: "secondary.light",
-                      border: "1px solid",
-                      borderColor: "divider",
-                    }}
-                  >
-                    <Skeleton variant="text" width="70%" height={18} />
-                    <Skeleton variant="text" width="35%" height={24} />
-                  </Paper>
-                ))}
-              </Box>
-              <Skeleton variant="text" width="80%" height={24} />
-            </Stack>
-          </Paper>
-        ))}
-      </Box>
+                <Skeleton variant="text" width="70%" height={18} />
+                <Skeleton variant="text" width="35%" height={24} />
+              </Paper>
+            ))}
+          </Box>
+        </Stack>
+      </Paper>
 
-      <Box
-        sx={{
-          display: "grid",
-          gap: 2,
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "repeat(2, minmax(0, 1fr))",
-            lg: "repeat(5, minmax(0, 1fr))",
-          },
-        }}
-      >
-        {Array.from({ length: 5 }).map((_, idx) => (
-          <Paper
-            key={idx}
-            elevation={0}
-            sx={{
-              p: { xs: 2, sm: 2.5 },
-              borderRadius: 3,
-              border: "1px solid",
-              borderColor: "divider",
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,246,243,0.94) 100%)",
-            }}
-          >
-            <Stack spacing={1.25}>
-              <Stack direction="row" sx={{ alignItems: "center", justifyContent: "space-between" }}>
-                <Skeleton variant="text" width={72} height={18} />
-                <Skeleton variant="rounded" width={36} height={36} />
-              </Stack>
-              <Skeleton variant="text" width={50} height={46} sx={{ alignSelf: "center" }} />
-              <Skeleton variant="text" width="90%" height={24} />
-            </Stack>
-          </Paper>
-        ))}
-      </Box>
+      <Stack spacing={4} sx={{ mb: 3 }}>
+        <Stack spacing={1}>
+          <Skeleton variant="text" width={150} height={48} />
+          <Skeleton variant="text" width="72%" height={24} />
+        </Stack>
 
-      <Stack spacing={1} sx={{ mb: 1 }}>
-        <Skeleton variant="text" width={180} height={52} />
-        <Skeleton variant="text" width="65%" height={28} />
+        {statsSections.map((section) => (
+          <Stack key={section.key} spacing={1.5}>
+            <Skeleton variant="text" width={130} height={40} />
+            <Box
+              sx={{
+                display: "grid",
+                gap: 2,
+                gridTemplateColumns: section.columns,
+              }}
+            >
+              {Array.from({ length: section.cards }).map((_, cardIdx) => (
+                <Paper
+                  key={cardIdx}
+                  elevation={0}
+                  sx={{
+                    p: { xs: 2, sm: 2.5 },
+                    borderRadius: 3,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    background:
+                      "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,246,243,0.94) 100%)",
+                    minWidth: 0,
+                  }}
+                >
+                  <Stack spacing={1.25} sx={{ height: "100%" }}>
+                    <Stack
+                      direction="row"
+                      spacing={1.25}
+                      sx={{ alignItems: "center", justifyContent: "space-between" }}
+                    >
+                      <Skeleton variant="text" width={88} height={20} />
+                      <Skeleton variant="rounded" width={36} height={36} />
+                    </Stack>
+                    <Skeleton variant="text" width={70} height={46} sx={{ alignSelf: "center" }} />
+                    <Skeleton variant="text" width="92%" height={24} />
+                  </Stack>
+                </Paper>
+              ))}
+            </Box>
+          </Stack>
+        ))}
+      </Stack>
+
+      <Stack spacing={1}>
+        <Skeleton variant="text" width={140} height={48} />
+        <Skeleton variant="text" width="70%" height={24} />
       </Stack>
 
       <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
@@ -131,30 +181,31 @@ export default function GuestsDashboardSkeleton() {
             >
               <Skeleton variant="text" width="45%" height={36} sx={{ alignSelf: "center" }} />
 
-              <Box
-                sx={{
-                  display: "grid",
-                  gap: 1.25,
-                  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                }}
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ justifyContent: "center", flexWrap: "wrap" }}
               >
-                {Array.from({ length: 4 }).map((__, metricIndex) => (
-                  <Paper
-                    key={metricIndex}
-                    variant="outlined"
-                    sx={{ p: 1.25, bgcolor: "grey.50", borderColor: "grey.200", borderRadius: 2 }}
-                  >
-                    <Skeleton variant="text" width="65%" height={18} />
-                    <Skeleton variant="text" width="80%" height={20} />
-                  </Paper>
+                <Skeleton variant="rounded" width={96} height={24} />
+                <Skeleton variant="rounded" width={132} height={24} />
+              </Stack>
+
+              <Stack spacing={0.75}>
+                {Array.from({ length: 6 }).map((__, lineIdx) => (
+                  <Skeleton
+                    key={lineIdx}
+                    variant="text"
+                    width={`${86 - lineIdx * 4}%`}
+                    height={22}
+                  />
                 ))}
-              </Box>
+              </Stack>
 
               <Skeleton variant="rectangular" height={1} />
 
-              <Stack spacing={0.5} sx={{ flexGrow: 1 }}>
-                <Skeleton variant="text" width="85%" height={22} />
-                <Skeleton variant="text" width="70%" height={22} />
+              <Stack spacing={0.75} sx={{ flexGrow: 1 }}>
+                <Skeleton variant="text" width="92%" height={22} />
+                <Skeleton variant="text" width="76%" height={22} />
               </Stack>
 
               <Stack direction="row" spacing={1.5} sx={{ justifyContent: "space-between", pt: 1 }}>
