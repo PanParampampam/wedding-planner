@@ -114,7 +114,7 @@ export default function GuestsOverview({
             gap: 1,
             gridTemplateColumns: {
               xs: "repeat(2, minmax(0, 1fr))",
-              md: "repeat(3, minmax(0, 1fr))",
+              xl: "repeat(3, minmax(0, 1fr))",
             },
           }}
         >

@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import type { ReactElement } from "react";
+import type { ReactNode } from "react";
 import { DRAWER_WIDTH } from "../constants/componentsSizes";
 
 type PageHeaderProps = {
   title: string;
   description: string;
-  children?: ReactElement;
+  children?: ReactNode;
 };
 
 export default function PageHeader({ title, description, children }: PageHeaderProps) {

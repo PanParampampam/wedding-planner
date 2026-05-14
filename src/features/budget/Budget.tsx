@@ -33,7 +33,7 @@ export default function Budget() {
         title="Budget"
         description="Build your spending plan, compare estimates with real costs, and keep every decision visible in one place."
       >
-        {!isReadOnly ? (
+        {!isReadOnly && (
           <Button
             variant="contained"
             startIcon={<AddRoundedIcon />}
@@ -47,7 +47,7 @@ export default function Budget() {
           >
             Add a new expense
           </Button>
-        ) : undefined}
+        )}
       </PageHeader>
       <BudgetDashboard categories={categories} />
       {!isReadOnly && <BudgetEntryForm key={form.entry?.id} categories={categories} />}
