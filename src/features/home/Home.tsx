@@ -2,7 +2,7 @@ import PageHeader from "../../shared/ui/PageHeader";
 import { useRequiredAuthProvider } from "../authProvider/hooks/useAuthProvider";
 import WeddingCountdown from "./components/WeddingCountdown";
 import { useFetchHomeDashboard } from "./hooks/useFetchHomeDashboard";
-import BudgetOverview from "../budget/components/budgetSummary/BudgetOverview";
+import BudgetOverview from "../budget/components/budgetOverview/BudgetOverview";
 import GuestsOverview from "../guests/components/GuestsOverview/GuestsOverview";
 import { Alert, Box, Stack } from "@mui/material";
 import { daysUntil } from "../budget/utils/budget.utils";

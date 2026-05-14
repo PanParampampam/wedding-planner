@@ -1,4 +1,3 @@
-import EventAvailableRoundedIcon from "@mui/icons-material/EventAvailableRounded";
 import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
 import SavingsRoundedIcon from "@mui/icons-material/SavingsRounded";
 import { Box, Chip, Paper, Stack, Typography } from "@mui/material";
@@ -85,76 +84,107 @@ export default function BudgetOverview({
         <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "flex-start" }}>
           <Box>
             <Typography variant="overline" sx={{ color: "text.secondary" }}>
-              Your initial budget:
+              Current budget after actual expenses
             </Typography>
             <Typography
-              variant="h4"
+              variant="h2"
               sx={{
-                fontWeight: 800,
-                lineHeight: 1.1,
+                fontWeight: 900,
+                lineHeight: 1.05,
                 color: "primary.main",
                 letterSpacing: "-0.02em",
               }}
             >
-              {formatMoney(budget, currencyCode)}
+              {formatMoney(remainingAfterActual, currencyCode)}
             </Typography>
           </Box>
         </Stack>
 
-        <Typography sx={{ color: "text.secondary", maxWidth: 420 }}>
-          Your current budget compared against both planned and already recorded spending.
+        <Typography sx={{ color: "text.secondary" }}>
+          Main view reflects what is currently left after recorded spending. Initial budget and
+          planned spending are shown for the context.
         </Typography>
 
-        <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-          <Box sx={{ minWidth: 0 }}>
+        <Stack direction={{ xs: "column" }} spacing={2}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: 4,
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <Typography variant="overline" sx={{ color: "text.secondary" }}>
-              After Planned Expenses
+              Initial Budget:
+            </Typography>
+            <Typography variant="h6" sx={{ fontWeight: 700, color: "text.primary" }}>
+              {formatMoney(budget, currencyCode)}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: 4,
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="overline" sx={{ color: "text.secondary" }}>
+              After Planned Expenses:
             </Typography>
             <Typography variant="h6" sx={{ fontWeight: 700, color: "text.primary" }}>
               {formatMoney(remainingAfterPlanned, currencyCode)}
             </Typography>
           </Box>
-          <Box sx={{ minWidth: 0 }}>
-            <Typography variant="overline" sx={{ color: "text.secondary" }}>
-              After Actual Expenses
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 700, color: "text.primary" }}>
-              {formatMoney(remainingAfterActual, currencyCode)}
-            </Typography>
-          </Box>
           {nearestDeadline !== undefined && nearestDeadline !== null && (
-            <Box sx={{ minWidth: 0, maxWidth: { md: "33%", lg: "50%" } }}>
-              <Stack direction="row" spacing={0.75} sx={{ alignItems: "center", mb: 0.25 }}>
-                <EventAvailableRoundedIcon sx={{ fontSize: 14, color: "text.secondary" }} />
-                <Typography variant="overline" sx={{ color: "text.secondary" }}>
-                  Next expense
-                </Typography>
-              </Stack>
-              <Typography
-                variant="h6"
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                gap: 4,
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography variant="overline" sx={{ color: "text.secondary" }}>
+                Next expense:
+              </Typography>
+              <Box
                 sx={{
-                  fontWeight: 700,
-                  color:
-                    nearestDeadline.days < 0
-                      ? "error.main"
-                      : nearestDeadline.days <= 7
-                        ? "warning.main"
-                        : nearestDeadline.days <= 30
-                          ? "primary.main"
-                          : "success.main",
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: 1,
+                  alignItems: "center",
                 }}
               >
-                {nearestDeadline.days < 0
-                  ? `${Math.abs(nearestDeadline.days)}d overdue`
-                  : nearestDeadline.days === 0
-                    ? "Today"
-                    : nearestDeadline.days === 1
-                      ? "Tomorrow"
-                      : `${nearestDeadline.days}d left`}
-              </Typography>
-              <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                {nearestDeadline.name} · {nearestDeadline.date}
-              </Typography>
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                  {nearestDeadline.name} · {nearestDeadline.date}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 700,
+                    color:
+                      nearestDeadline.days < 0
+                        ? "error.main"
+                        : nearestDeadline.days <= 7
+                          ? "warning.main"
+                          : nearestDeadline.days <= 30
+                            ? "primary.main"
+                            : "success.main",
+                  }}
+                >
+                  {nearestDeadline.days < 0
+                    ? `${Math.abs(nearestDeadline.days)}d overdue`
+                    : nearestDeadline.days === 0
+                      ? "Today"
+                      : nearestDeadline.days === 1
+                        ? "Tomorrow"
+                        : `${nearestDeadline.days}d left`}
+                </Typography>
+              </Box>
             </Box>
           )}
         </Stack>

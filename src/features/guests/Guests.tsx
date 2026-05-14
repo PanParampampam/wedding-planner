@@ -4,9 +4,12 @@ import PageHeader from "../../shared/ui/PageHeader";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { useGuestsStore } from "./store/guests.store";
 import ActionToast from "src/shared/ui/ActionToast";
+import { useAuthProvider } from "../authProvider/hooks/useAuthProvider";
 
 export default function Guests() {
   const { guest, setGuest, setForm } = useGuestsStore();
+  const { user } = useAuthProvider();
+  const isReadOnly = Boolean(user?.readOnly);
 
   return (
     <Box>
@@ -26,19 +29,21 @@ export default function Guests() {
         title="Guests"
         description="Track, edit, and organize everyone invited to your wedding."
       >
-        <Button
-          variant="contained"
-          startIcon={<AddRoundedIcon />}
-          onClick={() =>
-            setForm({
-              isOpen: true,
-              guest: null,
-            })
-          }
-          sx={{ width: "fit-content" }}
-        >
-          Add a new guest
-        </Button>
+        {!isReadOnly && (
+          <Button
+            variant="contained"
+            startIcon={<AddRoundedIcon />}
+            onClick={() =>
+              setForm({
+                isOpen: true,
+                guest: null,
+              })
+            }
+            sx={{ width: "fit-content" }}
+          >
+            Add a new guest
+          </Button>
+        )}
       </PageHeader>
       <GuestsDashboard />
     </Box>

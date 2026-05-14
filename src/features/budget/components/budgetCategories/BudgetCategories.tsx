@@ -3,6 +3,7 @@ import type { BudgetCategory } from "../../types/budget.types";
 import { Stack, Chip, Alert } from "@mui/material";
 import AddBudgetCategoryChip from "./AddBudgetCategoryChip";
 import { useDeleteBudgetCategory } from "../../hooks/categories/useDeleteBudgetCategory";
+import { useAuthProvider } from "src/features/authProvider/hooks/useAuthProvider";
 
 type BudgetCategoriesProps = {
   categories: BudgetCategory[];
@@ -16,6 +17,8 @@ export default function BudgetCategories({
   setCategoryFilter,
 }: BudgetCategoriesProps) {
   const { loading, error, handler } = useDeleteBudgetCategory();
+  const { user } = useAuthProvider();
+  const isReadOnly = Boolean(user?.readOnly);
   const filterCategoryHandler = (categoryId?: string) => {
     if (!categoryId) {
       setCategoryFilter([]);
@@ -49,9 +52,13 @@ export default function BudgetCategories({
             key={category.id}
             label={category.name}
             variant={categoryFilter.includes(category.id) ? "filled" : "outlined"}
-            onDelete={() => {
-              handler(category.id);
-            }}
+            onDelete={
+              isReadOnly
+                ? undefined
+                : () => {
+                    handler(category.id);
+                  }
+            }
             disabled={loading}
             onClick={() => filterCategoryHandler(category.id)}
             sx={{
@@ -64,7 +71,7 @@ export default function BudgetCategories({
             }}
           />
         ))}
-        <AddBudgetCategoryChip />
+        {!isReadOnly && <AddBudgetCategoryChip />}
       </Stack>
 
       {!!error && <Alert severity="error">{error}</Alert>}

@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import bcrypt from "bcrypt";
 import { prisma } from "../../_lib/prisma.js";
 import { signToken } from "../../../src/backend/shared/auth/jwt.js";
 import { setAuthCookie } from "../../../src/backend/shared/auth/cookie.js";
@@ -10,15 +9,27 @@ export default async function handler(
   res: VercelResponse,
 ): Promise<UserResponse | VercelResponse> {
   if (req.method !== "POST") return res.status(405).end();
-  const { email, password } = req.body;
+
+  const demoEmail = process.env.DEMO_USER_EMAIL;
+
+  if (!demoEmail) {
+    return res.status(503).json({
+      success: false,
+      message: "Demo mode is not configured yet.",
+    });
+  }
 
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email: demoEmail } });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ success: false, message: "Invalid credentials" });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Demo account is unavailable.",
+      });
     }
-    const token = signToken(user.id);
+
+    const token = signToken(user.id, { readOnly: true, isDemo: true });
     setAuthCookie(res, token);
 
     return res.status(200).json({
@@ -29,12 +40,12 @@ export default async function handler(
         weddingDate: user.weddingDate,
         budget: user.budget ? Number(user.budget) : null,
         currencyCode: user.currencyCode,
-        readOnly: false,
-        isDemo: false,
+        readOnly: true,
+        isDemo: true,
       },
     });
   } catch (e) {
-    console.error("Failed to login: ", e);
+    console.error("Failed to start demo session:", e);
 
     return res.status(500).json({
       success: false,

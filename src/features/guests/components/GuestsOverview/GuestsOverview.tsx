@@ -91,7 +91,7 @@ export default function GuestsOverview({
             Your estimated guests number (total number of guests minus declined):
           </Typography>
           <Typography
-            variant="h4"
+            variant="h2"
             sx={{
               fontWeight: 800,
               lineHeight: 1.1,
@@ -114,7 +114,7 @@ export default function GuestsOverview({
             gap: 1,
             gridTemplateColumns: {
               xs: "repeat(2, minmax(0, 1fr))",
-              md: "repeat(3, minmax(0, 1fr))",
+              xl: "repeat(3, minmax(0, 1fr))",
             },
           }}
         >
