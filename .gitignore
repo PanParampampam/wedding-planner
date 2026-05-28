@@ -35,3 +35,4 @@ vercel.local.json
 vercel.example.json
 .prettierrc
 /scripts
+scripts/seed-demo-guests.sql
