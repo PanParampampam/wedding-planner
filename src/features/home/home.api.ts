@@ -3,7 +3,7 @@ import type { GuestInvitationStatus } from "src/shared/types/common.types";
 
 export type HomeDashboardGuestStatus = {
   status: GuestInvitationStatus;
-  children: number | null;
+  isChild: boolean;
 };
 
 export type HomeDashboardBudgetNearestDeadlineEntry = {

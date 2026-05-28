@@ -120,8 +120,6 @@ export default function GuestForm({ plusOneList, allGuestsList }: GuestFormProps
     allGuestsList.find((plusOne) => plusOne.id === guestData.plusOneId) ?? null;
   const hasPlusOneOptions = selectablePlusOneList.length > 0;
   const isEditMode = Boolean(form.guest && form.guest.plusOneId);
-  console.log(plusOneList);
-  console.log(selectablePlusOneList);
   return (
     <Dialog
       fullWidth

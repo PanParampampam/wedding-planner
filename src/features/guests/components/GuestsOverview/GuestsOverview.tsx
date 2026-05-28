@@ -2,7 +2,6 @@ import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
 import ChildCareRoundedIcon from "@mui/icons-material/ChildCareRounded";
 import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
-import HowToRegRoundedIcon from "@mui/icons-material/HowToRegRounded";
 import MarkEmailReadRoundedIcon from "@mui/icons-material/MarkEmailReadRounded";
 import MarkEmailUnreadRoundedIcon from "@mui/icons-material/MarkEmailUnreadRounded";
 import { Box, Chip, Paper, Stack, Typography } from "@mui/material";
@@ -10,7 +9,6 @@ import GuestsOverviewItem from "./GuestsOverviewItem";
 
 type GuestsOverviewProps = {
   totalGuests: number;
-  totalEstimated: number;
   notYetInvited: number;
   invited: number;
   confirmed: number;
@@ -20,7 +18,6 @@ type GuestsOverviewProps = {
 
 export default function GuestsOverview({
   totalGuests,
-  totalEstimated,
   notYetInvited,
   invited,
   confirmed,
@@ -88,7 +85,7 @@ export default function GuestsOverview({
 
         <Box>
           <Typography variant="overline" sx={{ color: "text.secondary" }}>
-            Your estimated guests number (total number of guests minus declined):
+            Guests confirmed so far:
           </Typography>
           <Typography
             variant="h2"
@@ -99,13 +96,13 @@ export default function GuestsOverview({
               letterSpacing: "-0.02em",
             }}
           >
-            {totalEstimated} guests
+            {confirmed} guests
           </Typography>
         </Box>
 
         <Typography sx={{ color: "text.secondary" }}>
-          Keep the most important guest planning metrics visible at a glance: total headcount,
-          invitation progress, confirmed responses, declines, and children count.
+          Track your key guest metrics at a glance: total guests, invitation progress,
+          confirmations, declines, and children.
         </Typography>
 
         <Box
@@ -127,11 +124,6 @@ export default function GuestsOverview({
             icon={<MarkEmailReadRoundedIcon sx={{ fontSize: 16, color: "text.secondary" }} />}
             label="Invited"
             value={invited}
-          />
-          <GuestsOverviewItem
-            icon={<HowToRegRoundedIcon sx={{ fontSize: 16, color: "success.main" }} />}
-            label="Confirmed"
-            value={confirmed}
           />
           <GuestsOverviewItem
             icon={<BlockRoundedIcon sx={{ fontSize: 16, color: "error.main" }} />}

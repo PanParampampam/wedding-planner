@@ -3,7 +3,6 @@ import type { Guest } from "../types/guest.types";
 export const guestsStatsHandler = (guests: Guest[]) => {
   const totalGuests = guests.length;
   const declined = guests.filter((g) => g.status === "declined").length;
-  const totalEstimated = totalGuests - declined;
   const confirmed = guests.filter((g) => g.status === "confirmed");
   const notYetInvited = guests.filter((g) => g.status === "not yet invited").length;
   const invited = guests.filter((g) => g.status !== "not yet invited").length;
@@ -71,7 +70,6 @@ export const guestsStatsHandler = (guests: Guest[]) => {
 
   return {
     totalGuests: totalGuests,
-    totalEstimated: totalEstimated,
     notYetInvited: notYetInvited,
     invited: invited,
     confirmed: confirmed.length,

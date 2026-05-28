@@ -14,7 +14,6 @@ export default function GuestsDashboard() {
   const { form } = useGuestsStore();
   const {
     totalGuests,
-    totalEstimated,
     notYetInvited,
     invited,
     confirmed,
@@ -69,7 +68,6 @@ export default function GuestsDashboard() {
       <Stack spacing={2}>
         <GuestsOverview
           totalGuests={totalGuests}
-          totalEstimated={totalEstimated}
           notYetInvited={notYetInvited}
           invited={invited}
           confirmed={confirmed}
