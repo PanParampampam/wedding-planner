@@ -123,7 +123,7 @@ export default function Login() {
               <Alert severity="success">{userCreatedMessage}</Alert>
             ) : (
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                Welcome back! Sign in to your account.
+                Hello there! Sign in to your account.
               </Typography>
             )}
           </Stack>
@@ -176,7 +176,21 @@ export default function Login() {
             >
               Sign in
             </Button>
-
+            <Typography variant="body2" sx={{ color: "text.secondary", textAlign: "center" }}>
+              Don&apos;t have an account yet?{" "}
+              <Link component={RouterLink} to="/register" underline="hover">
+                Register here
+              </Link>
+            </Typography>
+            <Stack spacing={0.5}>
+              <Typography variant="h4" sx={{ color: "primary.main", fontWeight: 700 }}>
+                Check the demo
+              </Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                Just browsing? Try the demo account with sample data already filled in. In demo
+                mode, changes are disabled.
+              </Typography>
+            </Stack>
             <Button
               variant="contained"
               color="secondary"
@@ -204,12 +218,6 @@ export default function Login() {
                 {error || demoError}
               </Alert>
             )}
-            <Typography variant="body2" sx={{ color: "text.secondary", textAlign: "center" }}>
-              Don&apos;t have an account yet?{" "}
-              <Link component={RouterLink} to="/register" underline="hover">
-                Register here
-              </Link>
-            </Typography>
           </Stack>
         </Stack>
       </Paper>

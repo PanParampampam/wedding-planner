@@ -20,8 +20,7 @@ export default function Home() {
   const invited = statuses.filter((guest) => guest.status === "invited").length;
   const confirmed = statuses.filter((guest) => guest.status === "confirmed").length;
   const declined = statuses.filter((guest) => guest.status === "declined").length;
-  const children = statuses.reduce((sum, guest) => sum + Number(guest.children ?? 0), 0);
-  const totalEstimated = totalGuests - declined;
+  const children = statuses.reduce((sum, guest) => sum + Number(guest.isChild ?? 0), 0);
 
   const budgetOverview = home?.budgetOverview;
   const remainingAfterPlanned =
@@ -71,7 +70,6 @@ export default function Home() {
             <Box sx={{ display: "flex", "& > *": { height: "100%" } }}>
               <GuestsOverview
                 totalGuests={totalGuests}
-                totalEstimated={totalEstimated}
                 notYetInvited={notYetInvited}
                 invited={invited}
                 confirmed={confirmed}

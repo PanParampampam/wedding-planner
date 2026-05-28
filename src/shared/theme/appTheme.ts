@@ -132,6 +132,14 @@ const appTheme = createTheme({
             WebkitAppearance: "none",
             margin: 0,
           },
+        "input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active":
+          {
+            WebkitBoxShadow: "0 0 0 1000px #f8eef3 inset",
+            boxShadow: "0 0 0 1000px #f8eef3 inset",
+            WebkitTextFillColor: "#6f5863",
+            caretColor: "#6f5863",
+            transition: "background-color 9999s ease-in-out 0s",
+          },
       },
     },
     MuiPaper: {
